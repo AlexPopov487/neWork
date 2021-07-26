@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/nav_profile_fragment"
+            android:title="@string/my_profile_nav_menu_drawer" />
+
+        <item
+            android:id="@+id/nav_posts_fragment"
+            android:title="@string/main_nav_menu_drawer" />
+
+        <item
+            android:id="@+id/nav_events_fragment"
+            android:title="@string/events_nav_menu_drawer" />
+</menu>

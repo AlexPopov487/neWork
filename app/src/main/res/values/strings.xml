@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Netology Diploma</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="events_nav_menu_drawer">Events</string>
+    <string name="main_nav_menu_drawer">Main</string>
+    <string name="my_profile_nav_menu_drawer">My profile</string>
 </resources>
