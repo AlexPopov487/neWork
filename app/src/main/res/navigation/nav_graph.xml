@@ -7,17 +7,26 @@
 
     <fragment
         android:id="@+id/nav_posts_fragment"
-        android:name="com.example.netologydiploma.PostFragment"
+        android:name="com.example.netologydiploma.ui.PostFragment"
         android:label="Posts"
-        tools:layout="@layout/fragment_post" />
+        tools:layout="@layout/fragment_post" >
+        <action
+            android:id="@+id/action_nav_posts_fragment_to_createEditPostFragment"
+            app:destination="@id/createEditPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_events_fragment"
-        android:name="com.example.netologydiploma.EventsFragment"
+        android:name="com.example.netologydiploma.ui.EventsFragment"
         android:label="Events"
         tools:layout="@layout/fragment_events" />
     <fragment
         android:id="@+id/nav_profile_fragment"
-        android:name="com.example.netologydiploma.ProfileFragment"
+        android:name="com.example.netologydiploma.ui.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/createEditPostFragment"
+        android:name="com.example.netologydiploma.ui.CreateEditPostFragment"
+        android:label="Create post"
+        tools:layout="@layout/fragment_create_edit_post" />
 </navigation>

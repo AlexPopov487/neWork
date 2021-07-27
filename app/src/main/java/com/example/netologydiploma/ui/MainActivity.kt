@@ -1,4 +1,4 @@
-package com.example.netologydiploma
+package com.example.netologydiploma.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
+import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // initialize navController
-        navController = findNavController( R.id.nav_host_fragment_container)
+        navController = findNavController(R.id.nav_host_fragment_container)
         // Connect Drawer layout to the navigation graph
         NavigationUI.setupWithNavController(binding.drawerNavView, navController)
         binding.drawerNavView.setupWithNavController(navController)

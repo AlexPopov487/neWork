@@ -5,4 +5,9 @@
     <string name="events_nav_menu_drawer">Events</string>
     <string name="main_nav_menu_drawer">Main</string>
     <string name="my_profile_nav_menu_drawer">My profile</string>
+    <string name="user_icon_content_description">User icon</string>
+    <string name="delete_post_item_menu">Delete</string>
+    <string name="create_post_button_description">Create new post</string>
+    <string name="create_post_button_title">Create Post</string>
+    <string name="hint_create_post_editText">Create a new post</string>
 </resources>
