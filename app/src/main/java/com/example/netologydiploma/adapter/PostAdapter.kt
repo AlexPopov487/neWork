@@ -3,22 +3,27 @@ package com.example.netologydiploma.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.PostListItemBinding
-import com.example.netologydiploma.db.PostEntity
+import com.example.netologydiploma.dto.Post
 
-class PostAdapter : ListAdapter<PostEntity, PostViewHolder>(PostDiffCallback) {
+interface OnButtonInteractionListener {
+    fun onLike(post: Post)
+    fun onRemove(post: Post)
+}
 
-    companion object PostDiffCallback : DiffUtil.ItemCallback<PostEntity>() {
-        override fun areItemsTheSame(oldItem: PostEntity, newItem: PostEntity): Boolean =
+class PostAdapter(private val interactionListener: OnButtonInteractionListener) :
+    ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+
+    companion object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
             oldItem.id == newItem.id
 
 
-        override fun areContentsTheSame(oldItem: PostEntity, newItem: PostEntity): Boolean =
+        override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
             oldItem == newItem
 
     }
@@ -30,7 +35,7 @@ class PostAdapter : ListAdapter<PostEntity, PostViewHolder>(PostDiffCallback) {
                 parent,
                 false
             )
-        return PostViewHolder(postBinding)
+        return PostViewHolder(postBinding, interactionListener)
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -40,10 +45,13 @@ class PostAdapter : ListAdapter<PostEntity, PostViewHolder>(PostDiffCallback) {
 }
 
 
-class PostViewHolder(private val postBinding: PostListItemBinding) :
+class PostViewHolder(
+    private val postBinding: PostListItemBinding,
+    private val interactionListener: OnButtonInteractionListener
+) :
     RecyclerView.ViewHolder(postBinding.root) {
-    fun bind(post: PostEntity) {
-        with(postBinding){
+    fun bind(post: Post) {
+        with(postBinding) {
             tVUserName.text = post.author
             tVPublished.text = post.published.toString()
             tvContent.text = post.content
@@ -52,7 +60,7 @@ class PostViewHolder(private val postBinding: PostListItemBinding) :
             btLike.text = post.likeCount.toString()
 
             btLike.setOnClickListener {
-                // TODO set button interaction
+                interactionListener.onLike(post)
             }
 
             btPostOptions.setOnClickListener {
@@ -61,7 +69,7 @@ class PostViewHolder(private val postBinding: PostListItemBinding) :
                     setOnMenuItemClickListener { menuItem ->
                         when (menuItem.itemId) {
                             R.id.action_delete -> {
-                                Toast.makeText(it.context, "Clicked", Toast.LENGTH_SHORT).show()
+                                interactionListener.onRemove(post)
                                 true
                             }
                             else -> false

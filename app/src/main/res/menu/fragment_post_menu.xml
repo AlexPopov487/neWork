@@ -7,4 +7,5 @@
             android:contentDescription="@string/create_post_button_description"
             app:showAsAction="always"
             android:title="@string/create_post_button_title" />
+
 </menu>

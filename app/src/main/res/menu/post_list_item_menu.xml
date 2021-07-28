@@ -7,4 +7,10 @@
         android:title="@string/delete_post_item_menu"
         app:showAsAction="never"
         />
+
+    <item
+        android:id="@+id/action_edit"
+        android:title="Edit"
+        app:showAsAction="never"
+        />
 </menu>

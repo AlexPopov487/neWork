@@ -26,7 +26,8 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/createEditPostFragment"
-        android:name="com.example.netologydiploma.ui.CreateEditPostFragment"
+        android:name="com.example.netologydiploma.ui.CreatePostFragment"
         android:label="Create post"
-        tools:layout="@layout/fragment_create_edit_post" />
+        tools:layout="@layout/fragment_create_post" >
+    </fragment>
 </navigation>
