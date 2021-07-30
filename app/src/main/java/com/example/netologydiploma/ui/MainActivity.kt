@@ -1,6 +1,9 @@
 package com.example.netologydiploma.ui
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
@@ -9,8 +12,11 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.ActivityMainBinding
+import com.example.netologydiploma.viewModel.AuthViewModel
 
 class MainActivity : AppCompatActivity() {
+    private val viewModel: AuthViewModel by viewModels()
+
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -35,6 +41,11 @@ class MainActivity : AppCompatActivity() {
                 binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
             }
         }
+
+        // redraw menu when authState changes
+        viewModel.authState.observe(this) {
+            invalidateOptionsMenu()
+        }
     }
 
     override fun onBackPressed() {
@@ -47,5 +58,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return NavigationUI.navigateUp(navController, binding.mainDrawerLayout)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.auth_app_bar_menu, menu)
+
+        menu?.setGroupVisible(R.id.group_sign_in, !viewModel.isAuthenticated)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_sign_in -> {
+                findNavController(R.id.nav_host_fragment_container).navigate(R.id.logInFragment)
+                true
+            }
+            else -> false
+        }
     }
 }

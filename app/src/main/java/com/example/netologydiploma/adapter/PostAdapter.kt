@@ -1,6 +1,7 @@
 package com.example.netologydiploma.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -25,7 +26,6 @@ class PostAdapter(private val interactionListener: OnButtonInteractionListener) 
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
             oldItem == newItem
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -63,19 +63,26 @@ class PostViewHolder(
                 interactionListener.onLike(post)
             }
 
-            btPostOptions.setOnClickListener {
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.post_list_item_menu)
-                    setOnMenuItemClickListener { menuItem ->
-                        when (menuItem.itemId) {
-                            R.id.action_delete -> {
-                                interactionListener.onRemove(post)
-                                true
+
+            if (!post.ownedByMe) {
+                btPostOptions.visibility = View.GONE
+            } else {
+                btPostOptions.visibility = View.VISIBLE
+                btPostOptions.setOnClickListener {
+                    PopupMenu(it.context, it).apply {
+                        inflate(R.menu.post_list_item_menu)
+                        menu.setGroupVisible(R.id.post_modification, post.ownedByMe)
+                        setOnMenuItemClickListener { menuItem ->
+                            when (menuItem.itemId) {
+                                R.id.action_delete -> {
+                                    interactionListener.onRemove(post)
+                                    true
+                                }
+                                else -> false
                             }
-                            else -> false
                         }
-                    }
-                }.show()
+                    }.show()
+                }
             }
         }
     }

@@ -10,4 +10,30 @@
     <string name="create_post_button_description">Create new post</string>
     <string name="create_post_button_title">Create Post</string>
     <string name="hint_create_post_editText">Create a new post</string>
+    <string name="sign_out_button">Sign out</string>
+    <string name="action_signIn_auth_appbar_menu">Sign In</string>
+    <string name="et_login_hint_loginFragment">Login</string>
+    <string name="et_password_hint_loginFragment">Password</string>
+    <string name="bt_signIn_login_fragment">Sign in</string>
+    <string name="tv_create_account_request_login_fragment">Don\'t have an account yet?</string>
+    <string name="tv_create_account_span_action_login_fragment">Create one!</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="et_registration_hint_registrationFragment">User Name</string>
+    <string name="et_confirm_password_hint_registrationFragment">Confirm password</string>
+    <string name="tv_signIn_span_action_registration_fragment">Sign in!</string>
+    <string name="tv_is_signed_in_request_registration_fragment">Already have an existing account?</string>
+    <string name="bt_signUp_registration_fragment">Sign up</string>
+    <string name="passwords_not_match_error_registration">Passwords should be identical!</string>
+    <string name="empty_field_error_registration_fragment">\The field should be filled!</string>
+    <string name="invalid_email_registration">Please provide a valid email address</string>
+    <string name="password_too_short_error_registration_fragment">Password must be at least 6 characters long</string>
+    <string name="edit_post_item_menu">Edit</string>
 </resources>

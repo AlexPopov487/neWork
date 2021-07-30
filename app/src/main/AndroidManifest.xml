@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NetologyDiploma"
-        tools:targetApi="m">
+        tools:targetApi="m"
+        android:usesCleartextTraffic="${usesCleartextTraffic}"
+        android:name=".application.App">
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

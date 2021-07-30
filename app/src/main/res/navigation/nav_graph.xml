@@ -23,11 +23,48 @@
         android:id="@+id/nav_profile_fragment"
         android:name="com.example.netologydiploma.ui.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_nav_profile_fragment_to_nav_posts_fragment"
+            app:destination="@id/nav_posts_fragment"
+            app:popUpTo="@id/nav_posts_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/createEditPostFragment"
         android:name="com.example.netologydiploma.ui.CreatePostFragment"
         android:label="Create post"
         tools:layout="@layout/fragment_create_post" >
+    </fragment>
+    <fragment
+        android:id="@+id/logInFragment"
+        android:name="com.example.netologydiploma.ui.LogInFragment"
+        android:label="Sign In"
+        tools:layout="@layout/fragment_log_in">
+        <action
+            android:id="@+id/action_logInFragment_to_nav_events_fragment"
+            app:destination="@id/nav_events_fragment"
+            app:popUpTo="@id/nav_posts_fragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/registrationFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.netologydiploma.ui.RegistrationFragment"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_registration">
+        <action
+            android:id="@+id/action_registrationFragment_to_logInFragment"
+            app:destination="@id/logInFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/logInFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registrationFragment_to_nav_events_fragment"
+            app:destination="@id/nav_events_fragment"
+            app:popUpTo="@id/nav_posts_fragment" />
     </fragment>
 </navigation>

@@ -28,6 +28,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders.usesCleartextTraffic = false
+            buildConfigField "String", "BASE_URL", '"https://nmedia.herokuapp.com"'
+        }
+        debug {
+            manifestPlaceholders.usesCleartextTraffic = true
+            buildConfigField "String", "BASE_URL", '"http://192.168.0.105:9999"'
         }
     }
     compileOptions {
@@ -40,6 +46,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.annotation:annotation:1.1.0'
     def nav_version = "2.3.5"
     def room_version = "2.3.0"
     def lifecycle_version = "2.4.0-alpha02"
