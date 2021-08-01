@@ -15,8 +15,10 @@ import com.example.netologydiploma.databinding.FragmentPostsBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.viewModel.PostViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@AndroidEntryPoint
 class PostFragment : Fragment() {
 
     private lateinit var navController: NavController

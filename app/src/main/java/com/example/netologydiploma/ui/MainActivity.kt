@@ -13,7 +13,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.ActivityMainBinding
 import com.example.netologydiploma.viewModel.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: AuthViewModel by viewModels()
 

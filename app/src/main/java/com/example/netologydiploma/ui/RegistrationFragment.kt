@@ -19,7 +19,7 @@ import com.example.netologydiploma.databinding.FragmentRegistrationBinding
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.LoginRegistrationViewModel
 import com.google.android.material.snackbar.Snackbar
-
+import dagger.hilt.android.AndroidEntryPoint
 
 class RegistrationFragment : Fragment() {
 

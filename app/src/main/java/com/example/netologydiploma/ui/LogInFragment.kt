@@ -17,7 +17,9 @@ import com.example.netologydiploma.databinding.FragmentLogInBinding
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.LoginRegistrationViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LogInFragment : Fragment() {
 
     private val viewModel: LoginRegistrationViewModel by viewModels(

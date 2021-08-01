@@ -1,6 +1,6 @@
 package com.example.netologydiploma.data
 
-import com.example.netologydiploma.api.PostApi
+import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.PostDao
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.PostEntity
@@ -14,8 +14,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import java.sql.SQLException
+import javax.inject.Inject
 
-class PostRepository(private val postDao: PostDao) {
+class PostRepository @Inject constructor(
+    private val postDao: PostDao,
+    private val postApi: ApiService
+) {
 
     fun getAllPosts(): Flow<List<Post>> {
         return postDao.getAllPosts().map { it.toDto() }
@@ -23,7 +27,7 @@ class PostRepository(private val postDao: PostDao) {
 
     suspend fun loadPostsFromWeb() {
         try {
-            val response = PostApi.retrofitService.getAllPosts()
+            val response = postApi.getAllPosts()
             if (!response.isSuccessful) {
                 throw ApiError(response.code())
             }
@@ -40,7 +44,7 @@ class PostRepository(private val postDao: PostDao) {
 
     suspend fun createPost(post: Post) {
         try {
-            val createPostResponse = PostApi.retrofitService.createPost(post)
+            val createPostResponse = postApi.createPost(post)
             if (!createPostResponse.isSuccessful) {
                 throw ApiError(createPostResponse.code())
             }
@@ -51,7 +55,7 @@ class PostRepository(private val postDao: PostDao) {
             // because createPostBody doesn't have authorName set (it is set via backend),
             // so we cannot pass createPostBody to db and prefer to get the newly created
             // post explicitly
-            val getPostResponse = PostApi.retrofitService.getPostById(createPostBody.id)
+            val getPostResponse = postApi.getPostById(createPostBody.id)
             if (!getPostResponse.isSuccessful) {
                 throw ApiError(getPostResponse.code())
             }
@@ -73,7 +77,7 @@ class PostRepository(private val postDao: PostDao) {
         try {
             postDao.deletePost(postId)
 
-            val response = PostApi.retrofitService.deletePost(postId)
+            val response = postApi.deletePost(postId)
             if (!response.isSuccessful) {
                 postDao.createPost(postToDelete)
                 throw ApiError(response.code())

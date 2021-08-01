@@ -1,14 +1,13 @@
 package com.example.netologydiploma.auth
 
-import android.content.Context
+import android.content.SharedPreferences
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 
-class AppAuth private constructor(context: Context) {
+class AppAuth (private val prefs: SharedPreferences) {
     // store token and id for user auth validation
-    private val prefs = context.getSharedPreferences("auth", Context.MODE_PRIVATE)
     private val idKey = "id"
     private val tokenKey = "token"
 
@@ -48,23 +47,6 @@ class AppAuth private constructor(context: Context) {
             clear()
             commit()
         }
-    }
-
-    companion object {
-        @Volatile
-        private var instance: AppAuth? = null
-
-        fun getInstance(): AppAuth = synchronized(this) {
-            instance ?: throw IllegalStateException(
-                "AppAuth is not initialized, you must call AppAuth.initializeAppAuth(context: Context) first!"
-            )
-        }
-
-        fun initializeAppAuth(context: Context): AppAuth = instance ?: synchronized(this) {
-            instance ?: buildAuth(context).also { instance = it }
-        }
-
-        private fun buildAuth(context: Context): AppAuth = AppAuth(context)
     }
 }
 

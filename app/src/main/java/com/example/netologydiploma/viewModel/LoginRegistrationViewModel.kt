@@ -8,11 +8,15 @@ import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.SignInUpRepository
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
-class LoginRegistrationViewModel: ViewModel() {
-    private val repository = SignInUpRepository()
+@HiltViewModel
+class LoginRegistrationViewModel @Inject constructor(
+    private val repository: SignInUpRepository,
+    private val appAuth: AppAuth
+) : ViewModel() {
 
     private val _isSignedIn = MutableLiveData(false)
     val isSignedIn: LiveData<Boolean>
@@ -38,7 +42,7 @@ class LoginRegistrationViewModel: ViewModel() {
                 val idAndToken = repository.onSignIn(login, password)
                 val id = idAndToken.userId ?: 0L
                 val token = idAndToken.token ?: "N/A"
-                AppAuth.getInstance().setAuth(id = id, token = token)
+                appAuth.setAuth(id = id, token = token)
 
                 _dataState.value = FeedStateModel(isLoading = false)
                 _isSignedIn.value = true
