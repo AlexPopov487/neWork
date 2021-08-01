@@ -6,15 +6,25 @@ import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.PostRepository
 import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.error.AppError
+import com.example.netologydiploma.model.FeedStateModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 class PostViewModel(application: Application): AndroidViewModel(application) {
     private val repository = PostRepository(AppDb.getInstance(application).postDao())
+
+    private val _dataState = MutableLiveData(FeedStateModel())
+    val dataState: LiveData<FeedStateModel>
+        get() = _dataState
+
+    fun invalidateDataState() {
+        _dataState.value = FeedStateModel()
+    }
+
 
     init {
         loadPostsFromWeb()
@@ -22,7 +32,16 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
 
     private fun loadPostsFromWeb() {
         viewModelScope.launch {
-            repository.loadPostsFromWeb()
+            try {
+                _dataState.value = (FeedStateModel(isLoading = true))
+                repository.loadPostsFromWeb()
+                _dataState.value = (FeedStateModel(isLoading = false))
+            } catch (e: Exception) {
+                _dataState.value = (FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                ))
+            }
         }
     }
 
@@ -40,14 +59,33 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
 
     fun savePost(post: Post) {
         viewModelScope.launch {
-            repository.createPost(post)
+            try {
+                _dataState.value = (FeedStateModel(isLoading = true))
+                repository.createPost(post)
+                _dataState.value = (FeedStateModel(isLoading = false))
+            } catch (e: Exception) {
+                _dataState.value = (FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                ))
+
+            }
         }
     }
 
 
     fun deletePost(postId: Long) {
         viewModelScope.launch {
-            repository.deletePost(postId)
+            try {
+                _dataState.value = (FeedStateModel(isLoading = true))
+                repository.deletePost(postId)
+                _dataState.value = (FeedStateModel(isLoading = false))
+            } catch (e: Exception) {
+                _dataState.value = (FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                ))
+            }
         }
     }
 

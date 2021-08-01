@@ -6,9 +6,14 @@ import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.PostEntity
 import com.example.netologydiploma.entity.toDto
 import com.example.netologydiploma.entity.toEntity
+import com.example.netologydiploma.error.ApiError
+import com.example.netologydiploma.error.DbError
+import com.example.netologydiploma.error.NetworkError
+import com.example.netologydiploma.error.UndefinedError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import java.sql.SQLException
 
 class PostRepository(private val postDao: PostDao) {
 
@@ -19,48 +24,47 @@ class PostRepository(private val postDao: PostDao) {
     suspend fun loadPostsFromWeb() {
         try {
             val response = PostApi.retrofitService.getAllPosts()
-            if (!response.isSuccessful){
-                throw Error()
-                // TODO create a comprehensive wrapper for all app errors
+            if (!response.isSuccessful) {
+                throw ApiError(response.code())
             }
-            // TODO create a comprehensive wrapper for all app errors
-            val body = response.body() ?: throw Error()
+            val body = response.body() ?: throw ApiError(response.code())
             postDao.createPosts(body.toEntity())
         } catch (e: IOException) {
-            e.printStackTrace()
-            // TODO create a comprehensive wrapper for all app errors
+            throw NetworkError
+        } catch (e: SQLException) {
+            throw  DbError
         } catch (e: Exception) {
-            e.printStackTrace()
-            // TODO create a comprehensive wrapper for all app errors
+            throw UndefinedError
         }
-
     }
 
     suspend fun createPost(post: Post) {
         try {
             val createPostResponse = PostApi.retrofitService.createPost(post)
             if (!createPostResponse.isSuccessful) {
-                Error().printStackTrace()
-                throw Error()
-                // TODO create a comprehensive wrapper for all app errors
+                throw ApiError(createPostResponse.code())
             }
-            // TODO create a comprehensive wrapper for all app errors
-            val createPostBody = createPostResponse.body() ?: throw Error()
+            val createPostBody = createPostResponse.body() ?: throw ApiError(
+                createPostResponse.code())
 
             // additional network call to get the created post is required
             // because createPostBody doesn't have authorName set (it is set via backend),
             // so we cannot pass createPostBody to db and prefer to get the newly created
             // post explicitly
             val getPostResponse = PostApi.retrofitService.getPostById(createPostBody.id)
-            val getPostBody = getPostResponse.body() ?: throw Error()
+            if (!getPostResponse.isSuccessful) {
+                throw ApiError(getPostResponse.code())
+            }
+            val getPostBody = getPostResponse.body() ?: throw ApiError(
+                getPostResponse.code())
 
             postDao.createPost(PostEntity.fromDto(getPostBody))
         } catch (e: IOException) {
-            e.printStackTrace()
-            // TODO create a comprehensive wrapper for all app errors
+            throw NetworkError
+        } catch (e: SQLException) {
+            throw  DbError
         } catch (e: Exception) {
-            e.printStackTrace()
-            // TODO create a comprehensive wrapper for all app errors
+            throw UndefinedError
         }
     }
 
@@ -72,15 +76,14 @@ class PostRepository(private val postDao: PostDao) {
             val response = PostApi.retrofitService.deletePost(postId)
             if (!response.isSuccessful) {
                 postDao.createPost(postToDelete)
-                throw Error()
-                // TODO create a comprehensive wrapper for all app errors
+                throw ApiError(response.code())
             }
         } catch (e: IOException) {
-            e.printStackTrace()
-            // TODO create a comprehensive wrapper for all app errors
+            throw NetworkError
+        } catch (e: SQLException) {
+            throw  DbError
         } catch (e: Exception) {
-            e.printStackTrace()
-            // TODO create a comprehensive wrapper for all app errors
+            throw UndefinedError
         }
     }
 }

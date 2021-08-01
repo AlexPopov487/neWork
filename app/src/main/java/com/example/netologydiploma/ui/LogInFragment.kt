@@ -8,18 +8,19 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.FragmentLogInBinding
 import com.example.netologydiploma.util.AndroidUtils
-import com.example.netologydiploma.viewModel.SignInUpViewModel
+import com.example.netologydiploma.viewModel.LoginRegistrationViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class LogInFragment : Fragment() {
 
-    private val upViewModel: SignInUpViewModel by viewModels(
+    private val viewModel: LoginRegistrationViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
     private lateinit var binding: FragmentLogInBinding
@@ -36,24 +37,33 @@ class LogInFragment : Fragment() {
             false
         )
 
-        binding.signInBt.setOnClickListener {
-            binding.progressBar.visibility = View.VISIBLE
-            val login = binding.loginEt.text.toString().trim()
-            val password = binding.passwordEt.text.toString().trim()
-            upViewModel.onSignIn(login, password)
-        }
-
-        setOnCreateNewAccountListener()
-
-        upViewModel.isSignedIn.observe(viewLifecycleOwner) { isSignedId ->
+        viewModel.isSignedIn.observe(viewLifecycleOwner) { isSignedId ->
             if (isSignedId) {
                 binding.progressBar.visibility = View.GONE
                 AndroidUtils.hideKeyboard(requireView())
                 findNavController().popBackStack()
-                upViewModel.invalidateSignedInState()
+                viewModel.invalidateSignedInState()
             }
         }
 
+        setOnCreateNewAccountListener()
+
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
+            binding.progressBar.isVisible = state.isLoading
+
+            if (state.hasError) {
+                val msg = state.errorMessage ?: "Something went wrong, please try again later."
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
+                viewModel.invalidateDataState()
+            }
+        }
+
+        binding.signInBt.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
+            val login = binding.loginEt.text.toString().trim()
+            val password = binding.passwordEt.text.toString().trim()
+            viewModel.onSignIn(login, password)
+        }
 
         return binding.root
     }

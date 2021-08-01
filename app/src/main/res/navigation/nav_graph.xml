@@ -9,7 +9,7 @@
         android:id="@+id/nav_posts_fragment"
         android:name="com.example.netologydiploma.ui.PostFragment"
         android:label="Posts"
-        tools:layout="@layout/fragment_post" >
+        tools:layout="@layout/fragment_posts" >
         <action
             android:id="@+id/action_nav_posts_fragment_to_createEditPostFragment"
             app:destination="@id/createEditPostFragment" />
