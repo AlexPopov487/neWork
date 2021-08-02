@@ -3,6 +3,7 @@ package com.example.netologydiploma.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -27,9 +28,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         // initialize navController
         navController = findNavController(R.id.nav_host_fragment_container)
+
+
+        val toolbar = binding.mainToolbar
+        setSupportActionBar(toolbar)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.logInFragment || destination.id == R.id.registrationFragment) {
+                toolbar.visibility = View.GONE
+            } else {
+                toolbar.visibility = View.VISIBLE
+            }
+        }
+
+
         // Connect Drawer layout to the navigation graph
         NavigationUI.setupWithNavController(binding.drawerNavView, navController)
         binding.drawerNavView.setupWithNavController(navController)
@@ -37,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, binding.mainDrawerLayout)
 
         // navigate to user profile once header is clicked
-        binding.drawerNavView.getHeaderView(0).setOnClickListener{
+        binding.drawerNavView.getHeaderView(0).setOnClickListener {
             navController.navigate(R.id.nav_profile_fragment)
             if (binding.mainDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
@@ -45,8 +59,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         // redraw menu when authState changes
-        viewModel.authState.observe(this) {
-            invalidateOptionsMenu()
+        viewModel.authState.observe(this) { user ->
+
+            // ensure we automatically show login fragment only once at app
+            // launch and not every time the activity is recreated
+            if (!viewModel.checkIfAskedToLogin && user.id == 0L) {
+                navController.navigate(R.id.logInFragment)
+                viewModel.setCheckIfAskedLoginTrue()
+            }
+
+            if (user.id == 0L) {
+                invalidateOptionsMenu()
+            }
         }
     }
 
@@ -73,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sign_in -> {
-                findNavController(R.id.nav_host_fragment_container).navigate(R.id.logInFragment)
+                navController.navigate(R.id.logInFragment)
                 true
             }
             else -> false

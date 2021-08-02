@@ -9,6 +9,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +20,6 @@ import com.example.netologydiploma.databinding.FragmentRegistrationBinding
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.LoginRegistrationViewModel
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
 
 class RegistrationFragment : Fragment() {
 
@@ -33,8 +33,11 @@ class RegistrationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
         navController = findNavController()
         binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+
 
         viewModel.isSignedIn.observe(viewLifecycleOwner) { isSignedId ->
             if (isSignedId) {

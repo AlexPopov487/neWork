@@ -41,15 +41,16 @@
         android:label="Sign In"
         tools:layout="@layout/fragment_log_in">
         <action
-            android:id="@+id/action_logInFragment_to_nav_events_fragment"
-            app:destination="@id/nav_events_fragment"
-            app:popUpTo="@id/nav_posts_fragment" />
-        <action
             android:id="@+id/action_logInFragment_to_registrationFragment"
             app:destination="@id/registrationFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/registrationFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_logInFragment_to_nav_posts_fragment"
+            app:destination="@id/nav_posts_fragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/nav_posts_fragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -62,9 +63,5 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/logInFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_registrationFragment_to_nav_events_fragment"
-            app:destination="@id/nav_events_fragment"
-            app:popUpTo="@id/nav_posts_fragment" />
     </fragment>
 </navigation>

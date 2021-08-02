@@ -8,9 +8,11 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.FragmentLogInBinding
@@ -21,6 +23,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LogInFragment : Fragment() {
+
+    companion object {
+        const val LOGIN_SUCCESSFUL: String = "LOGIN_SUCCESSFUL"
+    }
+
+    private lateinit var savedStateHandle: SavedStateHandle
+
 
     private val viewModel: LoginRegistrationViewModel by viewModels(
         ownerProducer = ::requireParentFragment
@@ -39,10 +48,27 @@ class LogInFragment : Fragment() {
             false
         )
 
+
+
+        // use nav saved state to tell other activities whether the
+        // logg in procedure went well
+        // https://developer.android.com/guide/navigation/navigation-conditional
+        savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
+        savedStateHandle.set(LOGIN_SUCCESSFUL, false)
+
+
+        binding.signInBt.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
+            val login = binding.loginEt.text.toString().trim()
+            val password = binding.passwordEt.text.toString().trim()
+            viewModel.onSignIn(login, password)
+        }
+
         viewModel.isSignedIn.observe(viewLifecycleOwner) { isSignedId ->
             if (isSignedId) {
                 binding.progressBar.visibility = View.GONE
                 AndroidUtils.hideKeyboard(requireView())
+                savedStateHandle.set(LOGIN_SUCCESSFUL, true)
                 findNavController().popBackStack()
                 viewModel.invalidateSignedInState()
             }
@@ -60,11 +86,8 @@ class LogInFragment : Fragment() {
             }
         }
 
-        binding.signInBt.setOnClickListener {
-            binding.progressBar.visibility = View.VISIBLE
-            val login = binding.loginEt.text.toString().trim()
-            val password = binding.passwordEt.text.toString().trim()
-            viewModel.onSignIn(login, password)
+        binding.authLaterBt.setOnClickListener {
+            findNavController().popBackStack(R.id.nav_posts_fragment, false)
         }
 
         return binding.root
