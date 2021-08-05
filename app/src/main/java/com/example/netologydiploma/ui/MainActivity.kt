@@ -24,17 +24,22 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
+    fun setActionBarTitle(title: String) {
+        binding.mainToolbar.title = title
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         // initialize navController
         navController = findNavController(R.id.nav_host_fragment_container)
-
 
         val toolbar = binding.mainToolbar
         setSupportActionBar(toolbar)
 
+        // we don't want to show appBar during registration / authentication
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.logInFragment || destination.id == R.id.registrationFragment) {
                 toolbar.visibility = View.GONE
@@ -42,7 +47,6 @@ class MainActivity : AppCompatActivity() {
                 toolbar.visibility = View.VISIBLE
             }
         }
-
 
         // Connect Drawer layout to the navigation graph
         NavigationUI.setupWithNavController(binding.drawerNavView, navController)

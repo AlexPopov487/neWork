@@ -10,10 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.PostListItemBinding
 import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.util.AndroidUtils
+import com.example.netologydiploma.viewModel.AuthViewModel
+import javax.inject.Inject
 
 interface OnButtonInteractionListener {
     fun onLike(post: Post)
     fun onRemove(post: Post)
+    fun onEdit(post: Post)
 }
 
 class PostAdapter(private val interactionListener: OnButtonInteractionListener) :
@@ -50,18 +54,24 @@ class PostViewHolder(
     private val interactionListener: OnButtonInteractionListener
 ) :
     RecyclerView.ViewHolder(postBinding.root) {
+
+
+
     fun bind(post: Post) {
         with(postBinding) {
             tVUserName.text = post.author
-            tVPublished.text = post.published.toString()
+            tVPublished.text = AndroidUtils.formatMillisToDate(post.published)
             tvContent.text = post.content
 
-            btLike.isChecked = post.isLiked
+
+            btLike.isChecked = post.likedByMe
             btLike.text = post.likeCount.toString()
+
 
             btLike.setOnClickListener {
                 interactionListener.onLike(post)
             }
+
 
 
             if (!post.ownedByMe) {
@@ -76,6 +86,10 @@ class PostViewHolder(
                             when (menuItem.itemId) {
                                 R.id.action_delete -> {
                                     interactionListener.onRemove(post)
+                                    true
+                                }
+                                R.id.action_edit -> {
+                                    interactionListener.onEdit(post)
                                     true
                                 }
                                 else -> false

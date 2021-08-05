@@ -1,6 +1,7 @@
 package com.example.netologydiploma.data
 
 import com.example.netologydiploma.api.ApiService
+import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.PostDao
 import dagger.Module
 import dagger.Provides
@@ -14,8 +15,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun providePostRepository(apiService: ApiService, postDao: PostDao) : PostRepository =
-        PostRepository(postDao, apiService)
+    fun providePostRepository(apiService: ApiService, postDao: PostDao, appDb: AppDb) : PostRepository =
+        PostRepository(postDao, apiService, appDb)
 
     @Provides
     @Singleton

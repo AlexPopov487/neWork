@@ -2,13 +2,13 @@ package com.example.netologydiploma.ui
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.FragmentCreatePostBinding
 import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.PostViewModel
 
 
@@ -26,25 +26,48 @@ class CreatePostFragment : Fragment() {
         binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
 
+        viewModel.editedPost.observe(viewLifecycleOwner) { editedPost ->
+            editedPost?.let {
+
+                (activity as MainActivity?)?.setActionBarTitle(getString(R.string.change_post_fragment_title))
+                binding.eTPostContent.setText(editedPost.content)
+                binding.eTPostContent.requestFocus(
+                    binding.eTPostContent.text.lastIndex
+                )
+                AndroidUtils.showKeyboard(binding.eTPostContent)
+            }
+        }
+
+
 
         return binding.root
     }
 
+    override fun onDestroy() {
+        viewModel.invalidateEditPost()
+        super.onDestroy()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragment_create_post_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.action_add_post -> {
                 val content = binding.eTPostContent.text.toString()
-                viewModel.savePost(Post(content = content))
+                // if editedPost is not null, we are to rewrite an existing post.
+                // Otherwise, save a new one
+                viewModel.editedPost.value?.let {
+                    viewModel.savePost(it.copy(content = content))
+                } ?: viewModel.savePost(Post(content = content))
+                AndroidUtils.hideKeyboard(requireView())
                 findNavController().popBackStack()
                 true
             }
             else -> false
         }
     }
+
 
 }

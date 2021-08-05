@@ -1,6 +1,8 @@
 package com.example.netologydiploma.data
 
+import androidx.room.withTransaction
 import com.example.netologydiploma.api.ApiService
+import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.PostDao
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.PostEntity
@@ -18,7 +20,8 @@ import javax.inject.Inject
 
 class PostRepository @Inject constructor(
     private val postDao: PostDao,
-    private val postApi: ApiService
+    private val postApi: ApiService,
+    private val db: AppDb
 ) {
 
     fun getAllPosts(): Flow<List<Post>> {
@@ -31,8 +34,13 @@ class PostRepository @Inject constructor(
             if (!response.isSuccessful) {
                 throw ApiError(response.code())
             }
-            val body = response.body() ?: throw ApiError(response.code())
-            postDao.createPosts(body.toEntity())
+            val body = response.body()?.map {
+                it.copy(likeCount = it.likeOwnerIds.size)
+            } ?: throw ApiError(response.code())
+            db.withTransaction {
+                postDao.clearPostTable()
+                postDao.insertPosts(body.toEntity())
+            }
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: SQLException) {
@@ -62,12 +70,43 @@ class PostRepository @Inject constructor(
             val getPostBody = getPostResponse.body() ?: throw ApiError(
                 getPostResponse.code())
 
-            postDao.createPost(PostEntity.fromDto(getPostBody))
+            postDao.insertPost(PostEntity.fromDto(getPostBody))
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: SQLException) {
             throw  DbError
         } catch (e: Exception) {
+            throw UndefinedError
+        }
+    }
+
+    suspend fun likePost(post: Post) {
+        try {
+            // like in db
+            val likedPost = post.copy(
+                likeCount = if (post.likedByMe) post.likeCount.dec()
+                else post.likeCount.inc(),
+                likedByMe = !post.likedByMe
+            )
+            postDao.insertPost(PostEntity.fromDto(likedPost))
+
+            // like on server
+            val response = if (post.likedByMe) postApi.dislikePostById(post.id)
+            else postApi.likePostById(post.id)
+
+            if (!response.isSuccessful)
+                throw ApiError(response.code())
+        } catch (e: IOException) {
+            // revert changes to init state
+            postDao.insertPost(PostEntity.fromDto(post))
+            throw NetworkError
+        } catch (e: SQLException) {
+            // revert changes to init state
+            postDao.insertPost(PostEntity.fromDto(post))
+            throw  DbError
+        } catch (e: Exception) {
+            // revert changes to init state
+            postDao.insertPost(PostEntity.fromDto(post))
             throw UndefinedError
         }
     }
@@ -79,7 +118,7 @@ class PostRepository @Inject constructor(
 
             val response = postApi.deletePost(postId)
             if (!response.isSuccessful) {
-                postDao.createPost(postToDelete)
+                postDao.insertPost(postToDelete)
                 throw ApiError(response.code())
             }
         } catch (e: IOException) {

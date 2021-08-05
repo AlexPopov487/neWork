@@ -29,11 +29,16 @@ class PostViewModel @Inject constructor(
     }
 
 
+    private val _editedPost = MutableLiveData<Post?>(null)
+    val editedPost: LiveData<Post?>
+        get() = _editedPost
+
+
     init {
         loadPostsFromWeb()
     }
 
-    private fun loadPostsFromWeb() {
+    fun loadPostsFromWeb() {
         viewModelScope.launch {
             try {
                 _dataState.value = (FeedStateModel(isLoading = true))
@@ -46,6 +51,14 @@ class PostViewModel @Inject constructor(
                 ))
             }
         }
+    }
+
+    fun editPost(editedPost: Post) {
+        _editedPost.value = editedPost
+    }
+
+    fun invalidateEditPost() {
+        _editedPost.value = null
     }
 
     @ExperimentalCoroutinesApi
@@ -71,11 +84,25 @@ class PostViewModel @Inject constructor(
                     hasError = true,
                     errorMessage = AppError.getMessage(e)
                 ))
-
-            }
+            } finally {
+                invalidateEditPost()            }
         }
     }
 
+
+    fun likePost(post: Post){
+        viewModelScope.launch {
+          try{
+              _dataState.value = FeedStateModel()
+              repository.likePost(post)
+          } catch (e : Exception) {
+              _dataState.value = (FeedStateModel(
+                  hasError = true,
+                  errorMessage = AppError.getMessage(e)
+              ))
+          }
+        }
+    }
 
     fun deletePost(postId: Long) {
         viewModelScope.launch {

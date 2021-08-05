@@ -32,6 +32,12 @@ interface ApiService {
     @POST("posts")
     suspend fun createPost(@Body post: Post): Response<Post>
 
+    @POST("posts/{id}/likes")
+    suspend fun likePostById(@Path("id") postId: Long): Response<Post>
+
+    @DELETE("posts/{id}/likes")
+    suspend fun dislikePostById(@Path("id") postId: Long): Response<Post>
+
     @DELETE("posts/{id}")
     suspend fun deletePost(@Path("id") postId: Long): Response<Unit>
 

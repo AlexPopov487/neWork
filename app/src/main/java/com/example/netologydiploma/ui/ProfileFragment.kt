@@ -27,7 +27,7 @@ class ProfileFragment : Fragment() {
         val viewModel : ProfileViewModel by viewModels(
             ownerProducer = ::requireParentFragment
         )
-
+        // TODO UPDATE POSTS LIST!!
         binding.btSignOut.setOnClickListener {
             viewModel.onSignOut()
             findNavController().popBackStack()

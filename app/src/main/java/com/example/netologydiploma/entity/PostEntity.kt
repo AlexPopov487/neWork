@@ -16,7 +16,7 @@ data class PostEntity(
     val authorAvatar: String,
     val content: String,
     val published: Long,
-    val isLiked: Boolean,
+    val isLikedByMe: Boolean,
     val likeCount: Int,
     @Embedded
     val coords: PostCoordsEmbeddable?,
@@ -24,30 +24,31 @@ data class PostEntity(
     val attachment: MediaAttachmentEmbeddable?
 ) {
     fun toDto() = Post(
-        id,
-        authorId,
-        author,
-        authorAvatar,
-        content,
-        published,
-        isLiked,
-        likeCount,
-        coords?.toDto(),
-        attachment?.toDto()
+        id = id,
+        authorId = authorId,
+        author = author,
+        authorAvatar = authorAvatar,
+        content = content,
+        published = published,
+        likedByMe = isLikedByMe,
+        likeCount = likeCount,
+        coords = coords?.toDto(),
+        attachment = attachment?.toDto()
     )
 
     companion object {
         fun fromDto(postDto: Post) =
             PostEntity(
-                postDto.id,
-                postDto.authorId,
-                postDto.author,
-                postDto.authorAvatar,
-                postDto.content, postDto.published,
-                postDto.isLiked,
-                postDto.likeCount,
-                PostCoordsEmbeddable.fromDto(postDto.coords),
-                MediaAttachmentEmbeddable.fromDto(postDto.attachment)
+                id = postDto.id,
+                authorId = postDto.authorId,
+                author = postDto.author,
+                authorAvatar = postDto.authorAvatar,
+                content = postDto.content,
+                published = postDto.published,
+                isLikedByMe = postDto.likedByMe,
+                likeCount = postDto.likeCount,
+                coords = PostCoordsEmbeddable.fromDto(postDto.coords),
+                attachment = MediaAttachmentEmbeddable.fromDto(postDto.attachment)
             )
     }
 

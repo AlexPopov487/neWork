@@ -1,9 +1,6 @@
 package com.example.netologydiploma.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.netologydiploma.entity.PostEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,11 +15,14 @@ interface PostDao {
     suspend fun getPostById(id: Long) : PostEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createPosts(posts: List<PostEntity>)
+    suspend fun insertPosts(posts: List<PostEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createPost(post: PostEntity)
+    suspend fun insertPost(post: PostEntity)
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun deletePost(id: Long)
+
+    @Query("DELETE FROM PostEntity")
+    suspend fun clearPostTable()
 }

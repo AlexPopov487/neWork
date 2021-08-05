@@ -36,4 +36,5 @@
     <string name="invalid_email_registration">Please provide a valid email address</string>
     <string name="password_too_short_error_registration_fragment">Password must be at least 6 characters long</string>
     <string name="edit_post_item_menu">Edit</string>
+    <string name="change_post_fragment_title">Change post</string>
 </resources>
