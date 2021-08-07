@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
         <item
-            android:id="@+id/action_add_post"
+            android:id="@+id/action_save"
             android:icon="@drawable/ic_add_circle_24"
-            android:contentDescription="@string/create_post_button_description"
+            android:contentDescription="@string/save_button_description"
             app:showAsAction="always"
-            android:title="@string/create_post_button_title" />
+            android:title="@string/save_button_title" />
 
 </menu>

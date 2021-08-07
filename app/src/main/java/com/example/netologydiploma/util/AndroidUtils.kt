@@ -5,6 +5,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 object AndroidUtils {
     fun hideKeyboard(view: View) {
@@ -17,8 +18,20 @@ object AndroidUtils {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
-    fun formatMillisToDate(millis: Long): String {
+    fun formatMillisToDateString(millis: Long): String {
         return SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
             .format(millis)
+    }
+
+    fun formatDateToDateString(date: Date): String {
+        return SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
+            .format(date)
+    }
+
+    fun formatStringToMillis(dateString: String): Long {
+        val sdf = SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
+        return sdf.parse(dateString)!!.run {
+            time
+        }
     }
 }

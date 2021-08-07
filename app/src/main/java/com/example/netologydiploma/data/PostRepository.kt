@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.PostDao
+import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.PostEntity
 import com.example.netologydiploma.entity.toDto
@@ -110,6 +111,8 @@ class PostRepository @Inject constructor(
             throw UndefinedError
         }
     }
+
+
 
     suspend fun deletePost(postId: Long) {
         val postToDelete = postDao.getPostById(postId)

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.netologydiploma.dto.MediaAttachment
 import com.example.netologydiploma.dto.Post
-import com.example.netologydiploma.dto.PostCoords
+import com.example.netologydiploma.dto.Coords
 
 @Entity
 data class PostEntity(
@@ -19,7 +19,7 @@ data class PostEntity(
     val isLikedByMe: Boolean,
     val likeCount: Int,
     @Embedded
-    val coords: PostCoordsEmbeddable?,
+    val coords: CoordsEmbeddable?,
     @Embedded
     val attachment: MediaAttachmentEmbeddable?
 ) {
@@ -47,7 +47,7 @@ data class PostEntity(
                 published = postDto.published,
                 isLikedByMe = postDto.likedByMe,
                 likeCount = postDto.likeCount,
-                coords = PostCoordsEmbeddable.fromDto(postDto.coords),
+                coords = CoordsEmbeddable.fromDto(postDto.coords),
                 attachment = MediaAttachmentEmbeddable.fromDto(postDto.attachment)
             )
     }
@@ -67,15 +67,15 @@ data class MediaAttachmentEmbeddable(
     }
 }
 
-data class PostCoordsEmbeddable(
+data class CoordsEmbeddable(
     val lat: Double = 0.0,
     val lng: Double = 0.0,
 ) {
-    fun toDto() = PostCoords(lat, lng)
+    fun toDto() = Coords(lat, lng)
 
     companion object {
-        fun fromDto(dto: PostCoords?) = dto?.let {
-            PostCoordsEmbeddable(it.lat, it.lng)
+        fun fromDto(dto: Coords?) = dto?.let {
+            CoordsEmbeddable(it.lat, it.lng)
         }
     }
 }

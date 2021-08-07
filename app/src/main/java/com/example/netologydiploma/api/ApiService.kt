@@ -1,5 +1,6 @@
 package com.example.netologydiploma.api
 
+import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.model.AuthJsonModel
 import retrofit2.Response
@@ -40,5 +41,29 @@ interface ApiService {
 
     @DELETE("posts/{id}")
     suspend fun deletePost(@Path("id") postId: Long): Response<Unit>
+
+    @GET("events")
+    suspend fun getAllEvents() : Response<List<Event>>
+
+    @GET("events/{id}")
+    suspend fun getEventById(@Path("id")id: Long) : Response<Event>
+
+    @POST("events")
+    suspend fun createEvent(@Body event: Event) : Response<Event>
+
+    @POST("events/{id}/likes")
+    suspend fun likeEventById(@Path("id") eventId: Long): Response<Event>
+
+    @DELETE("events/{id}/likes")
+    suspend fun dislikeEventById(@Path("id") eventId: Long): Response<Event>
+
+    @POST("events/{id}/participants")
+    suspend fun participateEventById(@Path("id") eventId: Long): Response<Event>
+
+    @DELETE("events/{id}/participants")
+    suspend fun unparticipateEventById(@Path("id") eventId: Long): Response<Event>
+
+    @DELETE("event/{id}")
+    suspend fun deleteEvent(@Path("id") eventId: Long): Response<Unit>
 
 }

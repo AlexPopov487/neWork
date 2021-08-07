@@ -29,11 +29,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders.usesCleartextTraffic = false
-            buildConfigField "String", "BASE_URL", '"https://nmedia.herokuapp.com"'
-        }
-        debug {
-            manifestPlaceholders.usesCleartextTraffic = true
-            buildConfigField "String", "BASE_URL", '"http://192.168.0.105:9999"'
         }
     }
     compileOptions {
@@ -81,6 +76,9 @@ dependencies {
     // dagger hilt
     implementation("com.google.dagger:hilt-android:$hilt_version")
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
+    // paging 3
+    implementation("androidx.paging:paging-runtime-ktx:3.0.1")
+
 
 
 

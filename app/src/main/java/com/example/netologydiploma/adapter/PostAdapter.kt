@@ -11,16 +11,15 @@ import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.PostListItemBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
-import com.example.netologydiploma.viewModel.AuthViewModel
-import javax.inject.Inject
 
-interface OnButtonInteractionListener {
-    fun onLike(post: Post)
-    fun onRemove(post: Post)
-    fun onEdit(post: Post)
+
+interface OnPostButtonInteractionListener {
+    fun onPostLike(post: Post)
+    fun onPostRemove(post: Post)
+    fun onPostEdit(post: Post)
 }
 
-class PostAdapter(private val interactionListener: OnButtonInteractionListener) :
+class PostAdapter(private val interactionListener: OnPostButtonInteractionListener) :
     ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
 
     companion object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
@@ -51,7 +50,7 @@ class PostAdapter(private val interactionListener: OnButtonInteractionListener) 
 
 class PostViewHolder(
     private val postBinding: PostListItemBinding,
-    private val interactionListener: OnButtonInteractionListener
+    private val interactionListener: OnPostButtonInteractionListener
 ) :
     RecyclerView.ViewHolder(postBinding.root) {
 
@@ -60,7 +59,7 @@ class PostViewHolder(
     fun bind(post: Post) {
         with(postBinding) {
             tVUserName.text = post.author
-            tVPublished.text = AndroidUtils.formatMillisToDate(post.published)
+            tVPublished.text = AndroidUtils.formatMillisToDateString(post.published)
             tvContent.text = post.content
 
 
@@ -69,7 +68,7 @@ class PostViewHolder(
 
 
             btLike.setOnClickListener {
-                interactionListener.onLike(post)
+                interactionListener.onPostLike(post)
             }
 
 
@@ -80,16 +79,16 @@ class PostViewHolder(
                 btPostOptions.visibility = View.VISIBLE
                 btPostOptions.setOnClickListener {
                     PopupMenu(it.context, it).apply {
-                        inflate(R.menu.post_list_item_menu)
-                        menu.setGroupVisible(R.id.post_modification, post.ownedByMe)
+                        inflate(R.menu.list_item_menu)
+                        menu.setGroupVisible(R.id.list_item_modification, post.ownedByMe)
                         setOnMenuItemClickListener { menuItem ->
                             when (menuItem.itemId) {
                                 R.id.action_delete -> {
-                                    interactionListener.onRemove(post)
+                                    interactionListener.onPostRemove(post)
                                     true
                                 }
                                 R.id.action_edit -> {
-                                    interactionListener.onEdit(post)
+                                    interactionListener.onPostEdit(post)
                                     true
                                 }
                                 else -> false

@@ -28,4 +28,8 @@
     <style name="Widget.AppTheme.LikeCheckBox" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="tint">@color/like_checkbox_tint</item>
     </style>
+
+    <style name="Widget.AppTheme.EventParticipateCheckBox" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+        <item name="tint">@color/event_participation_check_box</item>
+    </style>
 </resources>

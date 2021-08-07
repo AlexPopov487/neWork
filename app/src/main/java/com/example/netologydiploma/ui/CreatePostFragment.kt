@@ -44,17 +44,19 @@ class CreatePostFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        viewModel.invalidateEditPost()
+        if (viewModel.editedPost.value != null) {
+            viewModel.invalidateEditPost()
+        }
         super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_create_post_menu, menu)
+        inflater.inflate(R.menu.fragment_create_edit_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_add_post -> {
+            R.id.action_save -> {
                 val content = binding.eTPostContent.text.toString()
                 // if editedPost is not null, we are to rewrite an existing post.
                 // Otherwise, save a new one

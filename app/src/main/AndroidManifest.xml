@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetologyDiploma"
         tools:targetApi="m"
-        android:usesCleartextTraffic="${usesCleartextTraffic}"
         android:name=".application.App">
         <activity android:name=".ui.MainActivity">
             <intent-filter>

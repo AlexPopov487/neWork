@@ -1,14 +1,13 @@
 <resources>
     <string name="app_name">Netology Diploma</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="events_nav_menu_drawer">Events</string>
     <string name="main_nav_menu_drawer">Main</string>
     <string name="my_profile_nav_menu_drawer">My profile</string>
     <string name="user_icon_content_description">User icon</string>
     <string name="delete_post_item_menu">Delete</string>
-    <string name="create_post_button_description">Create new post</string>
-    <string name="create_post_button_title">Create Post</string>
+    <string name="save_button_description">Save</string>
+    <string name="save_button_title">Save</string>
     <string name="hint_create_post_editText">Create a new post</string>
     <string name="sign_out_button">Sign out</string>
     <string name="action_signIn_auth_appbar_menu">Sign In</string>
@@ -37,4 +36,17 @@
     <string name="password_too_short_error_registration_fragment">Password must be at least 6 characters long</string>
     <string name="edit_post_item_menu">Edit</string>
     <string name="change_post_fragment_title">Change post</string>
+    <string name="tv_event_due_date_template">Due date:</string>
+    <string name="hint_create_event_editText">Create a new event</string>
+    <string name="change_event_fragment_title">Edit event</string>
+    <string name="iv_content_icon_description">Content icon</string>
+    <string name="iv_date_picker_icon_description">Date picker icon</string>
+    <string name="online_event_type_button">Online</string>
+    <string name="offline_event_type_button">Offline</string>
+    <string name="tv_pick_event_date">Pick date…</string>
+    <string name="create_event_fragment_title">Create event</string>
+    <string name="iv_event_type_icon_description">Event type icon</string>
+    <string name="iv_date_icon_description">Event date icon</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
