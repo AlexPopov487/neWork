@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.EventListItemBinding
@@ -21,7 +21,7 @@ interface OnEventButtonInteractionListener {
 }
 
 class EventAdapter(private val interactionListener: OnEventButtonInteractionListener) :
-    ListAdapter<Event, EventViewHolder>(EventDiffCallback) {
+    PagingDataAdapter<Event, EventViewHolder>(EventDiffCallback) {
 
     companion object EventDiffCallback : DiffUtil.ItemCallback<Event>() {
         override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean =
@@ -43,7 +43,8 @@ class EventAdapter(private val interactionListener: OnEventButtonInteractionList
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position) ?: return
+        holder.bind(item)
     }
 
 }

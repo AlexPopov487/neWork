@@ -5,13 +5,14 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.FragmentCreatePostBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.PostViewModel
 
-
+@ExperimentalPagingApi
 class CreatePostFragment : Fragment() {
 
     private lateinit var binding: FragmentCreatePostBinding

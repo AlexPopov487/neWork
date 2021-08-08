@@ -22,13 +22,43 @@ interface ApiService {
         @Field("login") login: String,
         @Field("pass") password: String,
         @Field("name") name: String
-    )   : Response<AuthJsonModel>
+    ): Response<AuthJsonModel>
 
     @GET("posts")
     suspend fun getAllPosts(): Response<List<Post>>
 
+    @GET("events/latest")
+    suspend fun getLatestEvents(@Query("count") count: Int): Response<List<Event>>
+
+    @GET("events/{id}/before")
+    suspend fun getEventsBefore(
+        @Path("id") id: Long,
+        @Query("count") count: Int
+    ): Response<List<Event>>
+
+    @GET("events/{id}/after")
+    suspend fun getEventsAfter(
+        @Path("id") id: Long,
+        @Query("count") count: Int
+    ): Response<List<Event>>
+
+    @GET("posts/latest")
+    suspend fun getLatestPosts(@Query("count") count: Int): Response<List<Post>>
+
+    @GET("posts/{id}/before")
+    suspend fun getPostsBefore(
+        @Path("id") id: Long,
+        @Query("count") count: Int
+    ): Response<List<Post>>
+
+    @GET("posts/{id}/after")
+    suspend fun getPostsAfter(
+        @Path("id") id: Long,
+        @Query("count") count: Int
+    ): Response<List<Post>>
+
     @GET("posts/{id}")
-    suspend fun getPostById(@Path("id")id: Long): Response<Post>
+    suspend fun getPostById(@Path("id") id: Long): Response<Post>
 
     @POST("posts")
     suspend fun createPost(@Body post: Post): Response<Post>

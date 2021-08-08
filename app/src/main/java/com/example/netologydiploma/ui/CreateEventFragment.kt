@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.FragmentCreateEventBinding
 import com.example.netologydiploma.dto.Event
@@ -14,6 +15,7 @@ import com.example.netologydiploma.viewModel.EventViewModel
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
+@ExperimentalPagingApi
 
 class CreateEventFragment : Fragment() {
 

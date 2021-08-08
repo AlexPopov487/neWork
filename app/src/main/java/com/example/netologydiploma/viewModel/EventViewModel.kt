@@ -1,19 +1,27 @@
 package com.example.netologydiploma.viewModel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.EventRepository
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalPagingApi
 @HiltViewModel
 class EventViewModel @Inject constructor(
     private val repository: EventRepository,
@@ -32,50 +40,18 @@ class EventViewModel @Inject constructor(
     val editedEvent: LiveData<Event?>
         get() = _editedEvent
 
-    init {
-        loadEventsFromWeb()
-    }
+
+    private val cached = repository.getAllEvents().cachedIn(viewModelScope)
 
     @ExperimentalCoroutinesApi
-    val eventList: LiveData<List<Event>> = appAuth
+    val eventList: Flow<PagingData<Event>> = appAuth
         .authStateFlow
         .flatMapLatest { (myId, _) ->
-            repository.getAllEvents().map { eventsList ->
-                eventsList.map {
-                    it.copy(ownedByMe = it.authorId == myId)
-                }
-            }
-        }.asLiveData(Dispatchers.Default)
-
-    private fun loadEventsFromWeb() {
-        viewModelScope.launch {
-            try {
-                _dataState.value = (FeedStateModel(isLoading = true))
-                repository.loadEventsFromWeb()
-                _dataState.value = (FeedStateModel(isLoading = false))
-            } catch (e: Exception) {
-                _dataState.value = (FeedStateModel(
-                    hasError = true,
-                    errorMessage = AppError.getMessage(e)
-                ))
+            cached.map { pagingDataList ->
+                pagingDataList.map { it.copy(ownedByMe = myId == it.authorId) }
             }
         }
-    }
 
-    fun updateEvents() {
-        viewModelScope.launch {
-            try {
-                _dataState.value = (FeedStateModel(isRefreshing = true))
-                repository.loadEventsFromWeb()
-                _dataState.value = (FeedStateModel(isRefreshing = false))
-            } catch (e: Exception) {
-                _dataState.value = (FeedStateModel(
-                    hasError = true,
-                    errorMessage = AppError.getMessage(e)
-                ))
-            }
-        }
-    }
 
     fun editEvent(editedEvent: Event) {
         _editedEvent.value = editedEvent

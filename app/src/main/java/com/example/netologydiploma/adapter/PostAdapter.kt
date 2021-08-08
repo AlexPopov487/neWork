@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,7 @@ interface OnPostButtonInteractionListener {
 }
 
 class PostAdapter(private val interactionListener: OnPostButtonInteractionListener) :
-    ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+    PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback) {
 
     companion object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
         override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
@@ -42,7 +43,8 @@ class PostAdapter(private val interactionListener: OnPostButtonInteractionListen
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val item = getItem(position) ?: return
+        holder.bind(item)
         }
 
 }

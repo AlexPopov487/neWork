@@ -1,7 +1,5 @@
 package com.example.netologydiploma.api
 
-import com.example.netologydiploma.BuildConfig
-import com.example.netologydiploma.api.ApiServiceModule.Companion.BASE_URL
 import com.example.netologydiploma.auth.AppAuth
 import dagger.Module
 import dagger.Provides
@@ -18,7 +16,7 @@ import javax.inject.Singleton
 class ApiServiceModule {
 
     companion object {
-        const val BASE_URL = "https://net-diploma.herokuapp.com/api/"
+        const val BASE_URL = "https://net-diploma.herokuapp.com/api/slow/"
     }
 
     @Singleton

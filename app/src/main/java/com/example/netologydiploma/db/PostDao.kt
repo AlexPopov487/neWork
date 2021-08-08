@@ -1,11 +1,17 @@
 package com.example.netologydiploma.db
 
+import androidx.paging.PagingSource
 import androidx.room.*
+import com.example.netologydiploma.entity.EventEntity
 import com.example.netologydiploma.entity.PostEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PostDao {
+
+
+    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    fun getPostPagingSource(): PagingSource<Int, PostEntity>
 
     // use Flow instead of LiveData to property check user auth in PostViewModel data map{} operation
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")

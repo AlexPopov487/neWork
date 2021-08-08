@@ -1,13 +1,12 @@
 package com.example.netologydiploma.data
 
-import androidx.room.withTransaction
+import androidx.paging.*
 import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.EventDao
+import com.example.netologydiploma.db.EventRemoteKeyDao
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.entity.EventEntity
-import com.example.netologydiploma.entity.toDto
-import com.example.netologydiploma.entity.toEntity
 import com.example.netologydiploma.error.ApiError
 import com.example.netologydiploma.error.DbError
 import com.example.netologydiploma.error.NetworkError
@@ -21,40 +20,21 @@ import javax.inject.Inject
 class EventRepository @Inject constructor(
     private val appDb: AppDb,
     private val apiService: ApiService,
-    private val eventDao: EventDao
+    private val eventDao: EventDao,
+    private val eventRemoteKeyDao: EventRemoteKeyDao
+
 ) {
 
-    fun getAllEvents(): Flow<List<Event>> = eventDao.getAllEvents().map {
-        it.toDto()
-    }
-
-    suspend fun loadEventsFromWeb() {
-        try {
-            val response = apiService.getAllEvents()
-
-            if (!response.isSuccessful) {
-                throw ApiError(response.code())
-            }
-
-            val body = response.body()?.map {
-                it.copy(
-                    likeCount = it.likeOwnerIds.size,
-                    participantsCount = it.participantsIds.size
-                )
-            } ?: throw ApiError(response.code())
-
-            appDb.withTransaction {
-                eventDao.clearEventTable()
-                eventDao.insertEvents(body.toEntity())
-            }
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: SQLException) {
-            throw  DbError
-        } catch (e: Exception) {
-            throw UndefinedError
+    @ExperimentalPagingApi
+    fun getAllEvents(): Flow<PagingData<Event>> = Pager(
+        config = PagingConfig(pageSize = DEFAULT_EVENT_PAGE_SIZE, enablePlaceholders = true),
+        remoteMediator = EventRemoteMediator(appDb, eventRemoteKeyDao, apiService, eventDao),
+        pagingSourceFactory = { eventDao.getEventPagingSource() }
+    ).flow
+        .map { entityList ->
+            entityList.map { it.toDto() }
         }
-    }
+
 
     suspend fun createEvent(event: Event) {
         try {

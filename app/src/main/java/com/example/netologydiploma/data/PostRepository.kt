@@ -1,14 +1,12 @@
 package com.example.netologydiploma.data
 
-import androidx.room.withTransaction
+import androidx.paging.*
 import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.PostDao
-import com.example.netologydiploma.dto.Event
+import com.example.netologydiploma.db.PostRemoteKeyDao
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.PostEntity
-import com.example.netologydiploma.entity.toDto
-import com.example.netologydiploma.entity.toEntity
 import com.example.netologydiploma.error.ApiError
 import com.example.netologydiploma.error.DbError
 import com.example.netologydiploma.error.NetworkError
@@ -22,34 +20,19 @@ import javax.inject.Inject
 class PostRepository @Inject constructor(
     private val postDao: PostDao,
     private val postApi: ApiService,
-    private val db: AppDb
+    private val db: AppDb,
+    private val postRemoteKeyDao: PostRemoteKeyDao,
 ) {
 
-    fun getAllPosts(): Flow<List<Post>> {
-        return postDao.getAllPosts().map { it.toDto() }
+    @ExperimentalPagingApi
+    fun getAllPosts(): Flow<PagingData<Post>> = Pager(
+        config = PagingConfig(pageSize = DEFAULT_POST_PAGE_SIZE, enablePlaceholders = true),
+        remoteMediator = PostRemoteMediator(postApi, db, postDao, postRemoteKeyDao),
+        pagingSourceFactory = { postDao.getPostPagingSource() }
+    ).flow.map { postList ->
+        postList.map { it.toDto() }
     }
 
-    suspend fun loadPostsFromWeb() {
-        try {
-            val response = postApi.getAllPosts()
-            if (!response.isSuccessful) {
-                throw ApiError(response.code())
-            }
-            val body = response.body()?.map {
-                it.copy(likeCount = it.likeOwnerIds.size)
-            } ?: throw ApiError(response.code())
-            db.withTransaction {
-                postDao.clearPostTable()
-                postDao.insertPosts(body.toEntity())
-            }
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: SQLException) {
-            throw  DbError
-        } catch (e: Exception) {
-            throw UndefinedError
-        }
-    }
 
     suspend fun createPost(post: Post) {
         try {

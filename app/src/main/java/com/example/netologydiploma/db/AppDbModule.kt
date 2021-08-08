@@ -29,4 +29,12 @@ class AppDbModule {
 
     @Provides
     fun provideEventDao(appDb: AppDb): EventDao = appDb.eventDao()
+
+    @Provides
+    fun provideEventRemoteKeyDao(appDb: AppDb): EventRemoteKeyDao =
+        appDb.eventRemoteKeyDao()
+
+    @Provides
+    fun providePostRemoteKeyDao(appDb: AppDb): PostRemoteKeyDao =
+        appDb.postRemoteKeyDao()
 }

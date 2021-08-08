@@ -1,9 +1,7 @@
 package com.example.netologydiploma.data
 
 import com.example.netologydiploma.api.ApiService
-import com.example.netologydiploma.db.AppDb
-import com.example.netologydiploma.db.EventDao
-import com.example.netologydiploma.db.PostDao
+import com.example.netologydiploma.db.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,9 +17,10 @@ class RepositoryModule {
     fun providePostRepository(
         apiService: ApiService,
         postDao: PostDao,
-        appDb: AppDb
+        appDb: AppDb,
+        postRemoteKeyDao: PostRemoteKeyDao
     ): PostRepository =
-        PostRepository(postDao, apiService, appDb)
+        PostRepository(postDao, apiService, appDb, postRemoteKeyDao)
 
     @Provides
     @Singleton
@@ -33,6 +32,7 @@ class RepositoryModule {
     fun provideEventRepository(
         apiService: ApiService,
         eventDao: EventDao,
-        appDb: AppDb
-    ): EventRepository = EventRepository(appDb, apiService, eventDao)
+        appDb: AppDb,
+        eventRemoteKeyDao: EventRemoteKeyDao
+    ): EventRepository = EventRepository(appDb, apiService, eventDao, eventRemoteKeyDao)
 }
