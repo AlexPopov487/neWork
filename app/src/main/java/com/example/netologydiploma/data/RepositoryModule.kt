@@ -35,4 +35,15 @@ class RepositoryModule {
         appDb: AppDb,
         eventRemoteKeyDao: EventRemoteKeyDao
     ): EventRepository = EventRepository(appDb, apiService, eventDao, eventRemoteKeyDao)
+
+    @Provides
+    @Singleton
+    fun provideProfileRepository(
+        apiService: ApiService,
+        appDb: AppDb,
+        wallRemoteKeyDao: WallRemoteKeyDao,
+        wallPostDao: WallPostDao,
+        jobDao: JobDao
+    ): ProfileRepository =
+        ProfileRepository(apiService, appDb, wallPostDao, wallRemoteKeyDao, jobDao)
 }

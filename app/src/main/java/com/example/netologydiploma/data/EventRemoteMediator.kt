@@ -54,7 +54,8 @@ class EventRemoteMediator(
             val receivedBody = response.body() ?: throw ApiError(response.code())
 
             if (receivedBody.isEmpty()) return MediatorResult.Success(
-                endOfPaginationReached = true)
+                endOfPaginationReached = true
+            )
 
             appDb.withTransaction {
                 when (loadType) {
@@ -67,7 +68,8 @@ class EventRemoteMediator(
                     LoadType.PREPEND -> insertMaxKey(receivedBody)
                     LoadType.APPEND -> insertMinKey(receivedBody)
                 }
-                eventDao.insertEvents(receivedBody.toEntity())
+                eventDao.insertEvents(receivedBody.map { it.copy(likeCount = it.likeOwnerIds.size) }
+                    .toEntity())
             }
             return MediatorResult.Success(
                 endOfPaginationReached =

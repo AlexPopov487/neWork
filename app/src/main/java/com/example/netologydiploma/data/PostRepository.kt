@@ -26,7 +26,7 @@ class PostRepository @Inject constructor(
 
     @ExperimentalPagingApi
     fun getAllPosts(): Flow<PagingData<Post>> = Pager(
-        config = PagingConfig(pageSize = DEFAULT_POST_PAGE_SIZE, enablePlaceholders = true),
+        config = PagingConfig(pageSize = DEFAULT_POST_PAGE_SIZE, enablePlaceholders = false),
         remoteMediator = PostRemoteMediator(postApi, db, postDao, postRemoteKeyDao),
         pagingSourceFactory = { postDao.getPostPagingSource() }
     ).flow.map { postList ->

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="150dp"
+    android:layout_marginHorizontal="4dp"
+    android:elevation="7dp"
+    android:longClickable="true"
+    app:cardCornerRadius="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/job_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="view, bt_cancel_job_deletion, bt_delete_job" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.6"
+            android:background="@android:color/darker_gray" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_delete_job"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/job_delete_action"
+            app:icon="@drawable/ic_delete_24"
+            app:layout_constraintBottom_toTopOf="@+id/bt_cancel_job_deletion"
+            app:layout_constraintEnd_toEndOf="@+id/bt_cancel_job_deletion"
+            app:layout_constraintStart_toStartOf="@+id/bt_cancel_job_deletion"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_cancel_job_deletion"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/job_options_cancel_deletion"
+            app:icon="@drawable/ic_cancel_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bt_delete_job" />
+
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/job_overView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="tv_job_company, tv_job_link, tv_job_period, tv_job_position" />
+
+        <TextView
+            android:id="@+id/tv_job_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="1dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_job_position"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:layout_editor_absoluteX="8dp"
+            tools:text="Netology" />
+
+        <TextView
+            android:id="@+id/tv_job_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="1dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_job_period"
+            app:layout_constraintTop_toBottomOf="@+id/tv_job_company"
+            tools:layout_editor_absoluteX="8dp"
+            tools:text="Android developer" />
+
+        <TextView
+            android:id="@+id/tv_job_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="1dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_job_link"
+            app:layout_constraintTop_toBottomOf="@+id/tv_job_position"
+            tools:layout_editor_absoluteX="8dp"
+            tools:text="20.20.2020 - 20.20.2021" />
+
+        <TextView
+            android:id="@+id/tv_job_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="1dp"
+            android:autoLink="web|email"
+            android:linksClickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_job_period"
+            tools:layout_editor_absoluteX="8dp"
+            tools:text="Netology.ru" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

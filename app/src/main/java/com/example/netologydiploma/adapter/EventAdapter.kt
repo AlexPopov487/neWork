@@ -60,9 +60,9 @@ class EventViewHolder(
     fun bind(event: Event) {
         with(eventBinding) {
             tVUserName.text = event.author
-            tVPublished.text = AndroidUtils.formatMillisToDateString(event.published)
+            tVPublished.text = AndroidUtils.formatMillisToDateTimeString(event.published)
             tvContent.text = event.content
-            tvEventDueDate.text = AndroidUtils.formatMillisToDateString(event.datetime)
+            tvEventDueDate.text = AndroidUtils.formatMillisToDateTimeString(event.datetime)
 
             btParticipate.isChecked = event.participatedByMe
             btParticipate.text = event.participantsCount.toString()

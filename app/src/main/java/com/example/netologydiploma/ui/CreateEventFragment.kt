@@ -45,7 +45,7 @@ class CreateEventFragment : Fragment() {
                 )
 
                 binding.tVEventDateTime.text =
-                    AndroidUtils.formatMillisToDateString(editedPost.datetime)
+                    AndroidUtils.formatMillisToDateTimeString(editedPost.datetime)
                 AndroidUtils.showKeyboard(binding.eTPostContent)
 
                 when (editedPost.type) {
@@ -84,7 +84,7 @@ class CreateEventFragment : Fragment() {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 calendar.set(Calendar.MINUTE, minute)
 
-                binding.tVEventDateTime.text = AndroidUtils.formatDateToDateString(calendar.time)
+                binding.tVEventDateTime.text = AndroidUtils.formatDateToDateTimeString(calendar.time)
             }.show(childFragmentManager, "timePicker")
         }.show(childFragmentManager, "datePicker")
     }
@@ -125,7 +125,7 @@ class CreateEventFragment : Fragment() {
 
                 val content = binding.eTPostContent.text.toString()
                 val date =
-                    AndroidUtils.formatStringToMillis(binding.tVEventDateTime.text.toString())
+                    AndroidUtils.formatDateTimeStringToMillis(binding.tVEventDateTime.text.toString())
                 val eventType = eventType ?: EventType.OFFLINE
 
                 // if editedEvent is not null, we are to rewrite an existing post.

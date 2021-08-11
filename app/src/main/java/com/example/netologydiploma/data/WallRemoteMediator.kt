@@ -7,43 +7,45 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.AppDb
-import com.example.netologydiploma.db.PostDao
-import com.example.netologydiploma.db.PostRemoteKeyDao
+import com.example.netologydiploma.db.WallPostDao
+import com.example.netologydiploma.db.WallRemoteKeyDao
 import com.example.netologydiploma.dto.Post
-import com.example.netologydiploma.entity.PostEntity
-import com.example.netologydiploma.entity.PostRemoteKeyEntity
-import com.example.netologydiploma.entity.toEntity
+import com.example.netologydiploma.entity.WallPostEntity
+import com.example.netologydiploma.entity.WallRemoteKeyEntity
+import com.example.netologydiploma.entity.toWallPostEntity
 import com.example.netologydiploma.error.ApiError
 
-const val DEFAULT_POST_PAGE_SIZE = 10
+const val DEFAULT_WALL_PAGE_SIZE = 10
 
-@ExperimentalPagingApi
-class PostRemoteMediator(
+@OptIn(ExperimentalPagingApi::class)
+class WallRemoteMediator(
     private val apiService: ApiService,
     private val appDb: AppDb,
-    private val postDao: PostDao,
-    private val postRemoteKeyDao: PostRemoteKeyDao
-) : RemoteMediator<Int, PostEntity>() {
+    private val wallPostDao: WallPostDao,
+    private val wallRemoteKeyDao: WallRemoteKeyDao,
+    private val authorId: Long,
+) : RemoteMediator<Int, WallPostEntity>() {
+
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, PostEntity>
+        state: PagingState<Int, WallPostEntity>
     ): MediatorResult {
         try {
             val response = when (loadType) {
                 LoadType.REFRESH -> {
-                    apiService.getLatestPosts(DEFAULT_POST_PAGE_SIZE)
+                    apiService.getLatestWallPosts(authorId, state.config.initialLoadSize)
                 }
                 LoadType.PREPEND -> {
-                    val maxKey = postRemoteKeyDao.getMaxKey() ?: return MediatorResult.Success(
+                    val maxKey = wallRemoteKeyDao.getMaxKey() ?: return MediatorResult.Success(
                         endOfPaginationReached = false
                     )
-                    apiService.getPostsAfter(maxKey, state.config.pageSize)
+                    apiService.getWallPostsAfter(maxKey, authorId, state.config.pageSize)
                 }
                 LoadType.APPEND -> {
-                    val minKey = postRemoteKeyDao.getMinKey() ?: return MediatorResult.Success(
+                    val minKey = wallRemoteKeyDao.getMinKey() ?: return MediatorResult.Success(
                         endOfPaginationReached = false
                     )
-                    apiService.getPostsBefore(minKey, state.config.pageSize)
+                    apiService.getWallPostsBefore(minKey, authorId, state.config.pageSize)
                 }
             }
 
@@ -57,16 +59,16 @@ class PostRemoteMediator(
             appDb.withTransaction {
                 when (loadType) {
                     LoadType.REFRESH -> {
-                        postRemoteKeyDao.removeAll()
+                        wallRemoteKeyDao.removeAll()
                         insertMaxKey(receivedBody)
                         insertMinKey(receivedBody)
-                        postDao.clearPostTable()
+                        wallPostDao.clearPostTable()
                     }
                     LoadType.PREPEND -> insertMaxKey(receivedBody)
                     LoadType.APPEND -> insertMinKey(receivedBody)
                 }
-                postDao.insertPosts(receivedBody.map { it.copy(likeCount = it.likeOwnerIds.size) }
-                    .toEntity())
+                wallPostDao.insertPosts(receivedBody.map { it.copy(likeCount = it.likeOwnerIds.size) }
+                    .toWallPostEntity())
             }
             return MediatorResult.Success(endOfPaginationReached = receivedBody.isEmpty())
         } catch (e: Exception) {
@@ -77,18 +79,18 @@ class PostRemoteMediator(
 
 
     private suspend fun insertMaxKey(receivedBody: List<Post>) {
-        postRemoteKeyDao.insertKey(
-            PostRemoteKeyEntity(
-                type = PostRemoteKeyEntity.KeyType.AFTER,
+        wallRemoteKeyDao.insertKey(
+            WallRemoteKeyEntity(
+                type = WallRemoteKeyEntity.KeyType.AFTER,
                 id = receivedBody.first().id
             )
         )
     }
 
     private suspend fun insertMinKey(receivedBody: List<Post>) {
-        postRemoteKeyDao.insertKey(
-            PostRemoteKeyEntity(
-                type = PostRemoteKeyEntity.KeyType.BEFORE,
+        wallRemoteKeyDao.insertKey(
+            WallRemoteKeyEntity(
+                type = WallRemoteKeyEntity.KeyType.BEFORE,
                 id = receivedBody.last().id,
             )
         )

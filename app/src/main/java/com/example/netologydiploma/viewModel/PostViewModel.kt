@@ -25,6 +25,7 @@ class PostViewModel @Inject constructor(
     appAuth: AppAuth
 ) : ViewModel() {
 
+
     private val _dataState = MutableLiveData(FeedStateModel())
     val dataState: LiveData<FeedStateModel>
         get() = _dataState

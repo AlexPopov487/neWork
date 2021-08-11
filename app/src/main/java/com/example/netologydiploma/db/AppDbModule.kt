@@ -37,4 +37,16 @@ class AppDbModule {
     @Provides
     fun providePostRemoteKeyDao(appDb: AppDb): PostRemoteKeyDao =
         appDb.postRemoteKeyDao()
+
+    @Provides
+    fun provideWallRemoteKeyDao(appDb: AppDb): WallRemoteKeyDao =
+        appDb.wallRemoteKeyDao()
+
+    @Provides
+    fun provideWallPostDao(appDb: AppDb): WallPostDao =
+        appDb.wallPostDao()
+
+    @Provides
+    fun provideJobDao(appDb: AppDb): JobDao =
+        appDb.jobDao()
 }

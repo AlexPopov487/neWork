@@ -12,54 +12,90 @@
         android:padding="@dimen/common_spacing"
         tools:context=".ui.RegistrationFragment">
 
-        <EditText
-            android:id="@+id/user_name_Et"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/username_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="User name"
-            android:hint="@string/et_registration_hint_registrationFragment"
-            android:inputType="text"
-            android:lines="1"
-            app:layout_constraintBottom_toTopOf="@+id/user_login_Et"
+            app:layout_constraintBottom_toTopOf="@+id/login_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintVertical_chainStyle="packed">
 
-        <EditText
-            android:id="@+id/user_login_Et"
+            <EditText
+                android:id="@+id/user_name_Et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="User name"
+                android:background="@android:color/transparent"
+                android:hint="@string/et_registration_hint_registrationFragment"
+                android:inputType="text"
+                android:lines="1"
+                tools:layout_editor_absoluteX="16dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/login_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="User name"
-            android:hint="@string/et_login_hint_loginFragment"
-            android:inputType="textEmailAddress"
-            android:lines="1"
-            app:layout_constraintBottom_toTopOf="@+id/password_Et"
-            app:layout_constraintTop_toBottomOf="@+id/user_name_Et"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintBottom_toTopOf="@+id/password_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_text_input_layout">
 
-        <EditText
-            android:id="@+id/password_Et"
+            <EditText
+                android:id="@+id/user_login_Et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="User name"
+                android:background="@android:color/transparent"
+                android:hint="@string/et_login_hint_loginFragment"
+                android:inputType="textEmailAddress"
+                android:lines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="Password"
-            android:hint="@string/et_password_hint_loginFragment"
-            android:inputType="textPassword"
-            android:lines="1"
-            app:layout_constraintBottom_toTopOf="@+id/confirm_password_Et"
-            app:layout_constraintTop_toBottomOf="@+id/user_login_Et"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintBottom_toTopOf="@+id/confirm_password_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_text_input_layout"
+            app:passwordToggleEnabled="true">
 
-        <EditText
-            android:id="@+id/confirm_password_Et"
+            <EditText
+                android:id="@+id/password_Et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="Password"
+                android:background="@android:color/transparent"
+                android:hint="@string/et_password_hint_loginFragment"
+                android:inputType="textPassword"
+                android:lines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirm_password_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="User name"
-            android:hint="@string/et_confirm_password_hint_registrationFragment"
-            android:inputType="textPassword"
-            android:lines="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_Et"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_text_input_layout"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/confirm_password_Et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="User name"
+                android:background="@android:color/transparent"
+                android:hint="@string/et_confirm_password_hint_registrationFragment"
+                android:inputType="textPassword"
+                android:lines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signUp_bt"
@@ -69,7 +105,7 @@
             android:text="@string/bt_signUp_registration_fragment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/confirm_password_Et" />
+            app:layout_constraintTop_toBottomOf="@id/confirm_password_text_input_layout" />
 
         <TextView
             android:id="@+id/tv_new_account_request"

@@ -88,6 +88,15 @@ class PostFragment: Fragment() {
                 viewModel.editPost(post)
                 navController.navigate(R.id.action_nav_posts_fragment_to_createEditPostFragment)
             }
+
+            override fun onAvatarClicked(post: Post) {
+                val action = PostFragmentDirections
+                    .actionNavPostsFragmentToNavProfileFragment(
+                        authorId = post.authorId,
+                        authorName = post.author
+                    )
+                navController.navigate(action)
+            }
         })
 
         binding.rVPosts.addItemDecoration(
@@ -115,8 +124,6 @@ class PostFragment: Fragment() {
         }
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
-
-            binding.swipeToRefresh.isRefreshing = state.isRefreshing
             if (state.hasError) {
                 val msg = state.errorMessage ?: "Something went wrong, please try again later."
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()

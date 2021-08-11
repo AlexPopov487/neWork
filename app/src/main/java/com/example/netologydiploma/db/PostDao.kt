@@ -13,9 +13,8 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity ORDER BY id DESC")
     fun getPostPagingSource(): PagingSource<Int, PostEntity>
 
-    // use Flow instead of LiveData to property check user auth in PostViewModel data map{} operation
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
-    fun getAllPosts() : Flow<List<PostEntity>>
+    @Query("SELECT * FROM PostEntity WHERE authorId = :authorId ORDER BY id DESC")
+    fun getWallPagingSource(authorId: Long): PagingSource<Int, PostEntity>
 
     @Query("SELECT * FROM PostEntity WHERE id = :id ")
     suspend fun getPostById(id: Long) : PostEntity

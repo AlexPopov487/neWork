@@ -79,7 +79,7 @@ class LogInFragment : Fragment() {
             binding.progressBar.isVisible = state.isLoading
 
             if (state.hasError) {
-                val msg = state.errorMessage ?: "Something went wrong, please try again later."
+                val msg = state.errorMessage ?: getString(R.string.common_error_message)
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
                 viewModel.invalidateDataState()
             }
@@ -96,6 +96,8 @@ class LogInFragment : Fragment() {
         val spanActionText = getString(R.string.tv_create_account_span_action_login_fragment)
         val createAccClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
+                binding.loginEt.text.clear()
+                binding.passwordEt.text.clear()
                 findNavController().navigate(R.id.action_logInFragment_to_registrationFragment)
             }
         }

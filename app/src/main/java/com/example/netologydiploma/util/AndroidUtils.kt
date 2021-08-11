@@ -18,18 +18,36 @@ object AndroidUtils {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
-    fun formatMillisToDateString(millis: Long): String {
+    fun formatMillisToDateTimeString(millis: Long): String {
         return SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
             .format(millis)
     }
 
-    fun formatDateToDateString(date: Date): String {
+    fun formatMillisToDateString(millis: Long?): String? {
+        return if (millis == null) null
+        else SimpleDateFormat.getDateInstance(DateFormat.DEFAULT)
+            .format(millis)
+    }
+
+    fun formatDateToDateTimeString(date: Date): String {
         return SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
             .format(date)
     }
 
-    fun formatStringToMillis(dateString: String): Long {
+    fun formatDateToDateString(date: Date): String {
+        return SimpleDateFormat.getDateInstance(DateFormat.DEFAULT)
+            .format(date)
+    }
+
+    fun formatDateTimeStringToMillis(dateString: String): Long {
         val sdf = SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
+        return sdf.parse(dateString)!!.run {
+            time
+        }
+    }
+
+    fun formatDateStringToMillis(dateString: String): Long {
+        val sdf = SimpleDateFormat.getDateInstance(DateFormat.DEFAULT)
         return sdf.parse(dateString)!!.run {
             time
         }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="300dp"
+    android:minHeight="350dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/eT_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:autofillHints="none"
+        android:hint="@string/create_job_dialog_company_name"
+        android:inputType="textCapSentences|textAutoCorrect" />
+
+    <EditText
+        android:id="@+id/eT_position"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:autofillHints="none"
+        android:hint="@string/create_job_dialog_position"
+        android:inputType="textCapSentences|textAutoCorrect" />
+
+    <TextView
+        android:id="@+id/tV_term_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:autofillHints="none"
+        android:hint="@string/create_job_dialog_start_period"
+        android:inputType="none"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tV_term_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:autofillHints="none"
+        android:hint="@string/create_job_dialog_end_period"
+        android:inputType="none"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/eT_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:autofillHints="none"
+        android:hint="@string/create_job_dialog_company_link"
+        android:inputType="none" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_cancel"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="8dp"
+        android:text="@string/create_job_dialog_bt_cancel" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="8dp"
+        android:text="@string/create_job_dialog_bt_confirm" />
+
+</LinearLayout>

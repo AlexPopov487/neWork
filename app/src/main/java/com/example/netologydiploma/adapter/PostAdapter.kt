@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.PostListItemBinding
@@ -18,6 +17,7 @@ interface OnPostButtonInteractionListener {
     fun onPostLike(post: Post)
     fun onPostRemove(post: Post)
     fun onPostEdit(post: Post)
+    fun onAvatarClicked(post: Post)
 }
 
 class PostAdapter(private val interactionListener: OnPostButtonInteractionListener) :
@@ -61,9 +61,13 @@ class PostViewHolder(
     fun bind(post: Post) {
         with(postBinding) {
             tVUserName.text = post.author
-            tVPublished.text = AndroidUtils.formatMillisToDateString(post.published)
+            tVPublished.text = AndroidUtils.formatMillisToDateTimeString(post.published)
             tvContent.text = post.content
 
+
+            iVAvatar.setOnClickListener {
+                interactionListener.onAvatarClicked(post)
+            }
 
             btLike.isChecked = post.likedByMe
             btLike.text = post.likeCount.toString()

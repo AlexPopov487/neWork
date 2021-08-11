@@ -41,7 +41,9 @@ class MainActivity : AppCompatActivity() {
 
         // we don't want to show appBar during registration / authentication
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.logInFragment || destination.id == R.id.registrationFragment) {
+            if (destination.id == R.id.logInFragment ||
+                destination.id == R.id.registrationFragment
+            ) {
                 toolbar.visibility = View.GONE
             } else {
                 toolbar.visibility = View.VISIBLE

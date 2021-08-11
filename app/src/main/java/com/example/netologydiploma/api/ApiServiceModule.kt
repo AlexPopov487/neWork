@@ -16,7 +16,7 @@ import javax.inject.Singleton
 class ApiServiceModule {
 
     companion object {
-        const val BASE_URL = "https://net-diploma.herokuapp.com/api/slow/"
+        const val BASE_URL = "https://net-diploma.herokuapp.com/api/"
     }
 
     @Singleton

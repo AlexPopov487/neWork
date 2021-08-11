@@ -30,7 +30,7 @@
             android:autofillHints="no"
             android:background="@android:color/transparent"
             android:hint="@string/hint_create_event_editText"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textCapSentences|textAutoCorrect|textAutoComplete"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@id/iV_content"
             app:layout_constraintTop_toTopOf="@id/iV_content" />
