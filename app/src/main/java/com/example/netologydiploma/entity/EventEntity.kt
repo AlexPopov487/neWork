@@ -26,9 +26,9 @@ data class EventEntity(
     val participatedByMe: Boolean,
     val participantsCount: Int,
     @Embedded
-    val coords: CoordsEmbeddable?,
+    var coords: CoordsEmbeddable?,
     @Embedded
-    val attachment: MediaAttachmentEmbeddable?,
+    var attachment: MediaAttachmentEmbeddable?,
     val ownedByMe: Boolean = false,
 ) {
 

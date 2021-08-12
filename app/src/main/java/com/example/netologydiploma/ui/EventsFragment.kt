@@ -88,6 +88,16 @@ class EventsFragment : Fragment() {
                 viewModel.participateInEvent(event)
             }
 
+            override fun onAvatarClicked(event: Event) {
+                val action = EventsFragmentDirections
+                    .actionNavEventsFragmentToNavProfileFragment(
+                        authorId = event.authorId,
+                        authorName = event.author,
+                        avatar = event.authorAvatar
+                    )
+                navController.navigate(action)
+            }
+
         })
 
         binding.rVEvents.adapter = adapter.withLoadStateHeaderAndFooter(

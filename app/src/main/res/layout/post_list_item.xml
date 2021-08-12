@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/common_spacing"
-    android:paddingVertical="4dp">
+    android:layout_marginVertical="8dp"
+    android:paddingHorizontal="@dimen/common_spacing">
 
     <ImageView
         android:id="@+id/iV_avatar"
         android:layout_width="@dimen/avatar_size"
         android:layout_height="@dimen/avatar_size"
         android:contentDescription="@string/user_icon_content_description"
+        android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="iV_avatar,tV_published,bt_event_options" />
+        app:constraint_referenced_ids="iV_avatar,tV_published" />
 
     <TextView
         android:id="@+id/tv_content"
@@ -68,18 +69,37 @@
         app:layout_constraintTop_toBottomOf="@id/header"
         tools:text="Content" />
 
+    <FrameLayout
+        android:id="@+id/media_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_content">
+
+        <ImageView
+            android:id="@+id/image_attachment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:contentDescription="@string/image_attachment_content_description"
+            android:scaleType="fitStart" />
+
+    </FrameLayout>
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/footer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_content" />
+        app:constraint_referenced_ids="media_container" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_like"
         style="@style/Widget.AppTheme.LikeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:checkable="true"
         app:icon="@drawable/ic_like_24_dp"
         app:layout_constraintStart_toStartOf="parent"

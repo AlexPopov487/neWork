@@ -12,6 +12,7 @@ import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.JobEntity
 import com.example.netologydiploma.entity.fromDto
+import com.example.netologydiploma.entity.toWallPostEntity
 import com.example.netologydiploma.error.ApiError
 import com.example.netologydiploma.error.DbError
 import com.example.netologydiploma.error.NetworkError
@@ -48,6 +49,25 @@ class ProfileRepository @Inject constructor(
     fun getAllJobs(): LiveData<List<Job>> = jobDao.getAllJobs().map { jobList ->
         jobList.map {
             it.toDto()
+        }
+    }
+
+    suspend fun getLatestWallPosts(authorId: Long) {
+        try {
+            wallPostDao.clearPostTable()
+            val response = apiService.getLatestWallPosts(authorId, 10)
+
+            if (!response.isSuccessful) throw ApiError(response.code())
+
+            val body = response.body() ?: throw ApiError(response.code())
+
+            wallPostDao.insertPosts(body.toWallPostEntity())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: SQLException) {
+            throw  DbError
+        } catch (e: Exception) {
+            throw UndefinedError
         }
     }
 

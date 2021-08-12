@@ -5,7 +5,7 @@ import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.PostDao
 import com.example.netologydiploma.db.PostRemoteKeyDao
-import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.dto.*
 import com.example.netologydiploma.entity.PostEntity
 import com.example.netologydiploma.error.ApiError
 import com.example.netologydiploma.error.DbError
@@ -13,6 +13,8 @@ import com.example.netologydiploma.error.NetworkError
 import com.example.netologydiploma.error.UndefinedError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.IOException
 import java.sql.SQLException
 import javax.inject.Inject
@@ -41,7 +43,8 @@ class PostRepository @Inject constructor(
                 throw ApiError(createPostResponse.code())
             }
             val createPostBody = createPostResponse.body() ?: throw ApiError(
-                createPostResponse.code())
+                createPostResponse.code()
+            )
 
             // additional network call to get the created post is required
             // because createPostBody doesn't have authorName set (it is set via backend),
@@ -52,14 +55,63 @@ class PostRepository @Inject constructor(
                 throw ApiError(getPostResponse.code())
             }
             val getPostBody = getPostResponse.body() ?: throw ApiError(
-                getPostResponse.code())
+                getPostResponse.code()
+            )
 
             postDao.insertPost(PostEntity.fromDto(getPostBody))
         } catch (e: IOException) {
+            e.printStackTrace()
+
             throw NetworkError
         } catch (e: SQLException) {
+            e.printStackTrace()
+
             throw  DbError
         } catch (e: Exception) {
+            e.printStackTrace()
+
+            throw UndefinedError
+        }
+    }
+
+    suspend fun saveWithAttachment(post: Post, mediaUpload: MediaUpload) {
+        try {
+            val uploadedMedia = uploadMedia(mediaUpload)
+
+            val postWithAttachment = post.copy(
+                attachment = MediaAttachment(
+                    url = uploadedMedia.url,
+                    type = AttachmentType.IMAGE
+                )
+            )
+
+            createPost(postWithAttachment)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw NetworkError
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw  DbError
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw UndefinedError
+        }
+    }
+
+    private suspend fun uploadMedia(mediaUpload: MediaUpload): MediaDownload {
+        try {
+            val mediaMultipart = MultipartBody.Part.createFormData(
+                "file", mediaUpload.file.name,
+                mediaUpload.file.asRequestBody()
+            )
+            val uploadMediaResponse = postApi.saveMediaFile(mediaMultipart)
+            if (!uploadMediaResponse.isSuccessful) throw ApiError(uploadMediaResponse.code())
+            return uploadMediaResponse.body() ?: throw ApiError(uploadMediaResponse.code())
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw NetworkError
+        } catch (e: Exception) {
+            e.printStackTrace()
             throw UndefinedError
         }
     }
@@ -94,7 +146,6 @@ class PostRepository @Inject constructor(
             throw UndefinedError
         }
     }
-
 
 
     suspend fun deletePost(postId: Long) {

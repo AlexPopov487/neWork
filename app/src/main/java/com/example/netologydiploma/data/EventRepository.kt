@@ -5,7 +5,7 @@ import com.example.netologydiploma.api.ApiService
 import com.example.netologydiploma.db.AppDb
 import com.example.netologydiploma.db.EventDao
 import com.example.netologydiploma.db.EventRemoteKeyDao
-import com.example.netologydiploma.dto.Event
+import com.example.netologydiploma.dto.*
 import com.example.netologydiploma.entity.EventEntity
 import com.example.netologydiploma.error.ApiError
 import com.example.netologydiploma.error.DbError
@@ -13,6 +13,8 @@ import com.example.netologydiploma.error.NetworkError
 import com.example.netologydiploma.error.UndefinedError
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.IOException
 import java.sql.SQLException
 import javax.inject.Inject
@@ -61,6 +63,48 @@ class EventRepository @Inject constructor(
         } catch (e: SQLException) {
             throw  DbError
         } catch (e: Exception) {
+            throw UndefinedError
+        }
+    }
+
+    suspend fun saveWithAttachment(event: Event, mediaUpload: MediaUpload) {
+        try {
+            val uploadedMedia = uploadMedia(mediaUpload)
+
+            val eventWithAttachment = event.copy(
+                attachment = MediaAttachment(
+                    url = uploadedMedia.url,
+                    type = AttachmentType.IMAGE
+                )
+            )
+
+            createEvent(eventWithAttachment)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw NetworkError
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw  DbError
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw UndefinedError
+        }
+    }
+
+    private suspend fun uploadMedia(mediaUpload: MediaUpload): MediaDownload {
+        try {
+            val mediaMultipart = MultipartBody.Part.createFormData(
+                "file", mediaUpload.file.name,
+                mediaUpload.file.asRequestBody()
+            )
+            val uploadMediaResponse = apiService.saveMediaFile(mediaMultipart)
+            if (!uploadMediaResponse.isSuccessful) throw ApiError(uploadMediaResponse.code())
+            return uploadMediaResponse.body() ?: throw ApiError(uploadMediaResponse.code())
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw NetworkError
+        } catch (e: Exception) {
+            e.printStackTrace()
             throw UndefinedError
         }
     }

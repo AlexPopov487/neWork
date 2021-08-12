@@ -39,12 +39,23 @@ class ProfileViewModel @Inject constructor(
         _dataState.value = FeedStateModel()
     }
 
+    private val _profileUserId = MutableLiveData<Long?>()
+    val profileUserId: LiveData<Long?>
+        get() = _profileUserId
+
+    private val _profileUserName = MutableLiveData<String?>()
+    val profileUserName: LiveData<String?>
+        get() = _profileUserName
+
+    private val _profileUserAvatar = MutableLiveData<String?>()
+    val profileUserAvatar: LiveData<String?>
+        get() = _profileUserAvatar
 
     @ExperimentalCoroutinesApi
     @ExperimentalPagingApi
-    fun getWallPosts(authorId: Long): Flow<PagingData<Post>> = appAuth.authStateFlow
+    fun getWallPosts(): Flow<PagingData<Post>> = appAuth.authStateFlow
         .flatMapLatest { (myId, _) ->
-            repository.getAllPosts(authorId)
+            repository.getAllPosts(_profileUserId.value!!)
                 .map { postList ->
                     postList.map {
                         it.copy(
@@ -55,31 +66,59 @@ class ProfileViewModel @Inject constructor(
         }
         .cachedIn(viewModelScope)
 
-    fun setAuthorId(authorId: Long): Long {
-        return if (authorId == -1L) appAuth.authStateFlow.value.id
+    fun setAuthorId(authorId: Long) {
+        _profileUserId.value = if (authorId == -1L) appAuth.authStateFlow.value.id
         else authorId
     }
 
-    fun setAuthorName(authorName: String?): String {
+    fun setAuthorName(authorName: String?) {
         // если authorName = null, значит пользователь зашел в свой профиль через вкладку
         // в меню. Тогда берем не имя польщователя, а логин из authStateFlow.
-        return authorName ?: appAuth.authStateFlow.value.login ?: "Your profile"
+        _profileUserName.value = authorName ?: appAuth.authStateFlow.value.login ?: "Your profile"
+    }
+
+    fun setAuthorAvatar(avatar: String?) {
+        // если authorName = null, значит пользователь зашел в свой профиль через вкладку
+        // в меню. Тогда берем не имя польщователя, а логин из authStateFlow.
+        _profileUserAvatar.value = avatar
     }
 
 
-    suspend fun loadJobsFromServer(authorId: Long) {
-        try {
-            _dataState.value = FeedStateModel(isLoading = true)
-            repository.loadJobsFromServer(authorId)
-            _dataState.value = FeedStateModel(isLoading = false)
-        } catch (e: Exception) {
-            _dataState.value = FeedStateModel(
-                hasError = true,
-                errorMessage = AppError.getMessage(e)
-            )
+    fun invalidateUserData() {
+        _profileUserId.value = null
+        _profileUserName.value = null
+        _profileUserAvatar.value = null
+    }
+
+    fun loadJobsFromServer() {
+        viewModelScope.launch {
+            try {
+                _dataState.value = FeedStateModel(isLoading = true)
+                repository.loadJobsFromServer(_profileUserId.value!!)
+                _dataState.value = FeedStateModel(isLoading = false)
+            } catch (e: Exception) {
+                _dataState.value = FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                )
+            }
         }
     }
 
+    fun getLatestWallPosts(){
+        viewModelScope.launch {
+            try {
+                _dataState.value = FeedStateModel(isLoading = true)
+                repository.getLatestWallPosts(_profileUserId.value!!)
+                _dataState.value = FeedStateModel(isLoading = false)
+            } catch (e: Exception) {
+                _dataState.value = FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                )
+            }
+        }
+    }
 
     fun getAllJobs(): LiveData<List<Job>> = repository.getAllJobs()
 

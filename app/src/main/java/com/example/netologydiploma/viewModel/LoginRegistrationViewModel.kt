@@ -1,15 +1,19 @@
 package com.example.netologydiploma.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.SignInUpRepository
+import com.example.netologydiploma.dto.MediaUpload
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
+import com.example.netologydiploma.model.PhotoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,6 +22,8 @@ class LoginRegistrationViewModel @Inject constructor(
     private val appAuth: AppAuth
 ) : ViewModel() {
 
+    private val noPhoto = PhotoModel()
+
     private val _isSignedIn = MutableLiveData(false)
     val isSignedIn: LiveData<Boolean>
         get() = _isSignedIn
@@ -25,6 +31,10 @@ class LoginRegistrationViewModel @Inject constructor(
     private val _dataState = MutableLiveData(FeedStateModel())
     val dataState: LiveData<FeedStateModel>
         get() = _dataState
+
+    private val _photo = MutableLiveData(noPhoto)
+    val photo: LiveData<PhotoModel>
+        get() = _photo
 
     fun invalidateSignedInState() {
         _isSignedIn.value = false
@@ -59,7 +69,14 @@ class LoginRegistrationViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _dataState.value = FeedStateModel(isLoading = true)
-                repository.onSignUp(login, password, userName)
+
+                when (_photo.value) {
+                    noPhoto ->   repository.onSignUp(login, password, userName)
+                    else -> _photo.value?.file?.let { file ->
+                        repository.onSignUpWithAttachment(login, password, userName, MediaUpload(file))
+                    }
+                }
+
                 _dataState.value = FeedStateModel(isLoading = false)
             } catch (e: Exception) {
                 _dataState.value = (FeedStateModel(
@@ -70,4 +87,8 @@ class LoginRegistrationViewModel @Inject constructor(
         }
     }
 
+
+    fun changePhoto(uri: Uri?, file: File?) {
+        _photo.value = PhotoModel(uri, file)
+    }
 }

@@ -93,7 +93,8 @@ class PostFragment: Fragment() {
                 val action = PostFragmentDirections
                     .actionNavPostsFragmentToNavProfileFragment(
                         authorId = post.authorId,
-                        authorName = post.author
+                        authorName = post.author,
+                        avatar = post.authorAvatar
                     )
                 navController.navigate(action)
             }

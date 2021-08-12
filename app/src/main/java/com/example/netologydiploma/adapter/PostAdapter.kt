@@ -8,10 +8,15 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
+import com.example.netologydiploma.api.ApiServiceModule
 import com.example.netologydiploma.databinding.PostListItemBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
+import com.example.netologydiploma.util.loadAvatar
+import com.example.netologydiploma.util.loadCircleCrop
+import com.example.netologydiploma.util.loadImage
 
+const val BASE_AVATAR_URL = "${ApiServiceModule.BASE_URL}/media/"
 
 interface OnPostButtonInteractionListener {
     fun onPostLike(post: Post)
@@ -45,7 +50,7 @@ class PostAdapter(private val interactionListener: OnPostButtonInteractionListen
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val item = getItem(position) ?: return
         holder.bind(item)
-        }
+    }
 
 }
 
@@ -57,13 +62,13 @@ class PostViewHolder(
     RecyclerView.ViewHolder(postBinding.root) {
 
 
-
     fun bind(post: Post) {
         with(postBinding) {
             tVUserName.text = post.author
             tVPublished.text = AndroidUtils.formatMillisToDateTimeString(post.published)
             tvContent.text = post.content
 
+            iVAvatar.loadCircleCrop(post.authorAvatar)
 
             iVAvatar.setOnClickListener {
                 interactionListener.onAvatarClicked(post)
@@ -76,7 +81,14 @@ class PostViewHolder(
             btLike.setOnClickListener {
                 interactionListener.onPostLike(post)
             }
-
+            post.attachment?.let {
+                imageAttachment.loadImage(it.url)
+            }
+            if (post.attachment == null) {
+                mediaContainer.visibility = View.GONE
+            } else {
+                mediaContainer.visibility = View.VISIBLE
+            }
 
 
             if (!post.ownedByMe) {

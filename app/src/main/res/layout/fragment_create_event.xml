@@ -67,7 +67,7 @@
             app:layout_constraintTop_toTopOf="@id/iV_pick_date" />
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/button_event_type"
+            android:id="@+id/button_event_type_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -89,8 +89,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/offline_event_type_button" />
-
-
         </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <FrameLayout
+            android:id="@+id/layout_photo_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_event_type_group">
+
+            <ImageView
+                android:id="@+id/iv_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/image_attachment_content_description"
+                android:scaleType="fitStart" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_removePhoto"
+                style="@style/Widget.App.Button.IconOnly"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="top|end"
+                app:icon="@drawable/ic_cancel_24"
+                app:iconTint="@android:color/darker_gray" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_panel_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_photo_container"
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_pickPhoto"
+                style="@style/Widget.App.Button.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_photo_24dp"
+                app:iconTint="@android:color/darker_gray" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bt_takePhoto"
+                style="@style/Widget.App.Button.IconOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_camera_24dp"
+                app:iconTint="@android:color/darker_gray" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

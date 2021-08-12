@@ -63,4 +63,7 @@
     <string name="common_error_message">Something went wrong, please try again later.</string>
     <string name="action_sign_out_menu_item">Sign out</string>
     <string name="login_fragment_login_later">Do it later</string>
+    <string name="image_attachment_content_description">Image attachment</string>
+    <string name="error_blank_post_content">Post content cannot be blank!</string>
+    <string name="empty_field_error">The field cannot be empty!</string>
 </resources>

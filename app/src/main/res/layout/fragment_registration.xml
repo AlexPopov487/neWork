@@ -12,6 +12,37 @@
         android:padding="@dimen/common_spacing"
         tools:context=".ui.RegistrationFragment">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="155dp"
+            android:id="@+id/cV_avatar_container"
+            android:layout_height="155dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="250dp"
+            app:layout_constraintBottom_toTopOf="@id/username_text_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:alpha="0.5"
+                app:cardBackgroundColor="@android:color/darker_gray"
+                app:cardCornerRadius="250dp">
+
+                <ImageView
+                    android:id="@+id/iV_set_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+
+                    android:src="@drawable/ic_no_avatar_user" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/username_text_input_layout"
             android:layout_width="match_parent"

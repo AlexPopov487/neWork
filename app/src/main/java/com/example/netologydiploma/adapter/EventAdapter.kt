@@ -11,13 +11,17 @@ import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.EventListItemBinding
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
+import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
+import com.example.netologydiploma.util.loadCircleCrop
+import com.example.netologydiploma.util.loadImage
 
 interface OnEventButtonInteractionListener {
     fun onEventLike(event: Event)
     fun onEventEdit(event: Event)
     fun onEventRemove(event: Event)
     fun onEventParticipate(event: Event)
+    fun onAvatarClicked(event: Event)
 }
 
 class EventAdapter(private val interactionListener: OnEventButtonInteractionListener) :
@@ -63,11 +67,21 @@ class EventViewHolder(
             tVPublished.text = AndroidUtils.formatMillisToDateTimeString(event.published)
             tvContent.text = event.content
             tvEventDueDate.text = AndroidUtils.formatMillisToDateTimeString(event.datetime)
+            iVAvatar.loadCircleCrop(event.authorAvatar)
 
             btParticipate.isChecked = event.participatedByMe
             btParticipate.text = event.participantsCount.toString()
             btParticipate.setOnClickListener {
                 interactionListener.onEventParticipate(event)
+            }
+
+            event.attachment?.let {
+                imageAttachment.loadImage(it.url)
+            }
+            if (event.attachment == null) {
+                mediaContainer.visibility = View.GONE
+            } else {
+                mediaContainer.visibility = View.VISIBLE
             }
 
             btLike.isChecked = event.likedByMe
@@ -88,6 +102,9 @@ class EventViewHolder(
                 EventType.ONLINE -> "Online event"
             }
 
+            iVAvatar.setOnClickListener{
+                interactionListener.onAvatarClicked(event)
+            }
 
             if (!event.ownedByMe) {
                 btEventOptions.visibility = View.GONE

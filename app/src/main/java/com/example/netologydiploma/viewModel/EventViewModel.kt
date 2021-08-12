@@ -1,5 +1,6 @@
 package com.example.netologydiploma.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,14 +12,17 @@ import androidx.paging.map
 import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.EventRepository
 import com.example.netologydiploma.dto.Event
+import com.example.netologydiploma.dto.MediaUpload
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
+import com.example.netologydiploma.model.PhotoModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @ExperimentalPagingApi
@@ -40,6 +44,23 @@ class EventViewModel @Inject constructor(
     val editedEvent: LiveData<Event?>
         get() = _editedEvent
 
+    private val noPhoto = PhotoModel()
+
+    private val _photo = MutableLiveData(noPhoto)
+    val photo: LiveData<PhotoModel>
+        get() = _photo
+
+    private val _eventDateTime = MutableLiveData<String?>()
+    val eventDateTime: LiveData<String?>
+        get() = _eventDateTime
+
+    fun invalidateEventDateTime() {
+        _eventDateTime.value = null
+    }
+
+    fun setEventDateTime(dateTime: String) {
+        _eventDateTime.value = dateTime
+    }
 
     private val cached = repository.getAllEvents().cachedIn(viewModelScope)
 
@@ -65,7 +86,12 @@ class EventViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _dataState.value = (FeedStateModel(isLoading = true))
-                repository.createEvent(event)
+                when (_photo.value) {
+                    noPhoto -> repository.createEvent(event)
+                    else -> _photo.value?.file?.let { file ->
+                        repository.saveWithAttachment(event, MediaUpload(file))
+                    }
+                }
                 _dataState.value = (FeedStateModel(isLoading = false))
             } catch (e: Exception) {
                 _dataState.value = (FeedStateModel(
@@ -74,6 +100,8 @@ class EventViewModel @Inject constructor(
                 ))
             } finally {
                 invalidateEditedEvent()
+                _photo.value = noPhoto
+                invalidateEventDateTime()
             }
         }
     }
@@ -121,5 +149,10 @@ class EventViewModel @Inject constructor(
             }
         }
     }
+
+    fun changePhoto(uri: Uri?, file: File?) {
+        _photo.value = PhotoModel(uri, file)
+    }
+
 
 }

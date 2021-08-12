@@ -1,7 +1,10 @@
 package com.example.netologydiploma.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,6 +15,8 @@ import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.EventViewModel
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
@@ -49,8 +54,8 @@ class CreateEventFragment : Fragment() {
                 AndroidUtils.showKeyboard(binding.eTPostContent)
 
                 when (editedPost.type) {
-                    EventType.OFFLINE -> binding.buttonEventType.check(R.id.button_type_offline)
-                    EventType.ONLINE -> binding.buttonEventType.check(R.id.button_type_online)
+                    EventType.OFFLINE -> binding.buttonEventTypeGroup.check(R.id.button_type_offline)
+                    EventType.ONLINE -> binding.buttonEventTypeGroup.check(R.id.button_type_online)
                 }
             }
         }
@@ -59,13 +64,76 @@ class CreateEventFragment : Fragment() {
             showDateTimePicker()
         }
 
-        binding.buttonEventType.addOnButtonCheckedListener { _, checkedId, isChecked ->
+        binding.buttonEventTypeGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
                     R.id.button_type_online -> eventType = EventType.ONLINE
                     R.id.button_type_offline -> eventType = EventType.OFFLINE
                 }
             }
+        }
+
+        viewModel.eventDateTime.observe(viewLifecycleOwner) { dateTime ->
+            dateTime?.let {
+                binding.tVEventDateTime.text = it
+            }
+        }
+
+        val handlePhotoResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+                val resultCode = activityResult.resultCode
+                val data = activityResult.data
+
+                if (resultCode == Activity.RESULT_OK) {
+                    //Image Uri will not be null for RESULT_OK
+                    val fileUri = data?.data!!
+                    viewModel.changePhoto(fileUri, fileUri.toFile())
+                } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                    Snackbar.make(
+                        binding.root,
+                        ImagePicker.getError(activityResult.data),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+        binding.btPickPhoto.setOnClickListener {
+            ImagePicker.with(this)
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
+                .provider(ImageProvider.GALLERY)
+                .galleryMimeTypes(arrayOf("image/png", "image/jpeg"))
+                .createIntent { intent ->
+                    handlePhotoResult.launch(intent)
+                }
+        }
+
+        binding.btTakePhoto.setOnClickListener {
+            ImagePicker.with(this)
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
+                .provider(ImageProvider.CAMERA)
+                .createIntent { intent ->
+                    handlePhotoResult.launch(intent)
+                }
+        }
+
+
+        binding.btRemovePhoto.setOnClickListener {
+            viewModel.changePhoto(null, null)
+        }
+
+
+        viewModel.photo.observe(viewLifecycleOwner) { photoModel ->
+            if (photoModel.uri == null) {
+                binding.layoutPhotoContainer.visibility = View.GONE
+                return@observe
+            }
+
+            binding.layoutPhotoContainer.visibility = View.VISIBLE
+            binding.ivPhoto.setImageURI(photoModel.uri)
         }
 
         return binding.root
@@ -84,17 +152,11 @@ class CreateEventFragment : Fragment() {
                 calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 calendar.set(Calendar.MINUTE, minute)
 
-                binding.tVEventDateTime.text = AndroidUtils.formatDateToDateTimeString(calendar.time)
+                viewModel.setEventDateTime(
+                    AndroidUtils.formatDateToDateTimeString(calendar.time)
+                )
             }.show(childFragmentManager, "timePicker")
         }.show(childFragmentManager, "datePicker")
-    }
-
-
-    override fun onDestroy() {
-        if (viewModel.editedEvent.value != null) {
-            viewModel.invalidateEditedEvent()
-        }
-        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,12 +167,12 @@ class CreateEventFragment : Fragment() {
         return when (item.itemId) {
             R.id.action_save -> {
                 if (binding.eTPostContent.text.isNullOrEmpty()) {
-                    binding.eTPostContent.error = "The field cannot be empty!"
+                    binding.eTPostContent.error = getString(R.string.empty_field_error)
                     return false
                 }
 
                 if (binding.tVEventDateTime.text.isNullOrEmpty()) {
-                    binding.tVEventDateTime.error = "The field cannot be empty!"
+                    binding.tVEventDateTime.error = getString(R.string.empty_field_error)
                     return false
                 }
 

@@ -32,4 +32,20 @@
     <style name="Widget.AppTheme.EventParticipateCheckBox" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="tint">@color/event_participation_check_box</item>
     </style>
+
+<!--     no stroke as well as ripple effect-->
+    <style name="Widget.App.Button.IconOnly" parent="Widget.MaterialComponents.Button">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:strokeColor">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:strokeWidth">0.0</item>
+    </style>
+
+
 </resources>

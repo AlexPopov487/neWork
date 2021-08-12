@@ -2,8 +2,10 @@ package com.example.netologydiploma.api
 
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.Job
+import com.example.netologydiploma.dto.MediaDownload
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.model.AuthJsonModel
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -25,8 +27,14 @@ interface ApiService {
         @Field("name") name: String
     ): Response<AuthJsonModel>
 
-    @GET("posts")
-    suspend fun getAllPosts(): Response<List<Post>>
+    @Multipart
+    @POST("users/registration")
+    suspend fun signUpWithAvatar(
+        @Part login: MultipartBody.Part,
+        @Part pass: MultipartBody.Part,
+        @Part name: MultipartBody.Part,
+        @Part file: MultipartBody.Part) : Response<AuthJsonModel>
+
 
     @GET("events/latest")
     suspend fun getLatestEvents(@Query("count") count: Int): Response<List<Event>>
@@ -117,9 +125,7 @@ interface ApiService {
         @Query("count") count: Int
     ): Response<List<Post>>
 
-
     /** job interaction */
-
 
     @GET("{userId}/jobs")
     suspend fun getAllUserJobs(@Path("userId")authorId: Long) : Response<List<Job>>
@@ -129,4 +135,10 @@ interface ApiService {
 
     @DELETE("my/jobs/{id}")
     suspend fun removeJobById(@Path("id") id: Long): Response<Unit>
+
+    /** HANDLING MEDIA REQUESTS */
+    @Multipart
+    @POST("media")
+    suspend fun saveMediaFile(@Part file: MultipartBody.Part) : Response<MediaDownload>
+
 }

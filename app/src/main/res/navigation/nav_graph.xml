@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_nav_events_fragment_to_createEventFragment"
             app:destination="@id/createEventFragment" />
+        <action
+            android:id="@+id/action_nav_events_fragment_to_nav_profile_fragment"
+            app:destination="@id/nav_profile_fragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_profile_fragment"
@@ -48,6 +51,11 @@
         <action
             android:id="@+id/action_nav_profile_fragment_to_createEditPostFragment"
             app:destination="@id/createEditPostFragment" />
+        <argument
+            android:name="avatar"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/createEditPostFragment"

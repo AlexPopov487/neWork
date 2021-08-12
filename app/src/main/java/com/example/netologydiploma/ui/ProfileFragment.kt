@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.JobAdapter
 import com.example.netologydiploma.adapter.OnJobButtonInteractionListener
@@ -19,6 +20,7 @@ import com.example.netologydiploma.adapter.PostAdapter
 import com.example.netologydiploma.databinding.FragmentProfileBinding
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.util.loadCircleCrop
 import com.example.netologydiploma.viewModel.AuthViewModel
 import com.example.netologydiploma.viewModel.PostViewModel
 import com.example.netologydiploma.viewModel.ProfileViewModel
@@ -57,24 +59,17 @@ class ProfileFragment : Fragment() {
         )
 
         val navArgs: ProfileFragmentArgs by navArgs()
-        val authorId = profileViewModel.setAuthorId(navArgs.authorId)
+        profileViewModel.setAuthorId(navArgs.authorId)
+        profileViewModel.setAuthorName(navArgs.authorName)
+        profileViewModel.setAuthorAvatar(navArgs.avatar)
 
 
 
 
-        if (authViewModel.isAuthenticated) {
 
-            // если пользователь на странице не своего профиля
-            if (authorId != profileViewModel.myId) {
-                binding.profileToolbarLayout.btAddJob.visibility = View.GONE
-            } else {
-                setHasOptionsMenu(true)
-            }
+        profileViewModel.profileUserName.observe(viewLifecycleOwner) {
+            binding.profileToolbarLayout.tvFirstName.text = it
         }
-
-
-        binding.profileToolbarLayout.tvFirstName.text =
-            profileViewModel.setAuthorName(navArgs.authorName)
 
         /** set the swipe to refresh behavior according to the collapsing toolbar state */
         binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
@@ -105,25 +100,40 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onAvatarClicked(post: Post) {
-                refreshCurrentFragment()
+                profileViewModel.getLatestWallPosts()
+                profileViewModel.loadJobsFromServer()
             }
         })
 
         binding.rVPosts.adapter = postAdapter
+        binding.rVPosts.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
         binding.profileToolbarLayout.rVJobs.adapter = jobAdapter
 
 
+        profileViewModel.profileUserId.observe(viewLifecycleOwner) { authorId ->
 
-        lifecycleScope.launchWhenResumed {
-            profileViewModel.loadJobsFromServer(authorId)
-        }
-
-        lifecycleScope.launchWhenCreated {
-            profileViewModel.getWallPosts(authorId).collectLatest {
-                postAdapter.submitData(it)
+            if (authViewModel.isAuthenticated) {
+                // если пользователь на странице не своего профиля
+                if (authorId != profileViewModel.myId) {
+                    binding.profileToolbarLayout.btAddJob.visibility = View.GONE
+                } else {
+                    setHasOptionsMenu(true)
+                }
             }
         }
 
+        profileViewModel.loadJobsFromServer()
+
+        lifecycleScope.launchWhenCreated {
+            profileViewModel.getWallPosts().collectLatest {
+                postAdapter.submitData(it)
+            }
+        }
         profileViewModel.getAllJobs().observe(viewLifecycleOwner) {
             jobAdapter.submitList(it)
             binding.profileToolbarLayout.rVJobs.isVisible = it.isNotEmpty()
@@ -135,6 +145,15 @@ class ProfileFragment : Fragment() {
 
         binding.swipeToRefresh.setOnRefreshListener {
             postAdapter.refresh()
+            profileViewModel.loadJobsFromServer()
+        }
+
+        profileViewModel.profileUserAvatar.observe(viewLifecycleOwner) { avatar ->
+            if (!avatar.isNullOrEmpty()) {
+                binding.profileToolbarLayout.iVAvatar.loadCircleCrop(avatar)
+            } else {
+                binding.profileToolbarLayout.iVAvatar.visibility = View.GONE
+            }
         }
 
         lifecycleScope.launchWhenCreated {
@@ -159,12 +178,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (!authViewModel.isAuthenticated) // user is not authenticated
             navController.navigate(R.id.logInFragment)
-    }
-
-    private fun refreshCurrentFragment() {
-        val currentFrId = navController.currentDestination?.id
-        navController.popBackStack(currentFrId!!, true)
-        navController.navigate(currentFrId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

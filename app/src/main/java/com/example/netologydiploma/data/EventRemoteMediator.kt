@@ -68,7 +68,12 @@ class EventRemoteMediator(
                     LoadType.PREPEND -> insertMaxKey(receivedBody)
                     LoadType.APPEND -> insertMinKey(receivedBody)
                 }
-                eventDao.insertEvents(receivedBody.map { it.copy(likeCount = it.likeOwnerIds.size) }
+                eventDao.insertEvents(receivedBody.map {
+                    it.copy(
+                        likeCount = it.likeOwnerIds.size,
+                        participantsCount = it.participantsIds.size
+                    )
+                }
                     .toEntity())
             }
             return MediatorResult.Success(
