@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/fragment_create_post.xml" value="0.136" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/auth_app_bar_menu.xml" value="0.1" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/bottom_app_bar.xml" value="0.10277777777777777" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/drawer_nav_menu.xml" value="0.176" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/fragment_create_edit_menu.xml" value="0.1" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/fragment_post_menu.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

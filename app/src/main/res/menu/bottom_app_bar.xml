@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item
+            android:id="@+id/nav_profile_fragment"
+            android:title="@string/my_profile_nav_menu_drawer"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/ic_profile_24"/>
+
+        <item
+            android:id="@+id/nav_posts_fragment"
+            android:title="@string/main_nav_menu_drawer"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/ic_posts_24"/>
+
+        <item
+            android:id="@+id/blank_item"
+            app:showAsAction="ifRoom"
+            android:title="" />
+
+        <item
+            android:id="@+id/nav_events_fragment"
+            android:title="@string/events_nav_menu_drawer"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/ic_events_24"/>
+
+        <item
+            android:id="@+id/blank_item_2"
+            app:showAsAction="ifRoom"
+            android:title="" />
+</menu>

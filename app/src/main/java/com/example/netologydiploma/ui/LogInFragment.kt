@@ -80,7 +80,9 @@ class LogInFragment : Fragment() {
 
             if (state.hasError) {
                 val msg = state.errorMessage ?: getString(R.string.common_error_message)
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+                    .setAction("Ok", {})
+                    .show()
                 viewModel.invalidateDataState()
             }
         }

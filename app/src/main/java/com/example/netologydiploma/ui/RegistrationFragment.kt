@@ -23,7 +23,6 @@ import com.example.netologydiploma.databinding.FragmentRegistrationBinding
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.LoginRegistrationViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
 
 class RegistrationFragment : Fragment() {

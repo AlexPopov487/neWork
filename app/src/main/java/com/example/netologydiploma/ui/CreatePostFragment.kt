@@ -1,8 +1,13 @@
 package com.example.netologydiploma.ui
 
 import android.app.Activity
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.*
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
@@ -16,8 +21,16 @@ import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.viewModel.PostViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
+const val MEDIA_REQUEST_CODE = 101
+
+
+@AndroidEntryPoint
 @ExperimentalPagingApi
 class CreatePostFragment : Fragment() {
 
@@ -45,7 +58,7 @@ class CreatePostFragment : Fragment() {
             }
         }
 
-
+        
         val handlePhotoResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
                 val resultCode = activityResult.resultCode
@@ -63,6 +76,7 @@ class CreatePostFragment : Fragment() {
                     ).show()
                 }
             }
+
 
         binding.btPickPhoto.setOnClickListener {
             ImagePicker.with(this)
@@ -88,6 +102,21 @@ class CreatePostFragment : Fragment() {
         }
 
 
+//        val mediaPlayer = SimpleExoPlayer.Builder(requireContext())
+//            .build()
+//            .also {
+//                binding.ivPhoto.player = it
+//            }
+//
+        
+//        binding.btPickVideo.setOnClickListener {
+//            val intent = Intent(
+//                Intent.ACTION_PICK,
+//                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+//            )
+//            startActivityForResult(intent, 20)
+//        }
+
         binding.btRemovePhoto.setOnClickListener {
             viewModel.changePhoto(null, null)
         }
@@ -101,12 +130,40 @@ class CreatePostFragment : Fragment() {
 
             binding.layoutPhotoContainer.visibility = View.VISIBLE
             binding.ivPhoto.setImageURI(photoModel.uri)
-
+//            val mediaItem = MediaItem.fromUri(photoModel.uri)
+//            mediaPlayer.setMediaItem(mediaItem)
 
         }
 
         return binding.root
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (resultCode == Activity.RESULT_OK){
+//            if (requestCode == 20){
+//                val selectedVideoUri = data?.data!!
+//                val selectedVideoPath = getRealPathFromUri(selectedVideoUri)
+//                if (selectedVideoPath != null) {
+//                    Toast.makeText(requireContext(), selectedVideoUri.path + "   |   "+ selectedVideoPath, Toast.LENGTH_LONG).show()
+//                    viewModel.changePhoto(selectedVideoUri, File(selectedVideoPath))
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun getRealPathFromUri(uri: Uri) : String? {
+//        var cursor: Cursor? = null
+//        return try {
+//            val projection = arrayOf(MediaStore.Images.Media.DATA)
+//            cursor = requireActivity().contentResolver.query(uri, projection, null, null, null)
+//            val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//            cursor?.moveToFirst()
+//            cursor?.getString(columnIndex!!)
+//        } finally {
+//            cursor?.close()
+//        }
+//    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragment_create_edit_menu, menu)

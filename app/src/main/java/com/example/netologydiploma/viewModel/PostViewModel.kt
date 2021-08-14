@@ -11,6 +11,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.PostRepository
+import com.example.netologydiploma.dto.AttachmentType
 import com.example.netologydiploma.dto.MediaUpload
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.error.AppError
@@ -78,7 +79,7 @@ class PostViewModel @Inject constructor(
                 when (_photo.value) {
                     noPhoto ->  repository.createPost(post)
                     else -> _photo.value?.file?.let { file ->
-                        repository.saveWithAttachment(post, MediaUpload(file))
+                        repository.saveWithAttachment(post, MediaUpload(file), AttachmentType.IMAGE)
                     }
                 }
 

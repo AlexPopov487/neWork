@@ -74,14 +74,14 @@ class PostRepository @Inject constructor(
         }
     }
 
-    suspend fun saveWithAttachment(post: Post, mediaUpload: MediaUpload) {
+    suspend fun saveWithAttachment(post: Post, mediaUpload: MediaUpload, type : AttachmentType) {
         try {
             val uploadedMedia = uploadMedia(mediaUpload)
 
             val postWithAttachment = post.copy(
                 attachment = MediaAttachment(
                     url = uploadedMedia.url,
-                    type = AttachmentType.IMAGE
+                    type = type
                 )
             )
 

@@ -1,7 +1,9 @@
 package com.example.netologydiploma.ui
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,12 +50,6 @@ class EventsFragment : Fragment() {
         binding = FragmentEventsBinding.inflate(inflater, container, false)
         navController = findNavController()
 
-        if (authViewModel.isAuthenticated) {
-            setHasOptionsMenu(true)
-        } else {
-            setHasOptionsMenu(false)
-        }
-
         val adapter = EventAdapter(object : OnEventButtonInteractionListener {
             override fun onEventLike(event: Event) {
                 if (!authViewModel.isAuthenticated) {
@@ -61,7 +57,9 @@ class EventsFragment : Fragment() {
                         binding.root,
                         "Only authorized users can leave likes!",
                         Snackbar.LENGTH_SHORT
-                    ).show()
+                    )
+                        .setAction("Ok", {})
+                        .show()
                     return
                 }
                 viewModel.likeEvent(event)
@@ -82,7 +80,9 @@ class EventsFragment : Fragment() {
                         binding.root,
                         "Only authorized users can participate!",
                         Snackbar.LENGTH_SHORT
-                    ).show()
+                    )
+                        .setAction("Ok", {})
+                        .show()
                     return
                 }
                 viewModel.participateInEvent(event)
@@ -130,7 +130,9 @@ class EventsFragment : Fragment() {
 
             if (state.hasError) {
                 val msg = state.errorMessage ?: "Something went wrong, please try again later."
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+                    .setAction("Ok", {})
+                    .show()
                 viewModel.invalidateDataState()
             }
         }
@@ -143,17 +145,4 @@ class EventsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_post_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_save -> {
-                navController.navigate(R.id.action_nav_events_fragment_to_createEventFragment)
-                true
-            }
-            else -> false
-        }
-    }
 }

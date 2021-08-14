@@ -66,4 +66,6 @@
     <string name="image_attachment_content_description">Image attachment</string>
     <string name="error_blank_post_content">Post content cannot be blank!</string>
     <string name="empty_field_error">The field cannot be empty!</string>
+    <string name="add_event_fab">Add event</string>
+    <string name="add_post_fab">Add post</string>
 </resources>

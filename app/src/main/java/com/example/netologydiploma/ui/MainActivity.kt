@@ -6,9 +6,9 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.netologydiploma.R
@@ -23,10 +23,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
 
     fun setActionBarTitle(title: String) {
         binding.mainToolbar.title = title
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,33 +42,80 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.mainToolbar
         setSupportActionBar(toolbar)
 
+
+        val bottomNavView = binding.bottomNavView.apply {
+            // removes all the unnecessary shadows when bottomNavView is positioned above the
+            // bottomAppBar
+            background = null
+            menu.findItem(R.id.blank_item).isEnabled = false
+            menu.findItem(R.id.blank_item_2).isEnabled = false
+        }
+
+        // hides top back arrow from these destinations
+        val topLevelDestinations = setOf(
+            R.id.nav_posts_fragment,
+            R.id.nav_events_fragment,
+            R.id.nav_profile_fragment
+        )
+
+        appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations).build()
+        NavigationUI.setupActionBarWithNavController(
+            this, navController,
+            appBarConfiguration
+        )
+
+
         // we don't want to show appBar during registration / authentication
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.logInFragment ||
-                destination.id == R.id.registrationFragment
-            ) {
-                toolbar.visibility = View.GONE
-            } else {
-                toolbar.visibility = View.VISIBLE
+
+            when (destination.id) {
+
+                R.id.logInFragment -> {
+                    toolbar.visibility = View.GONE
+                    bottomNavView.visibility = View.GONE
+                    binding.bottomAppBar.visibility = View.GONE
+                    binding.fabCreateLayout.visibility = View.GONE
+                }
+                R.id.registrationFragment -> {
+                    toolbar.visibility = View.GONE
+                    binding.bottomAppBar.visibility = View.GONE
+                    bottomNavView.visibility = View.GONE
+                    binding.fabCreateLayout.visibility = View.GONE
+                }
+                R.id.createEditPostFragment -> {
+                    bottomNavView.visibility = View.GONE
+                    binding.bottomAppBar.visibility = View.GONE
+                    binding.fabCreateLayout.visibility = View.GONE
+                }
+                R.id.createEventFragment -> {
+                    bottomNavView.visibility = View.GONE
+                    binding.bottomAppBar.visibility = View.GONE
+                    binding.fabCreateLayout.visibility = View.GONE
+                }
+
+                else -> {
+                    toolbar.visibility = View.VISIBLE
+                    binding.bottomAppBar.visibility = View.VISIBLE
+                    bottomNavView.visibility = View.VISIBLE
+                    binding.fabCreateLayout.visibility = View.VISIBLE
+                }
+
             }
         }
 
-        // Connect Drawer layout to the navigation graph
-        NavigationUI.setupWithNavController(binding.drawerNavView, navController)
-        binding.drawerNavView.setupWithNavController(navController)
-        // automatically changes appBar title according to fragment label in nav_graph
-        NavigationUI.setupActionBarWithNavController(this, navController, binding.mainDrawerLayout)
+        bottomNavView.setupWithNavController(navController)
 
-        // navigate to user profile once header is clicked
-        binding.drawerNavView.getHeaderView(0).setOnClickListener {
-            navController.navigate(R.id.nav_profile_fragment)
-            if (binding.mainDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
-            }
+        binding.fabAddPost.setOnClickListener {
+            navController.navigate(R.id.createEditPostFragment)
+        }
+
+        binding.fabAddEvent.setOnClickListener {
+            navController.navigate(R.id.createEventFragment)
         }
 
         // redraw menu when authState changes
-        viewModel.authState.observe(this) { user ->
+        viewModel.authState.observe(this)
+        { user ->
 
             // ensure we automatically show login fragment only once at app
             // launch and not every time the activity is recreated
@@ -76,20 +126,16 @@ class MainActivity : AppCompatActivity() {
 
             if (user.id == 0L) {
                 invalidateOptionsMenu()
+                binding.bottomNavView.menu.findItem(R.id.nav_profile_fragment).isEnabled = false
+            } else {
+                binding.bottomNavView.menu.findItem(R.id.nav_profile_fragment).isEnabled = true
             }
         }
     }
 
-    override fun onBackPressed() {
-        if (binding.mainDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
 
     override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController, binding.mainDrawerLayout)
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -109,4 +155,5 @@ class MainActivity : AppCompatActivity() {
             else -> false
         }
     }
+
 }

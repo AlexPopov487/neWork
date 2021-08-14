@@ -1,7 +1,9 @@
 package com.example.netologydiploma.ui
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -61,12 +63,6 @@ class PostFragment: Fragment() {
                 }
             }
 
-        if (authViewModel.isAuthenticated) {
-            setHasOptionsMenu(true)
-        } else {
-            setHasOptionsMenu(false)
-        }
-
         val adapter = PostAdapter(object : OnPostButtonInteractionListener {
             override fun onPostLike(post: Post) {
                 if (!authViewModel.isAuthenticated) {
@@ -74,7 +70,9 @@ class PostFragment: Fragment() {
                         binding.root,
                         "Only authorized users can leave likes!",
                         Snackbar.LENGTH_SHORT
-                    ).show()
+                    )
+                        .setAction("Ok", {})
+                        .show()
                     return
                 }
                 viewModel.likePost(post)
@@ -127,7 +125,9 @@ class PostFragment: Fragment() {
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             if (state.hasError) {
                 val msg = state.errorMessage ?: "Something went wrong, please try again later."
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+                    .setAction("Ok", {})
+                    .show()
                 viewModel.invalidateDataState()
             }
         }
@@ -138,17 +138,4 @@ class PostFragment: Fragment() {
         return binding.root
     }
 
-        override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-            inflater.inflate(R.menu.fragment_post_menu, menu)
-        }
-
-        override fun onOptionsItemSelected(item: MenuItem): Boolean {
-            return when (item.itemId) {
-                R.id.action_save -> {
-                    navController.navigate(R.id.action_nav_posts_fragment_to_createEditPostFragment)
-                    true
-                }
-                else -> false
-            }
-        }
-    }
+}

@@ -18,10 +18,11 @@ import com.example.netologydiploma.viewModel.EventViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @ExperimentalPagingApi
-
+@AndroidEntryPoint
 class CreateEventFragment : Fragment() {
 
     private lateinit var binding: FragmentCreateEventBinding

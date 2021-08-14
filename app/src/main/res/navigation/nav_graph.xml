@@ -12,7 +12,8 @@
         tools:layout="@layout/fragment_posts" >
         <action
             android:id="@+id/action_nav_posts_fragment_to_createEditPostFragment"
-            app:destination="@id/createEditPostFragment" />
+            app:destination="@id/createEditPostFragment"
+            app:popUpTo="@id/nav_posts_fragment" />
         <action
             android:id="@+id/action_nav_posts_fragment_to_nav_profile_fragment"
             app:destination="@id/nav_profile_fragment" />
@@ -24,7 +25,8 @@
         tools:layout="@layout/fragment_events" >
         <action
             android:id="@+id/action_nav_events_fragment_to_createEventFragment"
-            app:destination="@id/createEventFragment" />
+            app:destination="@id/createEventFragment"
+            app:popUpTo="@id/nav_events_fragment" />
         <action
             android:id="@+id/action_nav_events_fragment_to_nav_profile_fragment"
             app:destination="@id/nav_profile_fragment" />
@@ -50,7 +52,8 @@
            />
         <action
             android:id="@+id/action_nav_profile_fragment_to_createEditPostFragment"
-            app:destination="@id/createEditPostFragment" />
+            app:destination="@id/createEditPostFragment"
+            app:popUpTo="@id/nav_events_fragment" />
         <argument
             android:name="avatar"
             app:argType="string"
