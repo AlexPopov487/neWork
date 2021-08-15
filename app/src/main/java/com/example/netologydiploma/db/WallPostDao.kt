@@ -20,4 +20,7 @@ interface WallPostDao {
     @Query("DELETE FROM WallPostEntity")
     suspend fun clearPostTable()
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPost(post: WallPostEntity)
+
 }

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.OnPostButtonInteractionListener
 import com.example.netologydiploma.adapter.PagingLoadStateAdapter
@@ -113,12 +114,33 @@ class PostFragment: Fragment() {
             viewModel.postList.collectLatest {
                 adapter.submitData(it)
             }
+
         }
 
 
+
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                if (positionStart == 0) {
+                    binding.rVPosts.smoothScrollToPosition(0)
+                }
+            }
+        })
+
         lifecycleScope.launchWhenCreated {
-            adapter.loadStateFlow.collectLatest {
-                binding.swipeToRefresh.isRefreshing = it.refresh == LoadState.Loading
+            adapter.loadStateFlow.collectLatest { state ->
+                binding.swipeToRefresh.isRefreshing = state.refresh == LoadState.Loading
+
+
+                if (state.source.refresh is LoadState.NotLoading &&
+                    state.append.endOfPaginationReached &&
+                    adapter.itemCount < 1
+                ) {
+                    binding.emptyListContainer.visibility = View.VISIBLE
+                } else {
+                    binding.emptyListContainer.visibility = View.GONE
+                }
             }
         }
 

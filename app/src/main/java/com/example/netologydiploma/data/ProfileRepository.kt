@@ -11,6 +11,7 @@ import com.example.netologydiploma.db.WallRemoteKeyDao
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.entity.JobEntity
+import com.example.netologydiploma.entity.WallPostEntity
 import com.example.netologydiploma.entity.fromDto
 import com.example.netologydiploma.entity.toWallPostEntity
 import com.example.netologydiploma.error.ApiError
@@ -71,6 +72,38 @@ class ProfileRepository @Inject constructor(
         }
     }
 
+
+    suspend fun likePost(post: Post) {
+        try {
+            // like in db
+            val likedPost = post.copy(
+                likeCount = if (post.likedByMe) post.likeCount.dec()
+                else post.likeCount.inc(),
+                likedByMe = !post.likedByMe
+            )
+            wallPostDao.insertPost(WallPostEntity.fromDto(likedPost))
+
+            // like on server
+            val response = if (post.likedByMe) apiService.dislikeWallPostById(post.id)
+            else apiService.likeWallPostById(post.id)
+
+            if (!response.isSuccessful)
+                throw ApiError(response.code())
+        } catch (e: IOException) {
+            // revert changes to init state
+            wallPostDao.insertPost(WallPostEntity.fromDto(post))
+            throw NetworkError
+        } catch (e: SQLException) {
+            // revert changes to init state
+            wallPostDao.insertPost(WallPostEntity.fromDto(post))
+            throw  DbError
+        } catch (e: Exception) {
+            // revert changes to init state
+            wallPostDao.insertPost(WallPostEntity.fromDto(post))
+            throw UndefinedError
+        }
+    }
+
     suspend fun loadJobsFromServer(authorId: Long) {
         try {
             jobDao.removeAllJobs()
@@ -107,6 +140,7 @@ class ProfileRepository @Inject constructor(
             throw UndefinedError
         }
     }
+
 
     suspend fun deleteJobById(id: Long) {
         val jobToDelete = jobDao.getJobById(id)

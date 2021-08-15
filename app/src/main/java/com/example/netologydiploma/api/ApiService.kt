@@ -99,8 +99,8 @@ interface ApiService {
     @DELETE("events/{id}/participants")
     suspend fun unparticipateEventById(@Path("id") eventId: Long): Response<Event>
 
-    @DELETE("event/{id}")
-    suspend fun deleteEvent(@Path("id") eventId: Long): Response<Unit>
+    @DELETE("events/{id}")
+    suspend fun deleteEvent(@Path("id") id: Long): Response<Unit>
 
 
     /** wall interaction */
@@ -124,6 +124,13 @@ interface ApiService {
         @Path("authorId") authorId: Long,
         @Query("count") count: Int
     ): Response<List<Post>>
+
+
+    @POST("{authorId}/wall/{id}/likes")
+    suspend fun likeWallPostById(@Path("id") postId: Long): Response<Post>
+
+    @DELETE("{authorId}/wall/{id}/likes")
+    suspend fun dislikeWallPostById(@Path("id") postId: Long): Response<Post>
 
     /** job interaction */
 

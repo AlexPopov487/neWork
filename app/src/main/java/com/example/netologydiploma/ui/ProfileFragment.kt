@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.JobAdapter
 import com.example.netologydiploma.adapter.OnJobButtonInteractionListener
@@ -87,7 +88,7 @@ class ProfileFragment : Fragment() {
 
         val postAdapter = PostAdapter(object : OnPostButtonInteractionListener {
             override fun onPostLike(post: Post) {
-                postViewModel.likePost(post)
+                profileViewModel.likeWallPostById(post)
             }
 
             override fun onPostRemove(post: Post) {
@@ -134,8 +135,21 @@ class ProfileFragment : Fragment() {
                 postAdapter.submitData(it)
             }
         }
+        postAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                if (positionStart == 0) {
+                    binding.rVPosts.smoothScrollToPosition(0)
+                }
+            }
+        })
         profileViewModel.getAllJobs().observe(viewLifecycleOwner) {
-            jobAdapter.submitList(it)
+            val oldCount = jobAdapter.itemCount
+            jobAdapter.submitList(it) {
+                if (it.size > oldCount) {
+                    binding.profileToolbarLayout.rVJobs.smoothScrollToPosition((0))
+                }
+            }
             binding.profileToolbarLayout.rVJobs.isVisible = it.isNotEmpty()
         }
 
@@ -145,6 +159,7 @@ class ProfileFragment : Fragment() {
 
         binding.swipeToRefresh.setOnRefreshListener {
             postAdapter.refresh()
+            profileViewModel.getLatestWallPosts()
             profileViewModel.loadJobsFromServer()
         }
 
@@ -159,6 +174,15 @@ class ProfileFragment : Fragment() {
         lifecycleScope.launchWhenCreated {
             postAdapter.loadStateFlow.collectLatest { state ->
                 binding.swipeToRefresh.isRefreshing = state.refresh == LoadState.Loading
+
+                if (state.source.refresh is LoadState.NotLoading &&
+                    state.append.endOfPaginationReached &&
+                    postAdapter.itemCount < 1
+                ) {
+                    binding.emptyListContainer.visibility = View.VISIBLE
+                } else {
+                    binding.emptyListContainer.visibility = View.GONE
+                }
             }
         }
 

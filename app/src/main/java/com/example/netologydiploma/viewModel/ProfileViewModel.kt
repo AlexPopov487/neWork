@@ -120,6 +120,20 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun likeWallPostById(post: Post) {
+        viewModelScope.launch {
+            try {
+                _dataState.value = FeedStateModel()
+                repository.likePost(post)
+            } catch (e: Exception) {
+                _dataState.value = (FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                ))
+            }
+        }
+    }
+
     fun getAllJobs(): LiveData<List<Job>> = repository.getAllJobs()
 
     fun createNewJob(job: Job) {

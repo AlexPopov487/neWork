@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.EventAdapter
 import com.example.netologydiploma.adapter.OnEventButtonInteractionListener
@@ -115,13 +116,29 @@ class EventsFragment : Fragment() {
                 adapter.submitData(it)
             }
         }
-
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                if (positionStart == 0) {
+                    binding.rVEvents.smoothScrollToPosition(0)
+                }
+            }
+        })
 
 
         lifecycleScope.launchWhenCreated {
-            adapter.loadStateFlow.collectLatest { loadState ->
-                binding.swipeToRefresh.isRefreshing = loadState.refresh is LoadState.Loading
+            adapter.loadStateFlow.collectLatest { state ->
+                binding.swipeToRefresh.isRefreshing = state.refresh is LoadState.Loading
 
+
+                if (state.source.refresh is LoadState.NotLoading &&
+                    state.append.endOfPaginationReached &&
+                    adapter.itemCount < 1
+                ) {
+                    binding.emptyListContainer.visibility = View.VISIBLE
+                } else {
+                    binding.emptyListContainer.visibility = View.GONE
+                }
             }
         }
 
@@ -135,6 +152,7 @@ class EventsFragment : Fragment() {
                     .show()
                 viewModel.invalidateDataState()
             }
+
         }
 
         binding.swipeToRefresh.setOnRefreshListener {

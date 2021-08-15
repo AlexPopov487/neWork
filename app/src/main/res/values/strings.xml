@@ -68,4 +68,7 @@
     <string name="empty_field_error">The field cannot be empty!</string>
     <string name="add_event_fab">Add event</string>
     <string name="add_post_fab">Add post</string>
+    <string name="empty_post_list_icon_content_desctription">Empty post list icon</string>
+    <string name="tv_empty_post_list">No posts yet :(</string>
+    <string name="tv_empty_event_list">No events yet :(</string>
 </resources>

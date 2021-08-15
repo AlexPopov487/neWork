@@ -8,15 +8,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
-import com.example.netologydiploma.api.ApiServiceModule
 import com.example.netologydiploma.databinding.PostListItemBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
-import com.example.netologydiploma.util.loadAvatar
 import com.example.netologydiploma.util.loadCircleCrop
 import com.example.netologydiploma.util.loadImage
 
-const val BASE_AVATAR_URL = "${ApiServiceModule.BASE_URL}/media/"
 
 interface OnPostButtonInteractionListener {
     fun onPostLike(post: Post)

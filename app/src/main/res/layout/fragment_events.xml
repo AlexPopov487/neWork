@@ -23,6 +23,37 @@
             tools:listitem="@layout/event_list_item" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
+    <ImageView
+        android:id="@+id/iV_empty_list"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/empty_post_list_icon_content_desctription"
+        android:src="@drawable/ic_baseline_mood_bad_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_empty_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_empty_event_list"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iV_empty_list" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/empty_list_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="iV_empty_list, tv_empty_list" />
+
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
