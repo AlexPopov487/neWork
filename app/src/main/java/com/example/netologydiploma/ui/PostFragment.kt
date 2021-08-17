@@ -13,15 +13,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.OnPostButtonInteractionListener
 import com.example.netologydiploma.adapter.PagingLoadStateAdapter
 import com.example.netologydiploma.adapter.PostAdapter
+import com.example.netologydiploma.adapter.PostRecyclerView
 import com.example.netologydiploma.databinding.FragmentPostsBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.viewModel.AuthViewModel
 import com.example.netologydiploma.viewModel.PostViewModel
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.util.Util
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,10 +34,12 @@ import kotlinx.coroutines.flow.collectLatest
 @AndroidEntryPoint
 class PostFragment: Fragment() {
 
-    private val authViewModel : AuthViewModel by viewModels(
+    private val authViewModel: AuthViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
     private lateinit var navController: NavController
+    private lateinit var recyclerView: PostRecyclerView
+
 
     @ExperimentalPagingApi
     @ExperimentalCoroutinesApi
@@ -49,6 +55,7 @@ class PostFragment: Fragment() {
 
         navController = findNavController()
 
+
         // check what LoginFragment have to say about auth state
         // https://developer.android.com/guide/navigation/navigation-conditional
         val currentBackStackEntry = navController.currentBackStackEntry!!
@@ -63,6 +70,8 @@ class PostFragment: Fragment() {
                     navController.navigate(startDestination, null, navOptions)
                 }
             }
+
+        recyclerView = binding.rVPosts
 
         val adapter = PostAdapter(object : OnPostButtonInteractionListener {
             override fun onPostLike(post: Post) {
@@ -110,6 +119,7 @@ class PostFragment: Fragment() {
             footer = PagingLoadStateAdapter { adapter.retry() }
         )
 
+
         lifecycleScope.launchWhenCreated {
             viewModel.postList.collectLatest {
                 adapter.submitData(it)
@@ -132,7 +142,6 @@ class PostFragment: Fragment() {
             adapter.loadStateFlow.collectLatest { state ->
                 binding.swipeToRefresh.isRefreshing = state.refresh == LoadState.Loading
 
-
                 if (state.source.refresh is LoadState.NotLoading &&
                     state.append.endOfPaginationReached &&
                     adapter.itemCount < 1
@@ -154,10 +163,30 @@ class PostFragment: Fragment() {
             }
         }
 
+
         binding.swipeToRefresh.setOnRefreshListener {
             adapter.refresh()
         }
         return binding.root
+
+
+    }
+
+
+    override fun onResume() {
+        if(::recyclerView.isInitialized) recyclerView.createPlayer()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        if(::recyclerView.isInitialized) recyclerView.releasePlayer()
+        super.onPause()
+    }
+
+
+    override fun onStop() {
+        if(::recyclerView.isInitialized) recyclerView.releasePlayer()
+        super.onStop()
     }
 
 }

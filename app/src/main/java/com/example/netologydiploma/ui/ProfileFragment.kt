@@ -14,10 +14,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
-import com.example.netologydiploma.adapter.JobAdapter
-import com.example.netologydiploma.adapter.OnJobButtonInteractionListener
-import com.example.netologydiploma.adapter.OnPostButtonInteractionListener
-import com.example.netologydiploma.adapter.PostAdapter
+import com.example.netologydiploma.adapter.*
 import com.example.netologydiploma.databinding.FragmentProfileBinding
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
@@ -38,11 +35,13 @@ class ProfileFragment : Fragment() {
         ownerProducer = { this }
     )
 
-    val authViewModel: AuthViewModel by viewModels(
+    private val authViewModel: AuthViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
 
     private lateinit var navController: NavController
+
+    private lateinit var postRecyclerView: PostRecyclerView
 
 
     @ExperimentalCoroutinesApi
@@ -65,9 +64,6 @@ class ProfileFragment : Fragment() {
         profileViewModel.setAuthorAvatar(navArgs.avatar)
 
 
-
-
-
         profileViewModel.profileUserName.observe(viewLifecycleOwner) {
             binding.profileToolbarLayout.tvFirstName.text = it
         }
@@ -78,6 +74,7 @@ class ProfileFragment : Fragment() {
             binding.swipeToRefresh.isEnabled = verticalOffset == 0
         })
 
+        postRecyclerView = binding.rVPosts
 
         val jobAdapter = JobAdapter(object : OnJobButtonInteractionListener {
             override fun onDeleteJob(job: Job) {
@@ -176,12 +173,9 @@ class ProfileFragment : Fragment() {
                 binding.swipeToRefresh.isRefreshing = state.refresh == LoadState.Loading
 
                 if (state.source.refresh is LoadState.NotLoading &&
-                    state.append.endOfPaginationReached &&
-                    postAdapter.itemCount < 1
+                    state.append.endOfPaginationReached
                 ) {
-                    binding.emptyListContainer.visibility = View.VISIBLE
-                } else {
-                    binding.emptyListContainer.visibility = View.GONE
+                    binding.emptyListContainer.isVisible = postAdapter.itemCount < 1
                 }
             }
         }
@@ -220,4 +214,21 @@ class ProfileFragment : Fragment() {
             else -> false
         }
     }
+
+    override fun onResume() {
+        if (::postRecyclerView.isInitialized) postRecyclerView.createPlayer()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        if (::postRecyclerView.isInitialized) postRecyclerView.releasePlayer()
+        super.onPause()
+    }
+
+
+    override fun onStop() {
+        if (::postRecyclerView.isInitialized) postRecyclerView.releasePlayer()
+        super.onStop()
+    }
+
 }

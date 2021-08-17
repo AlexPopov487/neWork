@@ -15,7 +15,7 @@ import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.MediaUpload
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
-import com.example.netologydiploma.model.PhotoModel
+import com.example.netologydiploma.model.MediaModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -44,10 +44,10 @@ class EventViewModel @Inject constructor(
     val editedEvent: LiveData<Event?>
         get() = _editedEvent
 
-    private val noPhoto = PhotoModel()
+    private val noPhoto = MediaModel()
 
     private val _photo = MutableLiveData(noPhoto)
-    val photo: LiveData<PhotoModel>
+    val photo: LiveData<MediaModel>
         get() = _photo
 
     private val _eventDateTime = MutableLiveData<String?>()
@@ -151,7 +151,7 @@ class EventViewModel @Inject constructor(
     }
 
     fun changePhoto(uri: Uri?, file: File?) {
-        _photo.value = PhotoModel(uri, file)
+        _photo.value = MediaModel(uri, file)
     }
 
 

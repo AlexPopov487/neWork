@@ -6,6 +6,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.netologydiploma.R
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.PlayerView
 
 fun ImageView.loadAvatar(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
 
@@ -37,3 +40,4 @@ fun ImageView.loadImage(url: String, vararg transforms: BitmapTransformation = e
 
 fun ImageView.loadCircleCrop(url: String, vararg transforms: BitmapTransformation = emptyArray()) =
     loadAvatar(url, CircleCrop(), *transforms)
+

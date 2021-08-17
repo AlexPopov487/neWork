@@ -127,8 +127,10 @@ class MainActivity : AppCompatActivity() {
             if (user.id == 0L) {
                 invalidateOptionsMenu()
                 binding.bottomNavView.menu.findItem(R.id.nav_profile_fragment).isEnabled = false
+                binding.expandableFab.visibility = View.GONE
             } else {
                 binding.bottomNavView.menu.findItem(R.id.nav_profile_fragment).isEnabled = true
+                binding.expandableFab.visibility = View.VISIBLE
             }
         }
     }

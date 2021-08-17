@@ -10,7 +10,7 @@ import com.example.netologydiploma.data.SignInUpRepository
 import com.example.netologydiploma.dto.MediaUpload
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
-import com.example.netologydiploma.model.PhotoModel
+import com.example.netologydiploma.model.MediaModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -22,7 +22,7 @@ class LoginRegistrationViewModel @Inject constructor(
     private val appAuth: AppAuth
 ) : ViewModel() {
 
-    private val noPhoto = PhotoModel()
+    private val noPhoto = MediaModel()
 
     private val _isSignedIn = MutableLiveData(false)
     val isSignedIn: LiveData<Boolean>
@@ -33,7 +33,7 @@ class LoginRegistrationViewModel @Inject constructor(
         get() = _dataState
 
     private val _photo = MutableLiveData(noPhoto)
-    val photo: LiveData<PhotoModel>
+    val photo: LiveData<MediaModel>
         get() = _photo
 
     fun invalidateSignedInState() {
@@ -89,6 +89,6 @@ class LoginRegistrationViewModel @Inject constructor(
 
 
     fun changePhoto(uri: Uri?, file: File?) {
-        _photo.value = PhotoModel(uri, file)
+        _photo.value = MediaModel(uri, file)
     }
 }

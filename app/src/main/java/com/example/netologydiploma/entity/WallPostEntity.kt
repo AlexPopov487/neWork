@@ -1,5 +1,6 @@
 package com.example.netologydiploma.entity
 
+import androidx.annotation.Nullable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,7 +12,7 @@ data class WallPostEntity (
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorAvatar: String,
+    @Nullable val authorAvatar: String?,
     val content: String,
     val published: Long,
     val isLikedByMe: Boolean,

@@ -117,6 +117,15 @@
                 app:iconTint="@android:color/darker_gray" />
         </FrameLayout>
 
+        <View
+            style="@style/DividerHorizontal"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@id/bottom_panel_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_photo_container"
+            app:layout_constraintVertical_bias="1.0" />
+
         <LinearLayout
             android:id="@+id/bottom_panel_layout"
             android:layout_width="0dp"
@@ -126,7 +135,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_photo_container"
             app:layout_constraintVertical_bias="1.0">
 
             <com.google.android.material.button.MaterialButton

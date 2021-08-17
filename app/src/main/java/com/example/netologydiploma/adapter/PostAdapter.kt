@@ -3,16 +3,21 @@ package com.example.netologydiploma.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
+import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.appcompat.widget.PopupMenu
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.PostListItemBinding
+import com.example.netologydiploma.dto.AttachmentType
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.util.loadCircleCrop
 import com.example.netologydiploma.util.loadImage
+import com.google.android.exoplayer2.MediaItem
 
 
 interface OnPostButtonInteractionListener {
@@ -22,7 +27,9 @@ interface OnPostButtonInteractionListener {
     fun onAvatarClicked(post: Post)
 }
 
-class PostAdapter(private val interactionListener: OnPostButtonInteractionListener) :
+class PostAdapter(
+    private val interactionListener: OnPostButtonInteractionListener,
+) :
     PagingDataAdapter<Post, PostViewHolder>(PostDiffCallback) {
 
     companion object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
@@ -54,18 +61,35 @@ class PostAdapter(private val interactionListener: OnPostButtonInteractionListen
 
 class PostViewHolder(
     private val postBinding: PostListItemBinding,
-    private val interactionListener: OnPostButtonInteractionListener
-) :
+    private val interactionListener: OnPostButtonInteractionListener,
+
+    ) :
     RecyclerView.ViewHolder(postBinding.root) {
 
+    private val parentView = postBinding.root
+    val videoThumbnail = postBinding.videoThumbnail
+    val videoContainer = postBinding.videoContainer
+    val videoProgressBar = postBinding.videoProgressbar
+    var videoPreview: MediaItem? = null
+    val videoPlayIcon: ImageView = postBinding.iVVideoPlayIcon
 
     fun bind(post: Post) {
+        parentView.tag = this
+
         with(postBinding) {
+
             tVUserName.text = post.author
             tVPublished.text = AndroidUtils.formatMillisToDateTimeString(post.published)
             tvContent.text = post.content
 
-            iVAvatar.loadCircleCrop(post.authorAvatar)
+            post.authorAvatar?.let {
+                iVAvatar.loadCircleCrop(it)
+            } ?: iVAvatar.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    itemView.context,
+                    R.drawable.ic_no_avatar_user
+                )
+            )
 
             iVAvatar.setOnClickListener {
                 interactionListener.onAvatarClicked(post)
@@ -78,15 +102,42 @@ class PostViewHolder(
             btLike.setOnClickListener {
                 interactionListener.onPostLike(post)
             }
-            post.attachment?.let {
-                imageAttachment.loadImage(it.url)
-            }
-            if (post.attachment == null) {
-                mediaContainer.visibility = View.GONE
-            } else {
-                mediaContainer.visibility = View.VISIBLE
-            }
 
+
+            if (post.attachment == null) {
+                imageAttachment.visibility = View.GONE
+
+                videoContainer.visibility = View.GONE
+
+                videoPreview = null
+
+            } else {
+                when (post.attachment!!.type) {
+                    AttachmentType.IMAGE -> {
+                        videoPreview = null
+                        videoContainer.visibility = View.GONE
+                        imageAttachment.visibility = View.VISIBLE
+                        imageAttachment.loadImage(post.attachment!!.url)
+                    }
+                    AttachmentType.VIDEO -> {
+                        imageAttachment.visibility = View.GONE
+                        videoContainer.visibility = View.VISIBLE
+                        videoPreview = MediaItem.fromUri(post.attachment!!.url)
+                        Glide.with(parentView).load(post.attachment!!.url).into(videoThumbnail)
+                    }
+                    AttachmentType.AUDIO -> {
+                        imageAttachment.visibility = View.GONE
+                        videoContainer.visibility = View.VISIBLE
+                        videoPreview = MediaItem.fromUri(post.attachment!!.url)
+                        videoThumbnail.setImageDrawable(
+                            AppCompatResources.getDrawable(
+                                itemView.context,
+                                R.drawable.ic_audiotrack_24
+                            )
+                        )
+                    }
+                }
+            }
 
             if (!post.ownedByMe) {
                 btPostOptions.visibility = View.GONE
@@ -112,6 +163,8 @@ class PostViewHolder(
                     }.show()
                 }
             }
+
+
         }
     }
 }

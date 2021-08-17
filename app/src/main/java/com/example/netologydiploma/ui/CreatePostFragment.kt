@@ -1,5 +1,6 @@
 package com.example.netologydiploma.ui
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
@@ -7,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
@@ -16,8 +16,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.FragmentCreatePostBinding
+import com.example.netologydiploma.dto.AttachmentType
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
+import com.example.netologydiploma.util.PermissionsManager
 import com.example.netologydiploma.viewModel.PostViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
@@ -27,9 +29,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
-const val MEDIA_REQUEST_CODE = 101
-
-
 @AndroidEntryPoint
 @ExperimentalPagingApi
 class CreatePostFragment : Fragment() {
@@ -38,6 +37,10 @@ class CreatePostFragment : Fragment() {
     private val viewModel: PostViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
+    private var mediaPlayer: SimpleExoPlayer? = null
+
+    private val permissionsRequestCode = 123
+    lateinit var permissionManager: PermissionsManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +48,14 @@ class CreatePostFragment : Fragment() {
     ): View {
         binding = FragmentCreatePostBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
+
+        val permissions = listOf<String>(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        )
+
+        permissionManager =
+            PermissionsManager(requireActivity(), permissions, permissionsRequestCode)
 
         viewModel.editedPost.observe(viewLifecycleOwner) { editedPost ->
             editedPost?.let {
@@ -58,7 +69,7 @@ class CreatePostFragment : Fragment() {
             }
         }
 
-        
+
         val handlePhotoResult =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
                 val resultCode = activityResult.resultCode
@@ -67,7 +78,7 @@ class CreatePostFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     //Image Uri will not be null for RESULT_OK
                     val fileUri = data?.data!!
-                    viewModel.changePhoto(fileUri, fileUri.toFile())
+                    viewModel.changeMedia(fileUri, fileUri.toFile(), AttachmentType.IMAGE)
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     Snackbar.make(
                         binding.root,
@@ -77,6 +88,44 @@ class CreatePostFragment : Fragment() {
                 }
             }
 
+
+        val handleVideoResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+                val resultCode = activityResult.resultCode
+                val data = activityResult.data
+
+                if (resultCode == Activity.RESULT_OK) {
+                    val selectedVideoUri = data?.data!!
+                    val selectedVideoPath = getRealPathFromUri(selectedVideoUri)
+                    if (selectedVideoPath != null) {
+
+                        viewModel.changeMedia(
+                            selectedVideoUri,
+                            File(selectedVideoPath),
+                            AttachmentType.VIDEO
+                        )
+                    }
+                }
+            }
+
+        val handleAudioResult =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+                val resultCode = activityResult.resultCode
+                val data = activityResult.data
+
+                if (resultCode == Activity.RESULT_OK) {
+                    val selectedVideoUri = data?.data!!
+                    val selectedVideoPath = getRealPathFromUri(selectedVideoUri)
+                    if (selectedVideoPath != null) {
+
+                        viewModel.changeMedia(
+                            selectedVideoUri,
+                            File(selectedVideoPath),
+                            AttachmentType.AUDIO
+                        )
+                    }
+                }
+            }
 
         binding.btPickPhoto.setOnClickListener {
             ImagePicker.with(this)
@@ -101,69 +150,107 @@ class CreatePostFragment : Fragment() {
                 }
         }
 
-
-//        val mediaPlayer = SimpleExoPlayer.Builder(requireContext())
-//            .build()
-//            .also {
-//                binding.ivPhoto.player = it
-//            }
-//
-        
-//        binding.btPickVideo.setOnClickListener {
-//            val intent = Intent(
-//                Intent.ACTION_PICK,
-//                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-//            )
-//            startActivityForResult(intent, 20)
-//        }
-
-        binding.btRemovePhoto.setOnClickListener {
-            viewModel.changePhoto(null, null)
-        }
-
-
-        viewModel.photo.observe(viewLifecycleOwner) { photoModel ->
-            if (photoModel.uri == null) {
-                binding.layoutPhotoContainer.visibility = View.GONE
-                return@observe
+        binding.btPickVideo.setOnClickListener {
+            if (!permissionManager.checkPermissions()) {
+                permissionManager.requestPermissions()
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.grant_storage_permissions_dialog_message),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAnchorView(binding.bottomPanelLayout)
+                    .setAction(getString(R.string.ok_action), {})
+                    .show()
+                return@setOnClickListener
             }
 
-            binding.layoutPhotoContainer.visibility = View.VISIBLE
-            binding.ivPhoto.setImageURI(photoModel.uri)
-//            val mediaItem = MediaItem.fromUri(photoModel.uri)
-//            mediaPlayer.setMediaItem(mediaItem)
 
+            val intent = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            )
+            handleVideoResult.launch(intent)
         }
 
+        binding.btPickAudio.setOnClickListener {
+            if (!permissionManager.checkPermissions()) {
+                permissionManager.requestPermissions()
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.grant_storage_permissions_dialog_message),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAnchorView(binding.bottomPanelLayout)
+                    .setAction(getString(R.string.ok_action), {})
+                    .show()
+                return@setOnClickListener
+            }
+            val intent = Intent(
+                Intent.ACTION_PICK,
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            )
+            handleAudioResult.launch(intent)
+        }
+
+        binding.btRemoveMedia.setOnClickListener {
+            viewModel.changeMedia(null, null, null)
+        }
+
+        viewModel.media.observe(viewLifecycleOwner) { mediaModel ->
+            if (mediaModel.uri == null) {
+                binding.layoutPhotoContainer.visibility = View.GONE
+                binding.ivPhoto.visibility = View.GONE
+                binding.videoPlayerView.visibility = View.GONE
+                return@observe
+            }
+            when (mediaModel.type) {
+                AttachmentType.IMAGE -> {
+                    binding.ivPhoto.visibility = View.VISIBLE
+                    binding.videoPlayerView.visibility = View.GONE
+                    binding.layoutPhotoContainer.visibility = View.VISIBLE
+
+                    binding.ivPhoto.setImageURI(mediaModel.uri)
+                }
+                AttachmentType.VIDEO -> {
+                    binding.ivPhoto.visibility = View.GONE
+                    binding.videoPlayerView.visibility = View.VISIBLE
+                    binding.layoutPhotoContainer.visibility = View.VISIBLE
+
+                    val mediaItem = MediaItem.fromUri(mediaModel.uri)
+                    mediaPlayer?.setMediaItem(mediaItem)
+                }
+                AttachmentType.AUDIO -> {
+                    binding.ivPhoto.visibility = View.GONE
+                    binding.videoPlayerView.visibility = View.VISIBLE
+                    binding.layoutPhotoContainer.visibility = View.VISIBLE
+
+                    val mediaItem = MediaItem.fromUri(mediaModel.uri)
+                    mediaPlayer?.setMediaItem(mediaItem)
+                }
+                null -> Snackbar.make(
+                    binding.root,
+                    getString(R.string.no_media_loaded_error),
+                    Snackbar.LENGTH_SHORT
+                ).setAction(getString(R.string.ok_action), {})
+                    .show()
+            }
+        }
         return binding.root
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode == Activity.RESULT_OK){
-//            if (requestCode == 20){
-//                val selectedVideoUri = data?.data!!
-//                val selectedVideoPath = getRealPathFromUri(selectedVideoUri)
-//                if (selectedVideoPath != null) {
-//                    Toast.makeText(requireContext(), selectedVideoUri.path + "   |   "+ selectedVideoPath, Toast.LENGTH_LONG).show()
-//                    viewModel.changePhoto(selectedVideoUri, File(selectedVideoPath))
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun getRealPathFromUri(uri: Uri) : String? {
-//        var cursor: Cursor? = null
-//        return try {
-//            val projection = arrayOf(MediaStore.Images.Media.DATA)
-//            cursor = requireActivity().contentResolver.query(uri, projection, null, null, null)
-//            val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//            cursor?.moveToFirst()
-//            cursor?.getString(columnIndex!!)
-//        } finally {
-//            cursor?.close()
-//        }
-//    }
+
+    private fun getRealPathFromUri(uri: Uri): String? {
+        var cursor: Cursor? = null
+        return try {
+            val projection = arrayOf(MediaStore.Images.Media.DATA)
+            cursor = requireActivity().contentResolver.query(uri, projection, null, null, null)
+            val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor?.moveToFirst()
+            cursor?.getString(columnIndex!!)
+        } finally {
+            cursor?.close()
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.fragment_create_edit_menu, menu)
@@ -193,6 +280,49 @@ class CreatePostFragment : Fragment() {
             }
             else -> false
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (com.google.android.exoplayer2.util.Util.SDK_INT >= 24) {
+            initializePlayer()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (com.google.android.exoplayer2.util.Util.SDK_INT < 24 || mediaPlayer == null) {
+            initializePlayer()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (com.google.android.exoplayer2.util.Util.SDK_INT < 24) {
+            releasePlayer()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (com.google.android.exoplayer2.util.Util.SDK_INT >= 24) {
+            releasePlayer()
+        }
+    }
+
+    private fun initializePlayer() {
+        mediaPlayer = SimpleExoPlayer.Builder(requireContext())
+            .build()
+            .also {
+                binding.videoPlayerView.player = it
+            }
+    }
+
+    private fun releasePlayer() {
+        mediaPlayer?.run {
+            release()
+        }
+        mediaPlayer = null
     }
 
 

@@ -34,7 +34,8 @@
                     layout="@layout/fragment_profile_overview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="12dp" />
+                    android:layout_margin="12dp"
+                    />
 
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -45,7 +46,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.recyclerview.widget.RecyclerView
+            <com.example.netologydiploma.adapter.PostRecyclerView
                 android:id="@+id/rV_posts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -54,7 +55,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/post_list_item" />
+                tools:listitem="@layout/post_list_item"
+                android:layout_marginBottom="@dimen/bottom_nav_bar_height"/>
 
             <ImageView
                 android:id="@+id/iV_empty_list"

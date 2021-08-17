@@ -3,11 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/drawable/ic_play_arrow_24.xml" value="0.12447916666666667" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/custom_exo_player_controls.xml" value="0.264" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/exo_player_control_view.xml" value="0.264" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/fragment_create_event.xml" value="0.1" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/fragment_create_post.xml" value="0.136" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/fragment_events.xml" value="0.1" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/fragment_posts.xml" value="0.12" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/layout/post_list_item.xml" value="0.16" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/auth_app_bar_menu.xml" value="0.1" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/bottom_app_bar.xml" value="0.10277777777777777" />
         <entry key="..\:/ANDROID_DEV/ANDROID/net_finals/app/src/main/res/menu/drawer_nav_menu.xml" value="0.176" />

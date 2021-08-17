@@ -71,4 +71,9 @@
     <string name="empty_post_list_icon_content_desctription">Empty post list icon</string>
     <string name="tv_empty_post_list">No posts yet :(</string>
     <string name="tv_empty_event_list">No events yet :(</string>
+    <string name="ok_action">OK</string>
+    <string name="no_media_loaded_error">Error with loading media. Please, try again!</string>
+    <string name="permissions_needed_title">App needs permission(s)</string>
+    <string name="grant_following_permissions_dialog_message">To proceed grant the app following permissions:</string>
+    <string name="grant_storage_permissions_dialog_message">To proceed grant the app permission to access device storage</string>
 </resources>

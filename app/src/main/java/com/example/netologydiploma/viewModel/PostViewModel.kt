@@ -16,7 +16,7 @@ import com.example.netologydiploma.dto.MediaUpload
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
-import com.example.netologydiploma.model.PhotoModel
+import com.example.netologydiploma.model.MediaModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +33,7 @@ class PostViewModel @Inject constructor(
     appAuth: AppAuth
 ) : ViewModel() {
 
-    private val noPhoto = PhotoModel()
+    private val noMedia = MediaModel()
 
 
     private val _dataState = MutableLiveData(FeedStateModel())
@@ -48,9 +48,10 @@ class PostViewModel @Inject constructor(
     val editedPost: LiveData<Post?>
         get() = _editedPost
 
-    private val _photo = MutableLiveData(noPhoto)
-    val photo: LiveData<PhotoModel>
-        get() = _photo
+    private val _media = MutableLiveData(noMedia)
+    val media: LiveData<MediaModel>
+        get() = _media
+
 
     private val cached = repository.getAllPosts().cachedIn(viewModelScope)
 
@@ -76,11 +77,43 @@ class PostViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _dataState.value = (FeedStateModel(isLoading = true))
-                when (_photo.value) {
-                    noPhoto ->  repository.createPost(post)
-                    else -> _photo.value?.file?.let { file ->
-                        repository.saveWithAttachment(post, MediaUpload(file), AttachmentType.IMAGE)
+                when (_media.value) {
+                    noMedia -> repository.createPost(post)
+                    else -> {
+                        when (_media.value?.type) {
+                            AttachmentType.IMAGE -> {
+                                _media.value?.file?.let { file ->
+                                    repository.saveWithAttachment(
+                                        post,
+                                        MediaUpload(file),
+                                        AttachmentType.IMAGE
+                                    )
+                                }
+                            }
+                            AttachmentType.VIDEO -> {
+                                _media.value?.file?.let { file ->
+                                    repository.saveWithAttachment(
+                                        post,
+                                        MediaUpload(file),
+                                        AttachmentType.VIDEO
+                                    )
+                                }
+                            }
+                            AttachmentType.AUDIO -> {
+                                _media.value?.file?.let { file ->
+                                    repository.saveWithAttachment(
+                                        post,
+                                        MediaUpload(file),
+                                        AttachmentType.AUDIO
+                                    )
+                                }
+                            }
+                            null -> repository.createPost(post)
+                        }
+
                     }
+
+
                 }
 
                 _dataState.value = (FeedStateModel(isLoading = false))
@@ -91,7 +124,7 @@ class PostViewModel @Inject constructor(
                 ))
             } finally {
                 invalidateEditPost()
-                _photo.value = noPhoto
+                _media.value = noMedia
             }
         }
     }
@@ -126,9 +159,10 @@ class PostViewModel @Inject constructor(
         }
     }
 
-    fun changePhoto(uri: Uri?, file: File?) {
-        _photo.value = PhotoModel(uri, file)
+    fun changeMedia(uri: Uri?, file: File?, type: AttachmentType?) {
+        _media.value = MediaModel(uri, file, type)
     }
+
 
 }
 
