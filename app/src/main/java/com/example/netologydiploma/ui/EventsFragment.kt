@@ -91,11 +91,7 @@ class EventsFragment : Fragment() {
 
             override fun onAvatarClicked(event: Event) {
                 val action = EventsFragmentDirections
-                    .actionNavEventsFragmentToNavProfileFragment(
-                        authorId = event.authorId,
-                        authorName = event.author,
-                        avatar = event.authorAvatar
-                    )
+                    .actionNavEventsFragmentToNavProfileFragment(authorId = event.authorId)
                 navController.navigate(action)
             }
 
@@ -129,7 +125,6 @@ class EventsFragment : Fragment() {
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest { state ->
                 binding.swipeToRefresh.isRefreshing = state.refresh is LoadState.Loading
-
 
                 if (state.source.refresh is LoadState.NotLoading &&
                     state.append.endOfPaginationReached &&

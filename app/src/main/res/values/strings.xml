@@ -76,4 +76,8 @@
     <string name="permissions_needed_title">App needs permission(s)</string>
     <string name="grant_following_permissions_dialog_message">To proceed grant the app following permissions:</string>
     <string name="grant_storage_permissions_dialog_message">To proceed grant the app permission to access device storage</string>
+    <string name="discard_changes_dialog_title">Discard changes?</string>
+    <string name="discard_changes_dialog_body">Do you want to leave? All unsaved changes will be lost</string>
+    <string name="action_leave_dialog_fragment">Leave</string>
+    <string name="action_cancel_dialog_fragment">Cancel</string>
 </resources>

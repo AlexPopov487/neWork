@@ -2,14 +2,18 @@ package com.example.netologydiploma.ui
 
 import android.Manifest
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +24,7 @@ import com.example.netologydiploma.dto.AttachmentType
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.util.PermissionsManager
+import com.example.netologydiploma.util.loadImage
 import com.example.netologydiploma.viewModel.PostViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
@@ -57,6 +62,7 @@ class CreatePostFragment : Fragment() {
         permissionManager =
             PermissionsManager(requireActivity(), permissions, permissionsRequestCode)
 
+        /** User wants to edit an existing post */
         viewModel.editedPost.observe(viewLifecycleOwner) { editedPost ->
             editedPost?.let {
 
@@ -66,6 +72,19 @@ class CreatePostFragment : Fragment() {
                     binding.eTPostContent.text.lastIndex
                 )
                 AndroidUtils.showKeyboard(binding.eTPostContent)
+
+                // get and display attachment (if any)
+                it.attachment?.let { attachment ->
+                    val type = attachment.type
+                    val attachmentUri = attachment.url
+                    viewModel.changeMedia(attachmentUri.toUri(), null, type)
+                    //disable media removal
+                    binding.btRemoveMedia.visibility = View.GONE
+
+                    if (type == AttachmentType.IMAGE) {
+                        binding.ivPhoto.loadImage(attachmentUri)
+                    }
+                }
             }
         }
 
@@ -325,5 +344,34 @@ class CreatePostFragment : Fragment() {
         mediaPlayer = null
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showAlert()
+                }
+            })
+    }
+
+    private fun showAlert() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.discard_changes_dialog_title))
+        builder.setMessage(getString(R.string.discard_changes_dialog_body))
+        builder.setPositiveButton(
+            getString(R.string.action_leave_dialog_fragment),
+            DialogInterface.OnClickListener { dialog, which ->
+                viewModel.invalidateEditPost()
+                viewModel.changeMedia(null, null, null)
+                findNavController().navigateUp()
+            })
+        builder.setNeutralButton(getString(R.string.action_cancel_dialog_fragment),
+            DialogInterface.OnClickListener { dialog, which ->
+                dialog.dismiss()
+            })
+        val dialog = builder.create()
+        dialog.show()
+    }
 
 }

@@ -52,7 +52,7 @@ class LoginRegistrationViewModel @Inject constructor(
                 val idAndToken = repository.onSignIn(login, password)
                 val id = idAndToken.userId ?: 0L
                 val token = idAndToken.token ?: "N/A"
-                appAuth.setAuth(id = id, token = token, login = login)
+                appAuth.setAuth(id = id, token = token)
 
                 _dataState.value = FeedStateModel(isLoading = false)
                 _isSignedIn.value = true

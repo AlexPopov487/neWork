@@ -44,21 +44,10 @@
             android:name="authorId"
             app:argType="long"
             android:defaultValue="-1L" />
-        <argument
-            android:name="authorName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"
-           />
         <action
             android:id="@+id/action_nav_profile_fragment_to_createEditPostFragment"
             app:destination="@id/createEditPostFragment"
             app:popUpTo="@id/nav_events_fragment" />
-        <argument
-            android:name="avatar"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/createEditPostFragment"

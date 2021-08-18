@@ -1,9 +1,6 @@
 package com.example.netologydiploma.api
 
-import com.example.netologydiploma.dto.Event
-import com.example.netologydiploma.dto.Job
-import com.example.netologydiploma.dto.MediaDownload
-import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.dto.*
 import com.example.netologydiploma.model.AuthJsonModel
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -147,5 +144,9 @@ interface ApiService {
     @Multipart
     @POST("media")
     suspend fun saveMediaFile(@Part file: MultipartBody.Part) : Response<MediaDownload>
+
+    /** USER INTERACTION */
+    @GET("users/{id}")
+    suspend fun getUserById(@Path("id") userId: Long) : Response<User>
 
 }

@@ -14,6 +14,15 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import com.google.android.exoplayer2.ui.PlayerView
 
 
+
+// this Recycle view is basically a way to properly use exoPlayer
+// with it being released when app is in onPause() or onStop.
+// Only one exoPlayer instance is being used for all the rv items.
+// When needed, player is released from the fragment holding this recyclerView
+// more
+// primarily https://github.com/yoobi/exoplayer-kotlin
+// and also
+// https://codingwithmitch.com/blog/playing-video-recyclerview-exoplayer-android/
 class PostRecyclerView : RecyclerView {
 
 

@@ -1,10 +1,14 @@
 package com.example.netologydiploma.ui
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,6 +18,7 @@ import com.example.netologydiploma.databinding.FragmentCreateEventBinding
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
 import com.example.netologydiploma.util.AndroidUtils
+import com.example.netologydiploma.util.loadImage
 import com.example.netologydiploma.viewModel.EventViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
@@ -40,21 +45,29 @@ class CreateEventFragment : Fragment() {
         setHasOptionsMenu(true)
 
         /** User wants to edit an existing event */
-        viewModel.editedEvent.observe(viewLifecycleOwner) { editedPost ->
-            editedPost?.let {
+        viewModel.editedEvent.observe(viewLifecycleOwner) { editedEvent ->
+            editedEvent?.let {
                 (activity as MainActivity?)
                     ?.setActionBarTitle(getString(R.string.change_event_fragment_title))
 
-                binding.eTPostContent.setText(editedPost.content)
+                binding.eTPostContent.setText(editedEvent.content)
                 binding.eTPostContent.requestFocus(
                     binding.eTPostContent.text.lastIndex
                 )
 
                 binding.tVEventDateTime.text =
-                    AndroidUtils.formatMillisToDateTimeString(editedPost.datetime)
+                    AndroidUtils.formatMillisToDateTimeString(editedEvent.datetime)
                 AndroidUtils.showKeyboard(binding.eTPostContent)
 
-                when (editedPost.type) {
+                it.attachment?.let { attachment ->
+                    val attachmentUri = attachment.url
+                    viewModel.changePhoto(attachmentUri.toUri(), null)
+                    binding.ivPhoto.loadImage(attachmentUri)
+                    //disable media removal
+                    binding.btRemovePhoto.visibility = View.GONE
+                }
+
+                when (editedEvent.type) {
                     EventType.OFFLINE -> binding.buttonEventTypeGroup.check(R.id.button_type_offline)
                     EventType.ONLINE -> binding.buttonEventTypeGroup.check(R.id.button_type_online)
                 }
@@ -191,6 +204,7 @@ class CreateEventFragment : Fragment() {
                     AndroidUtils.formatDateTimeStringToMillis(binding.tVEventDateTime.text.toString())
                 val eventType = eventType ?: EventType.OFFLINE
 
+
                 // if editedEvent is not null, we are to rewrite an existing post.
                 // Otherwise, save a new one
                 viewModel.editedEvent.value?.let {
@@ -198,14 +212,14 @@ class CreateEventFragment : Fragment() {
                         it.copy(
                             content = content,
                             datetime = date,
-                            type = eventType
+                            type = eventType,
                         )
                     )
                 } ?: viewModel.saveEvent(
                     Event(
                         content = content,
                         datetime = date,
-                        type = eventType
+                        type = eventType,
                     )
                 )
                 AndroidUtils.hideKeyboard(requireView())
@@ -216,5 +230,34 @@ class CreateEventFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showAlert()
+                }
+            })
+    }
 
+    private fun showAlert() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.discard_changes_dialog_title))
+        builder.setMessage(getString(R.string.discard_changes_dialog_body))
+        builder.setPositiveButton(
+            getString(R.string.action_leave_dialog_fragment),
+            DialogInterface.OnClickListener { dialog, which ->
+                viewModel.invalidateEditedEvent()
+                viewModel.invalidateEventDateTime()
+                viewModel.changePhoto(null, null)
+                findNavController().navigateUp()
+            })
+        builder.setNeutralButton(
+            getString(R.string.action_cancel_dialog_fragment),
+            DialogInterface.OnClickListener { dialog, which ->
+                dialog.dismiss()
+            })
+        val dialog = builder.create()
+        dialog.show()
+    }
 }

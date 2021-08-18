@@ -12,6 +12,7 @@ import com.example.netologydiploma.auth.AppAuth
 import com.example.netologydiploma.data.ProfileRepository
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.dto.User
 import com.example.netologydiploma.error.AppError
 import com.example.netologydiploma.model.FeedStateModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,8 +29,11 @@ class ProfileViewModel @Inject constructor(
     private val repository: ProfileRepository
 ) : ViewModel() {
 
-
     val myId: Long = appAuth.authStateFlow.value.id
+
+    private val _currentUser = MutableLiveData(User())
+    val currentUser: LiveData<User>
+        get() = _currentUser
 
     private val _dataState = MutableLiveData(FeedStateModel())
     val dataState: LiveData<FeedStateModel>
@@ -43,13 +47,6 @@ class ProfileViewModel @Inject constructor(
     val profileUserId: LiveData<Long?>
         get() = _profileUserId
 
-    private val _profileUserName = MutableLiveData<String?>()
-    val profileUserName: LiveData<String?>
-        get() = _profileUserName
-
-    private val _profileUserAvatar = MutableLiveData<String?>()
-    val profileUserAvatar: LiveData<String?>
-        get() = _profileUserAvatar
 
     @ExperimentalCoroutinesApi
     @ExperimentalPagingApi
@@ -67,27 +64,25 @@ class ProfileViewModel @Inject constructor(
         .cachedIn(viewModelScope)
 
     fun setAuthorId(authorId: Long) {
+        // если никакого id не передали (т.е. id = -1L),то пользователь зашел из меню к себе в профиль
         _profileUserId.value = if (authorId == -1L) appAuth.authStateFlow.value.id
         else authorId
     }
 
-    fun setAuthorName(authorName: String?) {
-        // если authorName = null, значит пользователь зашел в свой профиль через вкладку
-        // в меню. Тогда берем не имя польщователя, а логин из authStateFlow.
-        _profileUserName.value = authorName ?: appAuth.authStateFlow.value.login ?: "Your profile"
-    }
-
-    fun setAuthorAvatar(avatar: String?) {
-        // если authorName = null, значит пользователь зашел в свой профиль через вкладку
-        // в меню. Тогда берем не имя польщователя, а логин из authStateFlow.
-        _profileUserAvatar.value = avatar
-    }
-
-
-    fun invalidateUserData() {
-        _profileUserId.value = null
-        _profileUserName.value = null
-        _profileUserAvatar.value = null
+    fun getUserById() {
+        viewModelScope.launch {
+            try {
+                _dataState.value = FeedStateModel(isLoading = true)
+                val fetchedUser = repository.getUserById(_profileUserId.value!!)
+                _currentUser.value = fetchedUser
+                _dataState.value = FeedStateModel(isLoading = false)
+            } catch (e: Exception) {
+                _dataState.value = FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                )
+            }
+        }
     }
 
     fun loadJobsFromServer() {

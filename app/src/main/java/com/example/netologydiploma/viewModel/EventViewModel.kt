@@ -50,17 +50,10 @@ class EventViewModel @Inject constructor(
     val photo: LiveData<MediaModel>
         get() = _photo
 
+
     private val _eventDateTime = MutableLiveData<String?>()
     val eventDateTime: LiveData<String?>
         get() = _eventDateTime
-
-    fun invalidateEventDateTime() {
-        _eventDateTime.value = null
-    }
-
-    fun setEventDateTime(dateTime: String) {
-        _eventDateTime.value = dateTime
-    }
 
     private val cached = repository.getAllEvents().cachedIn(viewModelScope)
 
@@ -80,6 +73,14 @@ class EventViewModel @Inject constructor(
 
     fun invalidateEditedEvent() {
         _editedEvent.value = null
+    }
+
+    fun invalidateEventDateTime() {
+        _eventDateTime.value = null
+    }
+
+    fun setEventDateTime(dateTime: String) {
+        _eventDateTime.value = dateTime
     }
 
     fun saveEvent(event: Event) {

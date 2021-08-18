@@ -10,7 +10,6 @@ class AppAuth (private val prefs: SharedPreferences) {
     // store token and id for user auth validation
     private val idKey = "id"
     private val tokenKey = "token"
-    private val usernameKey = "username"
 
     private val _authStateFlow = MutableStateFlow(AuthState())
     val authStateFlow: StateFlow<AuthState> = _authStateFlow.asStateFlow()
@@ -20,24 +19,22 @@ class AppAuth (private val prefs: SharedPreferences) {
     init {
         val id = prefs.getLong(idKey, 0L)
         val token = prefs.getString(tokenKey, null)
-        val username = prefs.getString(usernameKey, null)
         if (id == 0L || token == null) {
             _authStateFlow.value = AuthState()
             prefs.edit()
                 .clear()
                 .apply()
         } else {
-            _authStateFlow.value = AuthState(id, token, username)
+            _authStateFlow.value = AuthState(id, token)
         }
     }
 
     @Synchronized
-    fun setAuth(id: Long, token: String, login: String) {
-        _authStateFlow.value = AuthState(id, token, login)
+    fun setAuth(id: Long, token: String) {
+        _authStateFlow.value = AuthState(id, token)
         with(prefs.edit()) {
             putLong(idKey, id)
             putString(tokenKey, token)
-            putString(usernameKey, login)
             apply()
         }
     }
@@ -53,4 +50,4 @@ class AppAuth (private val prefs: SharedPreferences) {
 
 }
 
-data class AuthState(val id: Long = 0, val token: String? = null, val login: String? = null)
+data class AuthState(val id: Long = 0, val token: String? = null)

@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.OnPostButtonInteractionListener
@@ -24,8 +23,6 @@ import com.example.netologydiploma.databinding.FragmentPostsBinding
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.viewModel.AuthViewModel
 import com.example.netologydiploma.viewModel.PostViewModel
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.util.Util
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -99,11 +96,7 @@ class PostFragment: Fragment() {
 
             override fun onAvatarClicked(post: Post) {
                 val action = PostFragmentDirections
-                    .actionNavPostsFragmentToNavProfileFragment(
-                        authorId = post.authorId,
-                        authorName = post.author,
-                        avatar = post.authorAvatar
-                    )
+                    .actionNavPostsFragmentToNavProfileFragment(authorId = post.authorId)
                 navController.navigate(action)
             }
         })

@@ -10,6 +10,7 @@ import com.example.netologydiploma.db.WallPostDao
 import com.example.netologydiploma.db.WallRemoteKeyDao
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
+import com.example.netologydiploma.dto.User
 import com.example.netologydiploma.entity.JobEntity
 import com.example.netologydiploma.entity.WallPostEntity
 import com.example.netologydiploma.entity.fromDto
@@ -50,6 +51,19 @@ class ProfileRepository @Inject constructor(
     fun getAllJobs(): LiveData<List<Job>> = jobDao.getAllJobs().map { jobList ->
         jobList.map {
             it.toDto()
+        }
+    }
+
+    // supposed using database here in inefficient.
+    suspend fun getUserById(userId: Long): User {
+        try {
+            val response = apiService.getUserById(userId)
+            if (!response.isSuccessful) throw ApiError(response.code())
+            return response.body() ?: throw ApiError(response.code())
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UndefinedError
         }
     }
 
@@ -140,7 +154,6 @@ class ProfileRepository @Inject constructor(
             throw UndefinedError
         }
     }
-
 
     suspend fun deleteJobById(id: Long) {
         val jobToDelete = jobDao.getJobById(id)

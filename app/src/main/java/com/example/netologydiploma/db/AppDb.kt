@@ -11,7 +11,7 @@ import com.example.netologydiploma.entity.*
         PostRemoteKeyEntity::class,
         WallRemoteKeyEntity::class,
         WallPostEntity::class,
-        JobEntity::class], version = 3
+        JobEntity::class,], version = 3
 )
 abstract class AppDb : RoomDatabase() {
     abstract fun postDao(): PostDao

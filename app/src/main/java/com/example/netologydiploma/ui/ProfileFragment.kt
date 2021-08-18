@@ -2,6 +2,7 @@ package com.example.netologydiploma.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -34,15 +35,11 @@ class ProfileFragment : Fragment() {
     val profileViewModel: ProfileViewModel by viewModels(
         ownerProducer = { this }
     )
-
     private val authViewModel: AuthViewModel by viewModels(
         ownerProducer = ::requireParentFragment
     )
-
     private lateinit var navController: NavController
-
     private lateinit var postRecyclerView: PostRecyclerView
-
 
     @ExperimentalCoroutinesApi
     @ExperimentalPagingApi
@@ -53,20 +50,15 @@ class ProfileFragment : Fragment() {
         val binding = FragmentProfileBinding.inflate(inflater, container, false)
         navController = findNavController()
 
-
         val postViewModel: PostViewModel by viewModels(
             ownerProducer = ::requireParentFragment
         )
 
         val navArgs: ProfileFragmentArgs by navArgs()
         profileViewModel.setAuthorId(navArgs.authorId)
-        profileViewModel.setAuthorName(navArgs.authorName)
-        profileViewModel.setAuthorAvatar(navArgs.avatar)
 
+        profileViewModel.getUserById()
 
-        profileViewModel.profileUserName.observe(viewLifecycleOwner) {
-            binding.profileToolbarLayout.tvFirstName.text = it
-        }
 
         /** set the swipe to refresh behavior according to the collapsing toolbar state */
         binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
@@ -81,7 +73,6 @@ class ProfileFragment : Fragment() {
                 profileViewModel.deleteJobById(job.id)
             }
         })
-
 
         val postAdapter = PostAdapter(object : OnPostButtonInteractionListener {
             override fun onPostLike(post: Post) {
@@ -107,14 +98,23 @@ class ProfileFragment : Fragment() {
         binding.rVPosts.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
-                DividerItemDecoration.VERTICAL
-            )
-        )
+                DividerItemDecoration.VERTICAL))
+
         binding.profileToolbarLayout.rVJobs.adapter = jobAdapter
 
+        profileViewModel.currentUser.observe(viewLifecycleOwner) { user ->
+            (activity as MainActivity?)?.setActionBarTitle(user.login)
+
+            user.avatar?.let {
+                binding.profileToolbarLayout.iVAvatar.loadCircleCrop(it)
+            } ?: binding.profileToolbarLayout.iVAvatar.setImageDrawable(
+                AppCompatResources.getDrawable(requireContext(), R.drawable.ic_no_avatar_user)
+            )
+
+            binding.profileToolbarLayout.tvFirstName.text = user.name
+        }
 
         profileViewModel.profileUserId.observe(viewLifecycleOwner) { authorId ->
-
             if (authViewModel.isAuthenticated) {
                 // если пользователь на странице не своего профиля
                 if (authorId != profileViewModel.myId) {
@@ -158,14 +158,6 @@ class ProfileFragment : Fragment() {
             postAdapter.refresh()
             profileViewModel.getLatestWallPosts()
             profileViewModel.loadJobsFromServer()
-        }
-
-        profileViewModel.profileUserAvatar.observe(viewLifecycleOwner) { avatar ->
-            if (!avatar.isNullOrEmpty()) {
-                binding.profileToolbarLayout.iVAvatar.loadCircleCrop(avatar)
-            } else {
-                binding.profileToolbarLayout.iVAvatar.visibility = View.GONE
-            }
         }
 
         lifecycleScope.launchWhenCreated {
