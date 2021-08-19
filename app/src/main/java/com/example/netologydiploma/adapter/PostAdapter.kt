@@ -39,6 +39,10 @@ class PostAdapter(
 
         override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
             oldItem == newItem
+
+        override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
+            return PostPayload(newItem.likedByMe.takeIf { oldItem.likedByMe != it })
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -56,6 +60,22 @@ class PostAdapter(
         holder.bind(item)
     }
 
+    override fun onBindViewHolder(
+        holder: PostViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        val item = getItem(position) ?: return
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        } else {
+            payloads.forEach { payload ->
+                if (payload is PostPayload) {
+                    holder.updateLikes(payload, item)
+                }
+            }
+        }
+    }
 }
 
 
@@ -72,6 +92,19 @@ class PostViewHolder(
     val videoProgressBar = postBinding.videoProgressbar
     var videoPreview: MediaItem? = null
     val videoPlayIcon: ImageView = postBinding.iVVideoPlayIcon
+
+    fun updateLikes(payload: PostPayload, post: Post) {
+        payload.liked?.also { liked ->
+            postBinding.btLike.isChecked = liked
+            postBinding.btLike.text = post.likeCount.toString()
+
+
+            postBinding.btLike.setOnClickListener {
+                interactionListener.onPostLike(post)
+            }
+
+        }
+    }
 
     fun bind(post: Post) {
         parentView.tag = this
@@ -97,7 +130,6 @@ class PostViewHolder(
 
             btLike.isChecked = post.likedByMe
             btLike.text = post.likeCount.toString()
-
 
             btLike.setOnClickListener {
                 interactionListener.onPostLike(post)
@@ -168,3 +200,7 @@ class PostViewHolder(
         }
     }
 }
+
+data class PostPayload(
+    val liked: Boolean? = null
+)

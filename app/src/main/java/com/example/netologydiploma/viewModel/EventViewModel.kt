@@ -124,9 +124,8 @@ class EventViewModel @Inject constructor(
     fun participateInEvent(event: Event) {
         viewModelScope.launch {
             try {
-                _dataState.value = FeedStateModel(isLoading = true)
+                _dataState.value = FeedStateModel()
                 repository.participateInEvent(event)
-                _dataState.value = FeedStateModel(isLoading = false)
             } catch (e: Exception) {
                 _dataState.value = (FeedStateModel(
                     hasError = true,

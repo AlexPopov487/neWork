@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
@@ -96,6 +97,19 @@ class EventsFragment : Fragment() {
             }
 
         })
+
+        // solution by https://stackoverflow.com/a/60427676/13924310
+        //
+        // So far it is the best and only solution to remove item blinking while preserving animations
+        // I tried loads of options with payloads but none of them worked correctly when there are 2
+        // checkable buttons within the item (they just kept interrupting each other on click).
+        // Gosh, I've spend 5 hours on it...
+        val itemAnimator: DefaultItemAnimator = object : DefaultItemAnimator() {
+            override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
+                return true
+            }
+        }
+        binding.rVEvents.itemAnimator = itemAnimator
 
         binding.rVEvents.adapter = adapter.withLoadStateHeaderAndFooter(
             header = PagingLoadStateAdapter { adapter.retry() },
