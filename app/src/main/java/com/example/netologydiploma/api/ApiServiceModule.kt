@@ -1,8 +1,12 @@
 package com.example.netologydiploma.api
 
 import com.example.netologydiploma.BuildConfig
-import com.example.netologydiploma.api.ApiServiceModule.Companion.BASE_URL
 import com.example.netologydiploma.auth.AppAuth
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,6 +15,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.Instant
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -40,10 +45,30 @@ class ApiServiceModule {
         }
         .build()
 
+
+    // gson Date converter as suggested by
+    // https://stackoverflow.com/a/46726037/13924310
+    // see also https://stackoverflow.com/a/40157532/13924310
     @Singleton
     @Provides
-    fun provideRetrofit(okhttp: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+    fun provideGson(): Gson = GsonBuilder()
+        .registerTypeAdapter(Instant::class.java, object : TypeAdapter<Instant>() {
+            override fun write(out: JsonWriter?, value: Instant?) {
+                out?.value(value.toString())
+            }
+
+            override fun read(`in`: JsonReader?): Instant {
+                return Instant.parse(`in`?.nextString())
+            }
+        })
+        .enableComplexMapKeySerialization()
+        .create()
+
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okhttp: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .baseUrl(BASE_URL)
         .client(okhttp)
         .build()

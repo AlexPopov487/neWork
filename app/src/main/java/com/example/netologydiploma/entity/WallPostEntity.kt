@@ -4,7 +4,10 @@ import androidx.annotation.Nullable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.netologydiploma.dto.InstantDateConverter
 import com.example.netologydiploma.dto.Post
+import java.time.Instant
 
 @Entity
 data class WallPostEntity (
@@ -14,7 +17,8 @@ data class WallPostEntity (
     val author: String,
     @Nullable val authorAvatar: String?,
     val content: String,
-    val published: Long,
+    @TypeConverters(InstantDateConverter::class)
+    val published: Instant,
     val isLikedByMe: Boolean,
     val likeCount: Int,
     @Embedded

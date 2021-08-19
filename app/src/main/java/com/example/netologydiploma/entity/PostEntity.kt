@@ -4,10 +4,9 @@ import androidx.annotation.Nullable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.netologydiploma.dto.AttachmentType
-import com.example.netologydiploma.dto.MediaAttachment
-import com.example.netologydiploma.dto.Post
-import com.example.netologydiploma.dto.Coords
+import androidx.room.TypeConverters
+import com.example.netologydiploma.dto.*
+import java.time.Instant
 
 @Entity
 data class PostEntity(
@@ -17,7 +16,8 @@ data class PostEntity(
     val author: String,
     @Nullable val authorAvatar: String?,
     val content: String,
-    val published: Long,
+    @TypeConverters(InstantDateConverter::class)
+    val published: Instant,
     val isLikedByMe: Boolean,
     val likeCount: Int,
     @Embedded

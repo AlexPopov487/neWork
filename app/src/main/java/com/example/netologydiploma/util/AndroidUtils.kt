@@ -5,6 +5,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.*
 
 object AndroidUtils {
@@ -18,7 +19,8 @@ object AndroidUtils {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
     }
 
-    fun formatMillisToDateTimeString(millis: Long): String {
+
+    fun formatMillisToDateTimeString(millis: Long?): String {
         return SimpleDateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT)
             .format(millis)
     }

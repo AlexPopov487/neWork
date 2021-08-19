@@ -24,6 +24,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Instant
 import java.util.*
 
 @ExperimentalPagingApi
@@ -56,7 +57,7 @@ class CreateEventFragment : Fragment() {
                 )
 
                 binding.tVEventDateTime.text =
-                    AndroidUtils.formatMillisToDateTimeString(editedEvent.datetime)
+                    AndroidUtils.formatMillisToDateTimeString(editedEvent.datetime.toEpochMilli())
                 AndroidUtils.showKeyboard(binding.eTPostContent)
 
                 it.attachment?.let { attachment ->
@@ -211,14 +212,14 @@ class CreateEventFragment : Fragment() {
                     viewModel.saveEvent(
                         it.copy(
                             content = content,
-                            datetime = date,
+                            datetime = Instant.ofEpochMilli(date),
                             type = eventType,
                         )
                     )
                 } ?: viewModel.saveEvent(
                     Event(
                         content = content,
-                        datetime = date,
+                        datetime = Instant.ofEpochMilli(date),
                         type = eventType,
                     )
                 )

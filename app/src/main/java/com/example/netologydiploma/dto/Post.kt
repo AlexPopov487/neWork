@@ -1,5 +1,7 @@
 package com.example.netologydiploma.dto
 
+import java.time.Instant
+
 
 data class Post(
     val id: Long = 0L,
@@ -7,7 +9,7 @@ data class Post(
     val author: String = "Alex Popov",
     val authorAvatar: String? = null,
     val content: String = "",
-    val published: Long = 0L,
+    val published: Instant = Instant.now(),
     val likedByMe: Boolean = false,
     val likeCount: Int = 0,
     val coords: Coords? = null,

@@ -112,7 +112,7 @@ class PostViewHolder(
         with(postBinding) {
 
             tVUserName.text = post.author
-            tVPublished.text = AndroidUtils.formatMillisToDateTimeString(post.published)
+            tVPublished.text = AndroidUtils.formatMillisToDateTimeString(post.published.toEpochMilli())
             tvContent.text = post.content
 
             post.authorAvatar?.let {

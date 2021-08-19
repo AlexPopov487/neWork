@@ -1,5 +1,7 @@
 package com.example.netologydiploma.dto
 
+import java.time.Instant
+
 enum class EventType {
     OFFLINE, ONLINE
 }
@@ -11,8 +13,8 @@ data class Event(
     val authorAvatar: String = "",
     val content: String = "",
 
-    val published: Long = 0L,
-    val datetime: Long = 0L,
+    val published: Instant = Instant.now(),
+    val datetime: Instant = Instant.now(),
 
     val type: EventType = EventType.ONLINE,
     val likedByMe: Boolean = false,

@@ -2,6 +2,8 @@ package com.example.netologydiploma.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.netologydiploma.dto.InstantDateConverter
 import com.example.netologydiploma.entity.*
 
 @Database(
@@ -13,6 +15,7 @@ import com.example.netologydiploma.entity.*
         WallPostEntity::class,
         JobEntity::class,], version = 3
 )
+@TypeConverters(InstantDateConverter::class)
 abstract class AppDb : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun eventDao(): EventDao

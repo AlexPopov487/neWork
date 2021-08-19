@@ -1,11 +1,10 @@
 package com.example.netologydiploma.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
+import com.example.netologydiploma.dto.InstantDateConverter
+import java.time.Instant
 
 @Entity
 data class EventEntity(
@@ -16,8 +15,10 @@ data class EventEntity(
     val authorAvatar: String,
     val content: String,
 
-    val published: Long,
-    val dateTime: Long,
+    @TypeConverters(InstantDateConverter::class)
+    val published: Instant,
+    @TypeConverters(InstantDateConverter::class)
+    val dateTime: Instant,
 
     @ColumnInfo(name = "event_type")
     val type: EventType,

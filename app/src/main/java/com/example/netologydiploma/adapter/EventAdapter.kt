@@ -11,7 +11,6 @@ import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.EventListItemBinding
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
-import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.util.loadCircleCrop
 import com.example.netologydiploma.util.loadImage
@@ -64,9 +63,11 @@ class EventViewHolder(
     fun bind(event: Event) {
         with(eventBinding) {
             tVUserName.text = event.author
-            tVPublished.text = AndroidUtils.formatMillisToDateTimeString(event.published)
+            tVPublished.text =
+                AndroidUtils.formatMillisToDateTimeString(event.published.toEpochMilli())
             tvContent.text = event.content
-            tvEventDueDate.text = AndroidUtils.formatMillisToDateTimeString(event.datetime)
+            tvEventDueDate.text =
+                AndroidUtils.formatMillisToDateTimeString(event.datetime.toEpochMilli())
             iVAvatar.loadCircleCrop(event.authorAvatar)
 
             btParticipate.isChecked = event.participatedByMe
