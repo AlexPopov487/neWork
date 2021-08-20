@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "86546069457",
+    "project_id": "nework-86a79",
+    "storage_bucket": "nework-86a79.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86546069457:android:b6197dda48ef21e17292f0",
+        "android_client_info": {
+          "package_name": "com.example.netologydiploma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86546069457-60d6eds6s0al69kocipu08dc44bg5ark.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ8aEOXjQ_iOLXycC_xQL8BocXPaspGYg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86546069457-60d6eds6s0al69kocipu08dc44bg5ark.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,7 +3,7 @@ package com.example.netologydiploma.entity
 import androidx.room.*
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
-import com.example.netologydiploma.dto.InstantDateConverter
+import com.example.netologydiploma.db.InstantDateConverter
 import java.time.Instant
 
 @Entity

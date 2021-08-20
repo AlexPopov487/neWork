@@ -1,9 +1,11 @@
 package com.example.netologydiploma.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -14,7 +16,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.ActivityMainBinding
 import com.example.netologydiploma.viewModel.AuthViewModel
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -25,6 +32,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
+
+    @Inject
+    lateinit var googleApiAvailability: GoogleApiAvailability
 
     fun setActionBarTitle(title: String) {
         binding.mainToolbar.title = title
@@ -35,6 +47,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        firebaseMessaging.token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(
+                    this.localClassName,
+                    "Fetching FCM registration token failed",
+                    task.exception
+                )
+                return@addOnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Log.i(this.localClassName, "TEST: push token is $token")
+            checkGoogleApiAvailability()
+        }
+
 
         // initialize navController
         navController = findNavController(R.id.nav_host_fragment_container)
@@ -159,4 +189,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun checkGoogleApiAvailability() {
+        with(googleApiAvailability) {
+            val code = isGooglePlayServicesAvailable(this@MainActivity)
+            if (code == ConnectionResult.SUCCESS) {
+                return@with
+            }
+            if (isUserResolvableError(code)) {
+                getErrorDialog(this@MainActivity, code, 9000).show()
+                return
+            }
+            Toast.makeText(this@MainActivity, R.string.google_play_unavailable, Toast.LENGTH_LONG)
+                .show()
+            googleApiAvailability.makeGooglePlayServicesAvailable(this@MainActivity)
+        }
+    }
 }

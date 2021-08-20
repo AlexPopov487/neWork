@@ -3,7 +3,6 @@ package com.example.netologydiploma.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.netologydiploma.dto.InstantDateConverter
 import com.example.netologydiploma.entity.*
 
 @Database(

@@ -9,6 +9,9 @@ import retrofit2.http.*
 
 interface ApiService {
 
+    @POST("users/push-tokens")
+    suspend fun saveToken(@Body pushToken: PushToken): Response<Unit>
+
     @FormUrlEncoded
     @POST("users/authentication")
     suspend fun signIn(

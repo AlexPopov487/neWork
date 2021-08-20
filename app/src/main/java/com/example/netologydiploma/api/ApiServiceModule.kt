@@ -1,5 +1,6 @@
 package com.example.netologydiploma.api
 
+import android.content.SharedPreferences
 import com.example.netologydiploma.BuildConfig
 import com.example.netologydiploma.auth.AppAuth
 import com.google.gson.Gson
@@ -30,12 +31,12 @@ class ApiServiceModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(appAuth: AppAuth): OkHttpClient = OkHttpClient.Builder()
+    fun provideOkHttpClient(authPrefs: SharedPreferences): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .addInterceptor { chain ->
-            appAuth.authStateFlow.value.token?.let { token ->
+            authPrefs.getString("token", null)?.let { token ->
                 val newRequest = chain.request().newBuilder()
                     .addHeader("Authorization", token)
                     .build()

@@ -80,4 +80,6 @@
     <string name="discard_changes_dialog_body">Do you want to leave? All unsaved changes will be lost</string>
     <string name="action_leave_dialog_fragment">Leave</string>
     <string name="action_cancel_dialog_fragment">Cancel</string>
+    <string name="google_play_unavailable">Google Api Is Unavailable</string>
+    <string name="button_add_a_job">Add a job</string>
 </resources>

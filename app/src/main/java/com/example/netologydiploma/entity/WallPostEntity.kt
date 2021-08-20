@@ -5,7 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.netologydiploma.dto.InstantDateConverter
+import com.example.netologydiploma.db.InstantDateConverter
 import com.example.netologydiploma.dto.Post
 import java.time.Instant
 

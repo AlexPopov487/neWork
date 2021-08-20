@@ -1,4 +1,4 @@
-package com.example.netologydiploma.dto
+package com.example.netologydiploma.db
 
 import androidx.room.TypeConverter
 import java.time.Instant
