@@ -10,7 +10,7 @@ data class Event(
     val id: Long = 0L,
     val authorId: Long = 0L,
     val author: String = "",
-    val authorAvatar: String = "",
+    val authorAvatar: String?= null,
     val content: String = "",
 
     val published: Instant = Instant.now(),

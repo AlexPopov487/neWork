@@ -1,5 +1,6 @@
 package com.example.netologydiploma.entity
 
+import androidx.annotation.Nullable
 import androidx.room.*
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.dto.EventType
@@ -12,7 +13,8 @@ data class EventEntity(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorAvatar: String,
+    @Nullable
+    val authorAvatar: String?,
     val content: String,
 
     @TypeConverters(InstantDateConverter::class)

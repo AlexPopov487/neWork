@@ -59,10 +59,16 @@ class EventRepository @Inject constructor(
 
             eventDao.insertEvent(EventEntity.fromDto(getEventBody))
         } catch (e: IOException) {
+            e.printStackTrace()
+
             throw NetworkError
         } catch (e: SQLException) {
+            e.printStackTrace()
+
             throw  DbError
         } catch (e: Exception) {
+            e.printStackTrace()
+
             throw UndefinedError
         }
     }

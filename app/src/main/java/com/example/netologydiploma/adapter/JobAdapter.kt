@@ -1,5 +1,6 @@
 package com.example.netologydiploma.adapter
 
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,11 @@ import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.JobListItemBinding
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.util.AndroidUtils
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 interface OnJobButtonInteractionListener {
     fun onDeleteJob(job: Job)
+    fun onLinkClicked(url: String)
 }
 
 class JobAdapter(private val onJobButtonInteractionListener: OnJobButtonInteractionListener) :
@@ -53,6 +56,11 @@ class JobViewHolder(
             tvJobPeriod.text =
                 itemView.context.getString(R.string.job_employment_term, startJob, endJob)
             tvJobLink.text = job.link
+            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, tvJobLink)
+                .setOnLinkClickListener { textView, url ->
+                    onJobButtonInteractionListener.onLinkClicked(url)
+                    true
+                }
 
             root.setOnLongClickListener {
                 jobOptions.visibility = View.VISIBLE

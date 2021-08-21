@@ -1,5 +1,6 @@
 package com.example.netologydiploma.adapter
 
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.util.loadCircleCrop
 import com.example.netologydiploma.util.loadImage
 import com.google.android.exoplayer2.MediaItem
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 
 interface OnPostButtonInteractionListener {
@@ -25,6 +27,7 @@ interface OnPostButtonInteractionListener {
     fun onPostRemove(post: Post)
     fun onPostEdit(post: Post)
     fun onAvatarClicked(post: Post)
+    fun onLinkClicked(url: String)
 }
 
 class PostAdapter(
@@ -114,6 +117,12 @@ class PostViewHolder(
             tVUserName.text = post.author
             tVPublished.text = AndroidUtils.formatMillisToDateTimeString(post.published.toEpochMilli())
             tvContent.text = post.content
+            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, tvContent)
+                .setOnLinkClickListener { textView, url ->
+                    interactionListener.onLinkClicked(url)
+                    true
+                }
+            
 
             post.authorAvatar?.let {
                 iVAvatar.loadCircleCrop(it)

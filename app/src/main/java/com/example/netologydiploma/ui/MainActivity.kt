@@ -173,7 +173,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.auth_app_bar_menu, menu)
-
         menu?.setGroupVisible(R.id.group_sign_in, !viewModel.isAuthenticated)
 
         return true

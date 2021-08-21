@@ -1,9 +1,11 @@
 package com.example.netologydiploma.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -98,6 +100,13 @@ class PostFragment: Fragment() {
                 val action = PostFragmentDirections
                     .actionNavPostsFragmentToNavProfileFragment(authorId = post.authorId)
                 navController.navigate(action)
+            }
+
+            override fun onLinkClicked(url: String) {
+                CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build()
+                    .launchUrl(requireContext(), Uri.parse(url))
             }
         })
 

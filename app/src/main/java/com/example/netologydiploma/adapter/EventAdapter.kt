@@ -1,9 +1,11 @@
 package com.example.netologydiploma.adapter
 
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +16,7 @@ import com.example.netologydiploma.dto.EventType
 import com.example.netologydiploma.util.AndroidUtils
 import com.example.netologydiploma.util.loadCircleCrop
 import com.example.netologydiploma.util.loadImage
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 interface OnEventButtonInteractionListener {
     fun onEventLike(event: Event)
@@ -21,6 +24,7 @@ interface OnEventButtonInteractionListener {
     fun onEventRemove(event: Event)
     fun onEventParticipate(event: Event)
     fun onAvatarClicked(event: Event)
+    fun onLinkClicked(url: String)
 }
 
 class EventAdapter(private val interactionListener: OnEventButtonInteractionListener) :
@@ -66,9 +70,24 @@ class EventViewHolder(
             tVPublished.text =
                 AndroidUtils.formatMillisToDateTimeString(event.published.toEpochMilli())
             tvContent.text = event.content
+            BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, tvContent)
+                .setOnLinkClickListener { textView, url ->
+                    interactionListener.onLinkClicked(url)
+                    true
+                }
+
             tvEventDueDate.text =
                 AndroidUtils.formatMillisToDateTimeString(event.datetime.toEpochMilli())
-            iVAvatar.loadCircleCrop(event.authorAvatar)
+
+
+            event.authorAvatar?.let {
+                iVAvatar.loadCircleCrop(it)
+            } ?: iVAvatar.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    itemView.context,
+                    R.drawable.ic_no_avatar_user
+                )
+            )
 
             btParticipate.isChecked = event.participatedByMe
             btParticipate.text = event.participantsCount.toString()

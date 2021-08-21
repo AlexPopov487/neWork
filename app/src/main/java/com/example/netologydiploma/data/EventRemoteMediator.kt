@@ -81,6 +81,8 @@ class EventRemoteMediator(
                 receivedBody.isEmpty()
             )
         } catch (e: Exception) {
+            e.printStackTrace()
+
             return MediatorResult.Error(e)
         }
     }

@@ -1,9 +1,11 @@
 package com.example.netologydiploma.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -96,6 +98,12 @@ class EventsFragment : Fragment() {
                 navController.navigate(action)
             }
 
+            override fun onLinkClicked(url: String) {
+                CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build()
+                    .launchUrl(requireContext(), Uri.parse(url))
+            }
         })
 
         // solution by https://stackoverflow.com/a/60427676/13924310

@@ -1,8 +1,10 @@
 package com.example.netologydiploma.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -72,6 +74,14 @@ class ProfileFragment : Fragment() {
             override fun onDeleteJob(job: Job) {
                 profileViewModel.deleteJobById(job.id)
             }
+
+            override fun onLinkClicked(url: String) {
+                CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build()
+                    .launchUrl(requireContext(), Uri.parse(url))
+            }
+
         })
 
         val postAdapter = PostAdapter(object : OnPostButtonInteractionListener {
@@ -91,6 +101,13 @@ class ProfileFragment : Fragment() {
             override fun onAvatarClicked(post: Post) {
                 profileViewModel.getLatestWallPosts()
                 profileViewModel.loadJobsFromServer()
+            }
+
+            override fun onLinkClicked(url: String) {
+                CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build()
+                    .launchUrl(requireContext(), Uri.parse(url))
             }
         })
 
