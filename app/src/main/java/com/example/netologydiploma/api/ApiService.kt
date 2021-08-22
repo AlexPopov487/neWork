@@ -152,4 +152,6 @@ interface ApiService {
     @GET("users/{id}")
     suspend fun getUserById(@Path("id") userId: Long) : Response<User>
 
+    @GET("users/")
+    suspend fun getAllUsers() : Response<List<User>>
 }

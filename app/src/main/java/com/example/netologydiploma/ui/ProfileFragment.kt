@@ -115,7 +115,9 @@ class ProfileFragment : Fragment() {
         binding.rVPosts.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
-                DividerItemDecoration.VERTICAL))
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         binding.profileToolbarLayout.rVJobs.adapter = jobAdapter
 

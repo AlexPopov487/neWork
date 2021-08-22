@@ -51,4 +51,8 @@ class AppDbModule {
     fun provideJobDao(appDb: AppDb): JobDao =
         appDb.jobDao()
 
+    @Provides
+    fun provideUserDao(appDb: AppDb): UserDao =
+        appDb.userDao()
+
 }

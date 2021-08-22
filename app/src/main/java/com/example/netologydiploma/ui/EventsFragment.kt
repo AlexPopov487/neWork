@@ -24,6 +24,7 @@ import com.example.netologydiploma.adapter.PagingLoadStateAdapter
 import com.example.netologydiploma.databinding.FragmentEventsBinding
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.viewModel.AuthViewModel
+import com.example.netologydiploma.viewModel.EventParticipantsViewModel
 import com.example.netologydiploma.viewModel.EventViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -103,6 +104,15 @@ class EventsFragment : Fragment() {
                     .setShowTitle(true)
                     .build()
                     .launchUrl(requireContext(), Uri.parse(url))
+            }
+
+            override fun onSeeParticipantsClicked(event: Event) {
+                val action =
+                    EventsFragmentDirections.actionNavEventsFragmentToEventParticipantsFragment(
+                        event.id
+                    )
+                navController.navigate(action)
+
             }
         })
 

@@ -21,7 +21,7 @@ data class Event(
     val likeCount: Int = 0,
     val likeOwnerIds: Set<Int> = emptySet<Int>(),
     val speakersIds: Set<Int> = emptySet(),
-    val participantsIds: Set<Int> = emptySet(),
+    val participantsIds: Set<Long> = emptySet(),
     val participatedByMe: Boolean = false,
     val participantsCount: Int = 0,
     val coords: Coords? = null,

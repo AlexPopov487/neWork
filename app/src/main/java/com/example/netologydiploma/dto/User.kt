@@ -5,6 +5,7 @@ data class User(
     val login: String = "",
     val name: String = "",
     val avatar: String? = null,
+    val isItMe: Boolean = false,
 ) {
 
 

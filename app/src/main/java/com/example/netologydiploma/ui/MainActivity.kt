@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
 
             // Get new FCM registration token
             val token = task.result
-            Log.i(this.localClassName, "TEST: push token is $token")
             checkGoogleApiAvailability()
         }
 
@@ -78,14 +77,14 @@ class MainActivity : AppCompatActivity() {
             // bottomAppBar
             background = null
             menu.findItem(R.id.blank_item).isEnabled = false
-            menu.findItem(R.id.blank_item_2).isEnabled = false
         }
 
         // hides top back arrow from these destinations
         val topLevelDestinations = setOf(
             R.id.nav_posts_fragment,
             R.id.nav_events_fragment,
-            R.id.nav_profile_fragment
+            R.id.nav_profile_fragment,
+            R.id.nav_users_fragment
         )
 
         appBarConfiguration = AppBarConfiguration.Builder(topLevelDestinations).build()

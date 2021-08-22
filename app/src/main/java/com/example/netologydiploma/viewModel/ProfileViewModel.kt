@@ -75,7 +75,7 @@ class ProfileViewModel @Inject constructor(
                 _dataState.value = FeedStateModel(isLoading = true)
                 val fetchedUser = repository.getUserById(_profileUserId.value!!)
                 _currentUser.value = fetchedUser
-                _dataState.value = FeedStateModel(isLoading = false)
+                _dataState.value = FeedStateModel()
             } catch (e: Exception) {
                 _dataState.value = FeedStateModel(
                     hasError = true,
@@ -90,7 +90,7 @@ class ProfileViewModel @Inject constructor(
             try {
                 _dataState.value = FeedStateModel(isLoading = true)
                 repository.loadJobsFromServer(_profileUserId.value!!)
-                _dataState.value = FeedStateModel(isLoading = false)
+                _dataState.value = FeedStateModel()
             } catch (e: Exception) {
                 _dataState.value = FeedStateModel(
                     hasError = true,
@@ -100,12 +100,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+
+
     fun getLatestWallPosts(){
         viewModelScope.launch {
             try {
                 _dataState.value = FeedStateModel(isLoading = true)
                 repository.getLatestWallPosts(_profileUserId.value!!)
-                _dataState.value = FeedStateModel(isLoading = false)
+                _dataState.value = FeedStateModel()
             } catch (e: Exception) {
                 _dataState.value = FeedStateModel(
                     hasError = true,
@@ -114,6 +116,22 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    fun refreshLatestWallPosts(){
+        viewModelScope.launch {
+            try {
+                _dataState.value = FeedStateModel(isRefreshing = true)
+                repository.getLatestWallPosts(_profileUserId.value!!)
+                _dataState.value = FeedStateModel()
+            } catch (e: Exception) {
+                _dataState.value = FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                )
+            }
+        }
+    }
+
 
     fun likeWallPostById(post: Post) {
         viewModelScope.launch {

@@ -46,4 +46,13 @@ class RepositoryModule {
         jobDao: JobDao
     ): ProfileRepository =
         ProfileRepository(apiService, appDb, wallPostDao, wallRemoteKeyDao, jobDao)
+
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        apiService: ApiService,
+        userDao: UserDao,
+    ): UserRepository =
+        UserRepository(apiService, userDao)
 }

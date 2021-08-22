@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Netology Diploma</string>
 
-    <string name="events_nav_menu_drawer">Events</string>
-    <string name="main_nav_menu_drawer">Main</string>
-    <string name="my_profile_nav_menu_drawer">My profile</string>
+    <string name="events_nav_menu_bottom_bar">Events</string>
+    <string name="main_nav_menu_bottom_bar">Main</string>
+    <string name="my_profile_nav_menu_bottom_bar">My profile</string>
     <string name="user_icon_content_description">User icon</string>
     <string name="delete_post_item_menu">Delete</string>
     <string name="save_button_description">Save</string>
@@ -69,6 +69,7 @@
     <string name="add_event_fab">Add event</string>
     <string name="add_post_fab">Add post</string>
     <string name="empty_post_list_icon_content_desctription">Empty post list icon</string>
+    <string name="empty_users_list_icon_content_description">Empty users list icon</string>
     <string name="tv_empty_post_list">No posts yet :(</string>
     <string name="tv_empty_event_list">No events yet :(</string>
     <string name="ok_action">OK</string>
@@ -82,4 +83,9 @@
     <string name="action_cancel_dialog_fragment">Cancel</string>
     <string name="google_play_unavailable">Google Api Is Unavailable</string>
     <string name="button_add_a_job">Add a job</string>
+    <string name="users_nav_menu_bottom_bar">Users</string>
+    <string name="is_you_user_card_view_text">You</string>
+    <string name="tv_empty_users_list">No users yet :(</string>
+    <string name="tv_see_all_participants">See all</string>
+    <string name="event_participants_fragment_tite">Participants</string>
 </resources>

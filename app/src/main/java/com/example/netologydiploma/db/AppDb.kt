@@ -12,9 +12,10 @@ import com.example.netologydiploma.entity.*
         PostRemoteKeyEntity::class,
         WallRemoteKeyEntity::class,
         WallPostEntity::class,
-        JobEntity::class,], version = 3
+        JobEntity::class,
+        UserEntity::class], version = 3
 )
-@TypeConverters(InstantDateConverter::class)
+@TypeConverters(InstantDateConverter::class, LongSetDataConverter::class)
 abstract class AppDb : RoomDatabase() {
     abstract fun postDao(): PostDao
     abstract fun eventDao(): EventDao
@@ -23,4 +24,5 @@ abstract class AppDb : RoomDatabase() {
     abstract fun wallRemoteKeyDao(): WallRemoteKeyDao
     abstract fun wallPostDao(): WallPostDao
     abstract fun jobDao(): JobDao
+    abstract fun userDao(): UserDao
 }

@@ -25,6 +25,7 @@ interface OnEventButtonInteractionListener {
     fun onEventParticipate(event: Event)
     fun onAvatarClicked(event: Event)
     fun onLinkClicked(url: String)
+    fun onSeeParticipantsClicked(event: Event)
 }
 
 class EventAdapter(private val interactionListener: OnEventButtonInteractionListener) :
@@ -124,6 +125,10 @@ class EventViewHolder(
 
             iVAvatar.setOnClickListener{
                 interactionListener.onAvatarClicked(event)
+            }
+
+            tVActionSeeParticipants.setOnClickListener {
+                interactionListener.onSeeParticipantsClicked(event)
             }
 
             if (!event.ownedByMe) {

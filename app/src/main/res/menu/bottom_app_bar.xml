@@ -4,13 +4,13 @@
 
         <item
             android:id="@+id/nav_profile_fragment"
-            android:title="@string/my_profile_nav_menu_drawer"
+            android:title="@string/my_profile_nav_menu_bottom_bar"
             app:showAsAction="ifRoom"
             android:icon="@drawable/ic_profile_24"/>
 
         <item
             android:id="@+id/nav_posts_fragment"
-            android:title="@string/main_nav_menu_drawer"
+            android:title="@string/main_nav_menu_bottom_bar"
             app:showAsAction="ifRoom"
             android:icon="@drawable/ic_posts_24"/>
 
@@ -21,12 +21,14 @@
 
         <item
             android:id="@+id/nav_events_fragment"
-            android:title="@string/events_nav_menu_drawer"
+            android:title="@string/events_nav_menu_bottom_bar"
             app:showAsAction="ifRoom"
             android:icon="@drawable/ic_events_24"/>
 
+
         <item
-            android:id="@+id/blank_item_2"
+            android:id="@+id/nav_users_fragment"
+            android:title="@string/users_nav_menu_bottom_bar"
             app:showAsAction="ifRoom"
-            android:title="" />
+            android:icon="@drawable/ic_users_24"/>
 </menu>

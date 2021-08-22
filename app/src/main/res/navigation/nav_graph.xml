@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_nav_events_fragment_to_nav_profile_fragment"
             app:destination="@id/nav_profile_fragment" />
+        <action
+            android:id="@+id/action_nav_events_fragment_to_eventParticipantsFragment"
+            app:destination="@id/eventParticipantsFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_profile_fragment"
@@ -87,6 +90,26 @@
     <fragment
         android:id="@+id/createEventFragment"
         android:name="com.example.netologydiploma.ui.CreateEventFragment"
-        android:label="Create event"
+        android:label="@string/event_participants_fragment_tite"
         tools:layout="@layout/fragment_create_event" />
+    <fragment
+        android:id="@+id/nav_users_fragment"
+        android:name="com.example.netologydiploma.ui.UsersFragment"
+        android:label="Users"
+        tools:layout="@layout/fragment_all_users">
+        <action
+            android:id="@+id/action_usersFragment_to_nav_profile_fragment"
+            app:destination="@id/nav_profile_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventParticipantsFragment"
+        android:name="com.example.netologydiploma.ui.EventParticipantsFragment"
+        android:label="@string/event_participants_fragment_tite">
+        <action
+            android:id="@+id/action_eventParticipantsFragment_to_nav_profile_fragment"
+            app:destination="@id/nav_profile_fragment" />
+        <argument
+            android:name="eventId"
+            app:argType="long" />
+    </fragment>
 </navigation>

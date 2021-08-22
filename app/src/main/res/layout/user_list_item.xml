@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/user_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/common_spacing"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:id="@+id/iV_avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="@string/user_icon_content_description"
+            android:scaleType="fitCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tV_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/tV_userLogin"
+            app:layout_constraintStart_toEndOf="@id/iV_avatar"
+            app:layout_constraintTop_toTopOf="@id/iV_avatar"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Alex Popov" />
+
+        <TextView
+            android:id="@+id/tV_userLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/material_on_surface_emphasis_medium"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/iV_avatar"
+            app:layout_constraintStart_toStartOf="@id/tV_userName"
+            app:layout_constraintTop_toBottomOf="@id/tV_userName"
+            tools:text="12/23/07 at 15:00" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cV_isYou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:cardBackgroundColor="@android:color/darker_gray"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/iV_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iV_avatar">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="@string/is_you_user_card_view_text"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
