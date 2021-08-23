@@ -2,11 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-   <group
-       android:id="@+id/group_sign_in">
-    <item
-        android:id="@+id/action_sign_in"
-        android:title="@string/action_signIn_auth_appbar_menu"
-        app:showAsAction="never"/>
-   </group>
+    <group android:id="@+id/group_sign_in">
+        <item
+            android:id="@+id/action_sign_in"
+            android:title="@string/action_signIn_auth_appbar_menu"
+            app:showAsAction="never" />
+    </group>
 </menu>

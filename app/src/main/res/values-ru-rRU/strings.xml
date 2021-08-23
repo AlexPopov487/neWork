@@ -3,7 +3,7 @@
     <string name="app_name">Netology Diploma</string>
     <string name="events_nav_menu_bottom_bar">События</string>
     <string name="main_nav_menu_bottom_bar">Главная</string>
-    <string name="my_profile_nav_menu_bottom_bar">Мой профиль</string>
+    <string name="my_profile_nav_menu_bottom_bar">Профиль</string>
     <string name="user_icon_content_description">Фото пользователя</string>
     <string name="delete_post_item_menu">Удалить</string>
     <string name="save_button_description">Кнопка сохранить</string>
@@ -69,7 +69,7 @@
     <string name="action_cancel_dialog_fragment">Отменить</string>
     <string name="google_play_unavailable">Нет доступа к сервисам Google Api</string>
     <string name="button_add_a_job">Добавить место работы</string>
-    <string name="users_nav_menu_bottom_bar">Пользователи</string>
+    <string name="users_nav_menu_bottom_bar">Люди</string>
     <string name="is_you_user_card_view_text">Вы</string>
     <string name="tv_empty_users_list">Пока ни одного пользователя :(</string>
     <string name="tv_see_all_participants">Еще</string>

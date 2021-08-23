@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/tV_published"
         app:layout_constraintStart_toEndOf="@id/iV_avatar"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/material_on_surface_emphasis_medium"
+        android:textColor="@color/secondary_text"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/iV_avatar"
         app:layout_constraintStart_toEndOf="@id/iV_avatar"
@@ -46,7 +46,8 @@
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_baseline_more_vert_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iV_avatar" />
+        app:layout_constraintTop_toTopOf="@id/iV_avatar"
+        app:rippleColor="@null" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/header"
@@ -63,6 +64,7 @@
         android:lineSpacingMultiplier="1.5"
         android:paddingTop="@dimen/common_spacing"
         android:paddingBottom="@dimen/common_spacing"
+        android:textColor="@color/secondary_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
@@ -169,6 +171,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
         android:text="@string/tv_see_all_participants"
+        android:textColor="@color/secondary_text"
         app:layout_constraintEnd_toEndOf="@id/bt_participate"
         app:layout_constraintStart_toStartOf="@id/bt_participate"
         app:layout_constraintTop_toBottomOf="@id/bt_participate" />

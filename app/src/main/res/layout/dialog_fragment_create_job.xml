@@ -74,7 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="8dp"
-            android:text="@string/create_job_dialog_bt_confirm" />
+            android:text="@string/create_job_dialog_bt_confirm"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 </ScrollView>

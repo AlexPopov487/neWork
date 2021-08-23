@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/black"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/tV_published"
         app:layout_constraintStart_toEndOf="@id/iV_avatar"
@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/material_on_surface_emphasis_medium"
+        android:textColor="@color/secondary_text"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/iV_avatar"
         app:layout_constraintStart_toEndOf="@id/iV_avatar"
@@ -48,6 +48,7 @@
         app:icon="@drawable/ic_baseline_more_vert_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iV_avatar"
+        app:rippleColor="@null"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -65,6 +66,7 @@
         android:lineSpacingMultiplier="1.5"
         android:paddingTop="@dimen/common_spacing"
         android:paddingBottom="@dimen/common_spacing"
+        android:textColor="@color/secondary_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
@@ -87,18 +89,17 @@
         android:id="@+id/video_container"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_content">
 
         <ImageView
             android:id="@+id/videoThumbnail"
-            android:layout_height="300dp"
             android:layout_width="300dp"
-            android:scaleType="centerCrop"
-             />
+            android:layout_height="300dp"
+            android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/iV_video_play_icon"
@@ -107,8 +108,7 @@
             android:layout_gravity="center"
             android:alpha="0.8"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_play_arrow_24"
-          />
+            android:src="@drawable/ic_play_arrow_24" />
 
         <ProgressBar
             android:id="@+id/video_progressbar"

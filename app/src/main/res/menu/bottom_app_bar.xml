@@ -2,33 +2,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <item
-            android:id="@+id/nav_profile_fragment"
-            android:title="@string/my_profile_nav_menu_bottom_bar"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/ic_profile_24"/>
+    <item
+        android:id="@+id/nav_profile_fragment"
+        android:icon="@drawable/ic_profile_24"
+        android:title="@string/my_profile_nav_menu_bottom_bar"
+        app:showAsAction="ifRoom" />
 
-        <item
-            android:id="@+id/nav_posts_fragment"
-            android:title="@string/main_nav_menu_bottom_bar"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/ic_posts_24"/>
+    <item
+        android:id="@+id/nav_posts_fragment"
+        android:icon="@drawable/ic_posts_24"
+        android:title="@string/main_nav_menu_bottom_bar"
+        app:showAsAction="ifRoom" />
 
-        <item
-            android:id="@+id/blank_item"
-            app:showAsAction="ifRoom"
-            android:title="" />
+    <item
+        android:id="@+id/blank_item"
+        android:title=""
+        app:showAsAction="ifRoom" />
 
-        <item
-            android:id="@+id/nav_events_fragment"
-            android:title="@string/events_nav_menu_bottom_bar"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/ic_events_24"/>
+    <item
+        android:id="@+id/nav_events_fragment"
+        android:icon="@drawable/ic_events_24"
+        android:title="@string/events_nav_menu_bottom_bar"
+        app:showAsAction="ifRoom" />
 
 
-        <item
-            android:id="@+id/nav_users_fragment"
-            android:title="@string/users_nav_menu_bottom_bar"
-            app:showAsAction="ifRoom"
-            android:icon="@drawable/ic_users_24"/>
+    <item
+        android:id="@+id/nav_users_fragment"
+        android:icon="@drawable/ic_users_24"
+        android:title="@string/users_nav_menu_bottom_bar"
+        app:showAsAction="ifRoom" />
 </menu>

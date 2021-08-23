@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.OnUserInteractionListener
 import com.example.netologydiploma.adapter.UsersAdapter
@@ -41,6 +42,13 @@ class UsersFragment : Fragment() {
         })
 
         binding.rVUsers.adapter = adapter
+
+        binding.rVUsers.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         binding.swipeToRefresh.setOnRefreshListener {
             viewModel.refreshUsers()

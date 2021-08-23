@@ -27,11 +27,11 @@
                 android:id="@+id/login_Et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:autofillHints="User name"
+                android:background="@android:color/transparent"
                 android:hint="@string/et_login_hint_loginFragment"
                 android:inputType="text"
-                android:lines="1"/>
+                android:lines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,8 +53,7 @@
                 android:autofillHints="Password"
                 android:background="@android:color/transparent"
                 android:hint="@string/et_password_hint_loginFragment"
-                android:inputType="textPassword"
-                />
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -63,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_spacing"
             android:text="@string/bt_signIn_login_fragment"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_text_input_layout" />
@@ -93,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_spacing"
             android:text="@string/login_fragment_login_later"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

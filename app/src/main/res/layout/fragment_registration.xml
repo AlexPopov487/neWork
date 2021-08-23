@@ -13,8 +13,8 @@
         tools:context=".ui.RegistrationFragment">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="155dp"
             android:id="@+id/cV_avatar_container"
+            android:layout_width="155dp"
             android:layout_height="155dp"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="250dp"
@@ -133,6 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/common_spacing"
             android:text="@string/bt_signUp_registration_fragment"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/confirm_password_text_input_layout" />

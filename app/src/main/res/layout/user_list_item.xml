@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/black"
+            android:textColor="@color/primary_text"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/tV_userLogin"
             app:layout_constraintStart_toEndOf="@id/iV_avatar"
@@ -39,7 +39,7 @@
             android:id="@+id/tV_userLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/material_on_surface_emphasis_medium"
+            android:textColor="@color/secondary_text"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/iV_avatar"
             app:layout_constraintStart_toStartOf="@id/tV_userName"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:cardBackgroundColor="@android:color/darker_gray"
+            app:cardBackgroundColor="@color/divider"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="@id/iV_avatar"
@@ -64,7 +64,7 @@
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
                 android:text="@string/is_you_user_card_view_text"
-                android:textColor="@color/black"
+                android:textColor="@color/primary_text"
                 android:textSize="10sp" />
         </androidx.cardview.widget.CardView>
 
