@@ -61,7 +61,7 @@ class UserRepository @Inject constructor(
 
    suspend fun getEventParticipants(eventId: Long): Flow<List<User>> {
        val event = getParticipatedEvent(eventId)
-       return userDao.getEventParticipants(event.participantsIds.toList()).map { participantsList ->
+       return userDao.getEventParticipants(event.participantsIds).map { participantsList ->
            participantsList.map { it.toDto() }
        }
    }

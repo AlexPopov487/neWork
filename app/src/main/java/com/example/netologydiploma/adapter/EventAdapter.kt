@@ -96,6 +96,14 @@ class EventViewHolder(
                 interactionListener.onEventParticipate(event)
             }
 
+
+            tVActionSeeParticipants.setOnClickListener {
+                interactionListener.onSeeParticipantsClicked(event)
+            }
+
+            if (event.participantsIds.isEmpty()) tVActionSeeParticipants.visibility = View.GONE
+            else tVActionSeeParticipants.visibility = View.VISIBLE
+
             event.attachment?.let {
                 imageAttachment.loadImage(it.url)
             }
@@ -119,17 +127,15 @@ class EventViewHolder(
             )
 
             tvEventType.text = when (event.type) {
-                EventType.OFFLINE -> "Offline event"
-                EventType.ONLINE -> "Online event"
+                EventType.OFFLINE -> itemView.context.getString(R.string.event_type_offline)
+                EventType.ONLINE -> itemView.context.getString(R.string.event_type_online)
             }
 
-            iVAvatar.setOnClickListener{
+            iVAvatar.setOnClickListener {
                 interactionListener.onAvatarClicked(event)
             }
 
-            tVActionSeeParticipants.setOnClickListener {
-                interactionListener.onSeeParticipantsClicked(event)
-            }
+
 
             if (!event.ownedByMe) {
                 btEventOptions.visibility = View.GONE

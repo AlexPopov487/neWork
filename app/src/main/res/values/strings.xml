@@ -9,7 +9,6 @@
     <string name="save_button_description">Save</string>
     <string name="save_button_title">Save</string>
     <string name="hint_create_post_editText">Create a new post</string>
-    <string name="sign_out_button">Sign out</string>
     <string name="action_signIn_auth_appbar_menu">Sign In</string>
     <string name="et_login_hint_loginFragment">Login</string>
     <string name="et_password_hint_loginFragment">Password</string>
@@ -17,14 +16,6 @@
     <string name="tv_create_account_request_login_fragment">Don\'t have an account yet?</string>
     <string name="tv_create_account_span_action_login_fragment">Create one!</string>
     <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome!"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
     <string name="et_registration_hint_registrationFragment">User Name</string>
     <string name="et_confirm_password_hint_registrationFragment">Confirm password</string>
     <string name="tv_signIn_span_action_registration_fragment">Sign in!</string>
@@ -36,7 +27,6 @@
     <string name="password_too_short_error_registration_fragment">Password must be at least 6 characters long</string>
     <string name="edit_post_item_menu">Edit</string>
     <string name="change_post_fragment_title">Change post</string>
-    <string name="tv_event_due_date_template">Due date:</string>
     <string name="hint_create_event_editText">Create a new event</string>
     <string name="change_event_fragment_title">Edit event</string>
     <string name="iv_content_icon_description">Content icon</string>
@@ -44,11 +34,9 @@
     <string name="online_event_type_button">Online</string>
     <string name="offline_event_type_button">Offline</string>
     <string name="tv_pick_event_date">Pick date…</string>
-    <string name="create_event_fragment_title">Create event</string>
     <string name="iv_event_type_icon_description">Event type icon</string>
     <string name="iv_date_icon_description">Event date icon</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="retry_button_tV">Retry</string>
     <string name="job_employment_term">%1$s - %2$s</string>
     <string name="create_job_dialog_company_name">Company name</string>
@@ -88,4 +76,14 @@
     <string name="tv_empty_users_list">No users yet :(</string>
     <string name="tv_see_all_participants">See all</string>
     <string name="event_participants_fragment_tite">Participants</string>
+    <string name="sign_in_fragment_title">Sign In</string>
+    <string name="sign_up_fragment_title">Sign Up</string>
+    <string name="users_fragment_title">Users</string>
+    <string name="profile_fragment_title">Profile</string>
+    <string name="post_fragment_title">Posts</string>
+    <string name="events_fragment_title">Events</string>
+    <string name="create_post_fragment_title">Create post</string>
+    <string name="cereate_event_fragment_title">Create event</string>
+    <string name="event_type_offline">Offline event</string>
+    <string name="event_type_online">Online event</string>
 </resources>

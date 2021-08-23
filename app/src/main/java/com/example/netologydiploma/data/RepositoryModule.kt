@@ -43,9 +43,10 @@ class RepositoryModule {
         appDb: AppDb,
         wallRemoteKeyDao: WallRemoteKeyDao,
         wallPostDao: WallPostDao,
-        jobDao: JobDao
+        jobDao: JobDao,
+        postDao: PostDao,
     ): ProfileRepository =
-        ProfileRepository(apiService, appDb, wallPostDao, wallRemoteKeyDao, jobDao)
+        ProfileRepository(apiService, appDb, wallPostDao, wallRemoteKeyDao, jobDao, postDao)
 
 
     @Provides

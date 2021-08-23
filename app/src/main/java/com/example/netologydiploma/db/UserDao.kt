@@ -21,5 +21,5 @@ interface UserDao {
     suspend fun removeAllUsers()
 
     @Query("SELECT * FROM UserEntity WHERE id IN (:participants)")
-    fun getEventParticipants(participants: List<Long>): Flow<List<UserEntity>>
+    fun getEventParticipants(participants: Set<Long>): Flow<List<UserEntity>>
 }

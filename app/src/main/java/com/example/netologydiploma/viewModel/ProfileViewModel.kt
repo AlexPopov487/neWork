@@ -179,6 +179,21 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun deletePost(postId: Long) {
+        viewModelScope.launch {
+            try {
+                _dataState.value = (FeedStateModel(isLoading = true))
+                repository.deletePost(postId)
+                _dataState.value = (FeedStateModel(isLoading = false))
+            } catch (e: Exception) {
+                _dataState.value = (FeedStateModel(
+                    hasError = true,
+                    errorMessage = AppError.getMessage(e)
+                ))
+            }
+        }
+    }
+
     fun onSignOut() {
         appAuth.removeAuth()
     }

@@ -18,9 +18,10 @@ import com.example.netologydiploma.model.PushModel
 import com.example.netologydiploma.ui.MainActivity
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 
-
+@AndroidEntryPoint
 class FCMService: FirebaseMessagingService() {
     private val content = "content"
     private val channelId = "remote"
@@ -28,10 +29,7 @@ class FCMService: FirebaseMessagingService() {
     @Inject
     lateinit var auth : AppAuth
 
-    override fun onCreate() {
-        super.onCreate()
 
-    }
 
     override fun onMessageReceived(message: RemoteMessage) {
         val notificationObject  = Gson().fromJson(message.data[content], PushModel::class.java)

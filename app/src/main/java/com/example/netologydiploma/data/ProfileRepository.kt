@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.paging.*
 import com.example.netologydiploma.api.ApiService
-import com.example.netologydiploma.db.AppDb
-import com.example.netologydiploma.db.JobDao
-import com.example.netologydiploma.db.WallPostDao
-import com.example.netologydiploma.db.WallRemoteKeyDao
+import com.example.netologydiploma.db.*
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.dto.Post
 import com.example.netologydiploma.dto.User
@@ -31,6 +28,7 @@ class ProfileRepository @Inject constructor(
     private val wallPostDao: WallPostDao,
     private val wallRemoteKeyDao: WallRemoteKeyDao,
     private val jobDao: JobDao,
+    private val postDao: PostDao,
 ) {
 
     @ExperimentalPagingApi
@@ -163,6 +161,26 @@ class ProfileRepository @Inject constructor(
             val response = apiService.removeJobById(id)
             if (!response.isSuccessful) {
                 jobDao.insertJob(jobToDelete)
+                throw ApiError(response.code())
+            }
+        } catch (e: IOException) {
+            throw NetworkError
+        } catch (e: SQLException) {
+            throw  DbError
+        } catch (e: Exception) {
+            throw UndefinedError
+        }
+    }
+
+    suspend fun deletePost(postId: Long) {
+        val postToDelete = postDao.getPostById(postId)
+        try {
+            postDao.deletePost(postId)
+            wallPostDao.deletePost(postId)
+            val response = apiService.deletePost(postId)
+            if (!response.isSuccessful) {
+                postDao.insertPost(postToDelete)
+                wallPostDao.insertPost(WallPostEntity.fromDto(postToDelete.toDto()))
                 throw ApiError(response.code())
             }
         } catch (e: IOException) {

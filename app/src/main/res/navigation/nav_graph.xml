@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/nav_posts_fragment"
         android:name="com.example.netologydiploma.ui.PostFragment"
-        android:label="Posts"
-        tools:layout="@layout/fragment_posts" >
+        android:label="@string/post_fragment_title"
+        tools:layout="@layout/fragment_posts">
         <action
             android:id="@+id/action_nav_posts_fragment_to_createEditPostFragment"
             app:destination="@id/createEditPostFragment"
@@ -21,8 +21,8 @@
     <fragment
         android:id="@+id/nav_events_fragment"
         android:name="com.example.netologydiploma.ui.EventsFragment"
-        android:label="Events"
-        tools:layout="@layout/fragment_events" >
+        android:label="@string/events_fragment_title"
+        tools:layout="@layout/fragment_events">
         <action
             android:id="@+id/action_nav_events_fragment_to_createEventFragment"
             app:destination="@id/createEventFragment"
@@ -37,16 +37,16 @@
     <fragment
         android:id="@+id/nav_profile_fragment"
         android:name="com.example.netologydiploma.ui.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile" >
+        android:label="@string/profile_fragment_title"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_nav_profile_fragment_to_nav_posts_fragment"
             app:destination="@id/nav_posts_fragment"
             app:popUpTo="@id/nav_posts_fragment" />
         <argument
             android:name="authorId"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_nav_profile_fragment_to_createEditPostFragment"
             app:destination="@id/createEditPostFragment"
@@ -55,13 +55,12 @@
     <fragment
         android:id="@+id/createEditPostFragment"
         android:name="com.example.netologydiploma.ui.CreatePostFragment"
-        android:label="Create post"
-        tools:layout="@layout/fragment_create_post" >
-    </fragment>
+        android:label="@string/create_post_fragment_title"
+        tools:layout="@layout/fragment_create_post"></fragment>
     <fragment
         android:id="@+id/logInFragment"
         android:name="com.example.netologydiploma.ui.LogInFragment"
-        android:label="Sign In"
+        android:label="@string/sign_in_fragment_title"
         tools:layout="@layout/fragment_log_in">
         <action
             android:id="@+id/action_logInFragment_to_registrationFragment"
@@ -78,7 +77,7 @@
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.netologydiploma.ui.RegistrationFragment"
-        android:label="Sign Up"
+        android:label="@string/sign_up_fragment_title"
         tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/action_registrationFragment_to_logInFragment"
@@ -90,12 +89,12 @@
     <fragment
         android:id="@+id/createEventFragment"
         android:name="com.example.netologydiploma.ui.CreateEventFragment"
-        android:label="@string/event_participants_fragment_tite"
+        android:label="@string/cereate_event_fragment_title"
         tools:layout="@layout/fragment_create_event" />
     <fragment
         android:id="@+id/nav_users_fragment"
         android:name="com.example.netologydiploma.ui.UsersFragment"
-        android:label="Users"
+        android:label="@string/users_fragment_title"
         tools:layout="@layout/fragment_all_users">
         <action
             android:id="@+id/action_usersFragment_to_nav_profile_fragment"

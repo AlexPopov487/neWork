@@ -90,7 +90,7 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onPostRemove(post: Post) {
-                postViewModel.deletePost(post.id)
+                profileViewModel.deletePost(post.id)
             }
 
             override fun onPostEdit(post: Post) {
@@ -110,6 +110,9 @@ class ProfileFragment : Fragment() {
                     .launchUrl(requireContext(), Uri.parse(url))
             }
         })
+
+
+
 
         binding.rVPosts.adapter = postAdapter
         binding.rVPosts.addItemDecoration(
@@ -175,7 +178,6 @@ class ProfileFragment : Fragment() {
 
         binding.swipeToRefresh.setOnRefreshListener {
             postAdapter.refresh()
-            profileViewModel.getLatestWallPosts()
             profileViewModel.loadJobsFromServer()
         }
 

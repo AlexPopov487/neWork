@@ -159,6 +159,7 @@ class RegistrationFragment : Fragment() {
         val spanActionText = getString(R.string.tv_signIn_span_action_registration_fragment)
         val createAccClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
+
                 navController.navigate(R.id.action_registrationFragment_to_logInFragment)
             }
         }
@@ -176,4 +177,8 @@ class RegistrationFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        viewModel.changePhoto(null, null)
+        super.onDestroyView()
+    }
 }

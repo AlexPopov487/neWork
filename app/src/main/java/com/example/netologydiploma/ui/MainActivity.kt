@@ -158,6 +158,7 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavView.menu.findItem(R.id.nav_profile_fragment).isEnabled = false
                 binding.expandableFab.visibility = View.GONE
             } else {
+                invalidateOptionsMenu()
                 binding.bottomNavView.menu.findItem(R.id.nav_profile_fragment).isEnabled = true
                 binding.expandableFab.visibility = View.VISIBLE
             }
