@@ -58,8 +58,10 @@ class RegistrationFragment : Fragment() {
             binding.progressBar.isVisible = state.isLoading
 
             if (state.hasError) {
-                val msg = state.errorMessage ?: "Something went wrong, please try again later."
-                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT).show()
+                val msg = getString(state.errorMessage ?: R.string.common_error_message)
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
+                    .setAction(getString(R.string.ok_action), {})
+                    .show()
                 viewModel.invalidateDataState()
             }
         }

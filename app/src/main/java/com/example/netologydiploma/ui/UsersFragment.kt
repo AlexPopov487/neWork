@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.netologydiploma.R
 import com.example.netologydiploma.adapter.OnUserInteractionListener
 import com.example.netologydiploma.adapter.UsersAdapter
 import com.example.netologydiploma.databinding.FragmentAllUsersBinding
@@ -61,9 +62,9 @@ class UsersFragment : Fragment() {
             binding.progressBar.isVisible = state.isLoading
 
             if (state.hasError) {
-                val msg = state.errorMessage ?: "Something went wrong, please try again later."
+                val msg = getString(state.errorMessage ?: R.string.common_error_message)
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
-                    .setAction("Ok", {})
+                    .setAction(getString(R.string.ok_action), {})
                     .show()
                 viewModel.invalidateDataState()
             }

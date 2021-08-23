@@ -7,5 +7,4 @@ data class Job(
     val start: Long = 0L,
     val finish: Long? = null,
     val link: String? = null,
-) {
-}
+)

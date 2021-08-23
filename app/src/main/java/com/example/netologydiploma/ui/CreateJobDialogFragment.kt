@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.example.netologydiploma.R
 import com.example.netologydiploma.databinding.DialogFragmentCreateJobBinding
 import com.example.netologydiploma.dto.Job
 import com.example.netologydiploma.util.AndroidUtils
@@ -65,15 +66,15 @@ class CreateJobDialogFragment : DialogFragment() {
         val link = binding.eTLink.text.toString().trim()
 
         if (company.isEmpty()) {
-            showToast("Provide a company name!")
+            showToast(getString(R.string._no_company_create_job_error))
             return
         }
         if (position.isEmpty()) {
-            showToast("Type in your position!")
+            showToast(getString(R.string._no_position_create_job_error))
             return
         }
         if (dateStart.isEmpty()) {
-            showToast("Provide start date!")
+            showToast(getString(R.string._no_start_date_create_job_error))
             return
         }
 
@@ -96,8 +97,8 @@ class CreateJobDialogFragment : DialogFragment() {
             calendar.set(year, month, dayOfMonth)
 
             if (isStartDate)
-                binding.tVTermStart.setText(AndroidUtils.formatDateToDateString(calendar.time))
-            else binding.tVTermFinish.setText(AndroidUtils.formatDateToDateString(calendar.time))
+                binding.tVTermStart.text = AndroidUtils.formatDateToDateString(calendar.time)
+            else binding.tVTermFinish.text = AndroidUtils.formatDateToDateString(calendar.time)
 
         }.show(childFragmentManager, "datePicker")
     }

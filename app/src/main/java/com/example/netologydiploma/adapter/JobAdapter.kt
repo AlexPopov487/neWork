@@ -4,6 +4,7 @@ import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -45,8 +46,9 @@ class JobViewHolder(
     private val onJobButtonInteractionListener: OnJobButtonInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(job: Job) {
-        val startJob = AndroidUtils.formatMillisToDateString(job.start) ?: "n/a"
-        val endJob = AndroidUtils.formatMillisToDateString(job.finish) ?: "current time"
+        val startJob = AndroidUtils.formatMillisToDateString(job.start)
+        val endJob = AndroidUtils.formatMillisToDateString(job.finish)
+            ?: itemView.context.getString(R.string.job_blank_end_date_text)
         with(binding) {
             jobOptions.visibility = View.GONE
             jobOverView.visibility = View.VISIBLE

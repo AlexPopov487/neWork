@@ -7,5 +7,4 @@ data class AuthJsonModel(
     var userId: Long?,
     @SerializedName("token")
     var token: String?
-) {
-}
+)

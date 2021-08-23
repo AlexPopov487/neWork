@@ -29,6 +29,5 @@ data class Event(
     val ownedByMe: Boolean = false,
 
 
-    ) {
-}
+    )
 

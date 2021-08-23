@@ -2,7 +2,6 @@ package com.example.netologydiploma.api
 
 import android.content.SharedPreferences
 import com.example.netologydiploma.BuildConfig
-import com.example.netologydiploma.auth.AppAuth
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
@@ -24,7 +23,7 @@ import javax.inject.Singleton
 class ApiServiceModule {
 
     companion object {
-        const val BASE_URL = "${BuildConfig.BASE_URL}/api/"
+        const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
 
 //        const val BASE_URL = "https://net-diploma.herokuapp.com/api/"
     }

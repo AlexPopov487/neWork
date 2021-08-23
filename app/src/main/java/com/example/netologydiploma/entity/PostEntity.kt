@@ -65,7 +65,7 @@ data class MediaAttachmentEmbeddable(
 
     companion object {
         fun fromDto(dto: MediaAttachment?) = dto?.let {
-            MediaAttachmentEmbeddable(it.url, it.type) ?: null
+            MediaAttachmentEmbeddable(it.url, it.type)
         }
     }
 }

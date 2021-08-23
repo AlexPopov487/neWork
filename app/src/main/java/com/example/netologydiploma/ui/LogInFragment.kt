@@ -79,7 +79,7 @@ class LogInFragment : Fragment() {
             binding.progressBar.isVisible = state.isLoading
 
             if (state.hasError) {
-                val msg = state.errorMessage ?: getString(R.string.common_error_message)
+                val msg = getString(state.errorMessage ?: R.string.common_error_message)
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
                     .setAction("Ok", {})
                     .show()

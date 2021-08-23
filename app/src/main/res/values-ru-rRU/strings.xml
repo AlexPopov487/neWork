@@ -84,6 +84,16 @@
     <string name="cereate_event_fragment_title">Создать событие</string>
     <string name="event_type_offline">Офлайн событие</string>
     <string name="event_type_online">Онлайн событие</string>
-    <string name="error_unauthorized_to_like">Авторизуйтесь, чтобы поставить лайк</string>
+    <string name="error_unauthorized_to_like">"Авторизуйтесь, чтобы выполнить это "</string>
     <string name="error_unauthorized_to_participate">Авторизуйтесь, чтобы выполнить это действие</string>
+    <string name="_no_company_create_job_error">Заполните название организации!</string>
+    <string name="_no_position_create_job_error">Заполните должность!</string>
+    <string name="_no_start_date_create_job_error">Заполните дату начал работы!</string>
+    <string name="job_blank_end_date_text">наст. время</string>
+    <string name="app_error_api_message">Ошибка сервера. Повторите поптыку позже.</string>
+    <string name="app_error_auth_message">Не удалось войти. Убедитесь, что логин и пароль введены верно и попробуйте снова.</string>
+    <string name="app_error_db_message">Ошибка базы данных. Повторите попытку снова.</string>
+    <string name="app_error_network_message">Ошибка интернет-соединения. Повторите попытку позже.</string>
+    <string name="app_error_registration_message">Не удалось зарегистрироваться. Попробуйте снова.</string>
+    <string name="app_error_undefined_message">Неизвестная ошибка. Повторите попытку снова.</string>
 </resources>

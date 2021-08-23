@@ -88,4 +88,14 @@
     <string name="event_type_online">Online event</string>
     <string name="error_unauthorized_to_like">Only authorized users can leave likes!</string>
     <string name="error_unauthorized_to_participate">Only authorized users can participate!</string>
+    <string name="_no_company_create_job_error">Provide a company name!</string>
+    <string name="_no_position_create_job_error">Type in your position!</string>
+    <string name="_no_start_date_create_job_error">Provide start date!</string>
+    <string name="job_blank_end_date_text">current time</string>
+    <string name="app_error_api_message">Server error. Please, try again.</string>
+    <string name="app_error_auth_message">Failed to sign in. Ensure your login and password are correct and try again</string>
+    <string name="app_error_db_message">Internal database error, try again.</string>
+    <string name="app_error_network_message">Connection error. Please try again later.</string>
+    <string name="app_error_registration_message">Failed to sign up. Please try again!</string>
+    <string name="app_error_undefined_message">Unknown error, please try again later.</string>
 </resources>
