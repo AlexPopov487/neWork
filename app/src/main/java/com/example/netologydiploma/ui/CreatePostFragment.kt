@@ -291,6 +291,9 @@ class CreatePostFragment : Fragment() {
                 // if editedPost is not null, we are to rewrite an existing post.
                 // Otherwise, save a new one
                 viewModel.editedPost.value?.let {
+                    // change media so if there were any in the edited post earlier, it wouldn't
+                    // affect  viewModel.savePost() function
+                    viewModel.changeMedia(null, null, null)
                     viewModel.savePost(it.copy(content = content))
                 } ?: viewModel.savePost(Post(content = content))
                 AndroidUtils.hideKeyboard(requireView())

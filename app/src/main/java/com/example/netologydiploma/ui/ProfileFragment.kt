@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
@@ -112,7 +113,16 @@ class ProfileFragment : Fragment() {
         })
 
 
-
+        // solution by https://stackoverflow.com/a/60427676/13924310
+        //
+        // So far it is the best and only solution to remove item blinking while preserving animations
+        // Payloads entailed too many bugs I couldn't fix, so I chose this solution
+        val itemAnimator: DefaultItemAnimator = object : DefaultItemAnimator() {
+            override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
+                return true
+            }
+        }
+        binding.rVPosts.itemAnimator = itemAnimator
 
         binding.rVPosts.adapter = postAdapter
         binding.rVPosts.addItemDecoration(

@@ -110,13 +110,12 @@ class PostViewModel @Inject constructor(
                             }
                             null -> repository.createPost(post)
                         }
-
                     }
 
 
                 }
 
-                _dataState.value = (FeedStateModel(isLoading = false))
+                _dataState.value = FeedStateModel()
             } catch (e: Exception) {
                 _dataState.value = (FeedStateModel(
                     hasError = true,

@@ -29,7 +29,7 @@ class EventRepository @Inject constructor(
 
     @ExperimentalPagingApi
     fun getAllEvents(): Flow<PagingData<Event>> = Pager(
-        config = PagingConfig(pageSize = DEFAULT_EVENT_PAGE_SIZE, enablePlaceholders = true),
+        config = PagingConfig(pageSize = DEFAULT_EVENT_PAGE_SIZE, enablePlaceholders = false),
         remoteMediator = EventRemoteMediator(appDb, eventRemoteKeyDao, apiService, eventDao),
         pagingSourceFactory = { eventDao.getEventPagingSource() }
     ).flow

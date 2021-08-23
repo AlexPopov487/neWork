@@ -209,6 +209,9 @@ class CreateEventFragment : Fragment() {
                 // if editedEvent is not null, we are to rewrite an existing post.
                 // Otherwise, save a new one
                 viewModel.editedEvent.value?.let {
+                    // change media so if there were any in the edited post earlier, it wouldn't
+                    // affect  viewModel.savePost() function
+                    viewModel.changePhoto(null, null)
                     viewModel.saveEvent(
                         it.copy(
                             content = content,

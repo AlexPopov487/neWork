@@ -84,4 +84,6 @@
     <string name="cereate_event_fragment_title">Создать событие</string>
     <string name="event_type_offline">Офлайн событие</string>
     <string name="event_type_online">Онлайн событие</string>
+    <string name="error_unauthorized_to_like">Авторизуйтесь, чтобы поставить лайк</string>
+    <string name="error_unauthorized_to_participate">Авторизуйтесь, чтобы выполнить это действие</string>
 </resources>

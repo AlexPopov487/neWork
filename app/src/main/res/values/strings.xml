@@ -86,4 +86,6 @@
     <string name="cereate_event_fragment_title">Create event</string>
     <string name="event_type_offline">Offline event</string>
     <string name="event_type_online">Online event</string>
+    <string name="error_unauthorized_to_like">Only authorized users can leave likes!</string>
+    <string name="error_unauthorized_to_participate">Only authorized users can participate!</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.netologydiploma.R
@@ -77,10 +78,10 @@ class PostFragment: Fragment() {
                 if (!authViewModel.isAuthenticated) {
                     Snackbar.make(
                         binding.root,
-                        "Only authorized users can leave likes!",
+                        getString(R.string.error_unauthorized_to_like),
                         Snackbar.LENGTH_SHORT
                     )
-                        .setAction("Ok", {})
+                        .setAction(getString(R.string.ok_action), {})
                         .show()
                     return
                 }
@@ -116,6 +117,18 @@ class PostFragment: Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+
+        // solution by https://stackoverflow.com/a/60427676/13924310
+        //
+        // So far it is the best and only solution to remove item blinking while preserving animations
+        // Payloads entailed too many bugs I couldn't fix, so I chose this solution
+        val itemAnimator: DefaultItemAnimator = object : DefaultItemAnimator() {
+            override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder): Boolean {
+                return true
+            }
+        }
+        binding.rVPosts.itemAnimator = itemAnimator
+
         binding.rVPosts.adapter = adapter.withLoadStateHeaderAndFooter(
             header = PagingLoadStateAdapter { adapter.retry() },
             footer = PagingLoadStateAdapter { adapter.retry() }
@@ -126,10 +139,7 @@ class PostFragment: Fragment() {
             viewModel.postList.collectLatest {
                 adapter.submitData(it)
             }
-
         }
-
-
 
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
@@ -157,9 +167,9 @@ class PostFragment: Fragment() {
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             if (state.hasError) {
-                val msg = state.errorMessage ?: "Something went wrong, please try again later."
+                val msg = state.errorMessage ?: getString(R.string.common_error_message)
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
-                    .setAction("Ok", {})
+                    .setAction(getString(R.string.ok_action), {})
                     .show()
                 viewModel.invalidateDataState()
             }

@@ -24,7 +24,6 @@ import com.example.netologydiploma.adapter.PagingLoadStateAdapter
 import com.example.netologydiploma.databinding.FragmentEventsBinding
 import com.example.netologydiploma.dto.Event
 import com.example.netologydiploma.viewModel.AuthViewModel
-import com.example.netologydiploma.viewModel.EventParticipantsViewModel
 import com.example.netologydiploma.viewModel.EventViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,10 +59,10 @@ class EventsFragment : Fragment() {
                 if (!authViewModel.isAuthenticated) {
                     Snackbar.make(
                         binding.root,
-                        "Only authorized users can leave likes!",
+                        getString(R.string.error_unauthorized_to_like),
                         Snackbar.LENGTH_SHORT
                     )
-                        .setAction("Ok", {})
+                        .setAction(getString(R.string.ok_action), {})
                         .show()
                     return
                 }
@@ -83,10 +82,10 @@ class EventsFragment : Fragment() {
                 if (!authViewModel.isAuthenticated) {
                     Snackbar.make(
                         binding.root,
-                        "Only authorized users can participate!",
+                        getString(R.string.error_unauthorized_to_participate),
                         Snackbar.LENGTH_SHORT
                     )
-                        .setAction("Ok", {})
+                        .setAction(getString(R.string.ok_action), {})
                         .show()
                     return
                 }
@@ -173,9 +172,9 @@ class EventsFragment : Fragment() {
             binding.progressBar.isVisible = state.isLoading
 
             if (state.hasError) {
-                val msg = state.errorMessage ?: "Something went wrong, please try again later."
+                val msg = state.errorMessage ?: getString(R.string.common_error_message)
                 Snackbar.make(binding.root, msg, Snackbar.LENGTH_SHORT)
-                    .setAction("Ok", {})
+                    .setAction(getString(R.string.ok_action), {})
                     .show()
                 viewModel.invalidateDataState()
             }

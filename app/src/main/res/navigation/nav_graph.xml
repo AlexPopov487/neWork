@@ -50,7 +50,7 @@
         <action
             android:id="@+id/action_nav_profile_fragment_to_createEditPostFragment"
             app:destination="@id/createEditPostFragment"
-            app:popUpTo="@id/nav_events_fragment" />
+            app:popUpTo="@id/nav_profile_fragment" />
     </fragment>
     <fragment
         android:id="@+id/createEditPostFragment"
