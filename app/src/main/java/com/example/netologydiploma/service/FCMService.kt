@@ -69,7 +69,7 @@ class FCMService: FirebaseMessagingService() {
         )
 
        val notification = NotificationCompat.Builder(applicationContext, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
             .setAutoCancel(true)
             .setOnlyAlertOnce(true)
             .setContentTitle("New notification")
