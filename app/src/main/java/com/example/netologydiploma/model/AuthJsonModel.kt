@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class AuthJsonModel(
     @SerializedName("id")
-    var userId: Long?,
+    val userId: Long?,
     @SerializedName("token")
-    var token: String?
+    val token: String?
 )

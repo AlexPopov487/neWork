@@ -32,9 +32,9 @@ data class EventEntity(
     @TypeConverters(LongSetDataConverter::class)
     val participantsIds: Set<Long>,
     @Embedded
-    var coords: CoordsEmbeddable?,
+    val coords: CoordsEmbeddable?,
     @Embedded
-    var attachment: MediaAttachmentEmbeddable?,
+    val attachment: MediaAttachmentEmbeddable?,
     val ownedByMe: Boolean = false,
 ) {
 

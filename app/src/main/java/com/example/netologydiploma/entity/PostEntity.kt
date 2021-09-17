@@ -6,7 +6,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.netologydiploma.db.InstantDateConverter
-import com.example.netologydiploma.dto.*
+import com.example.netologydiploma.dto.AttachmentType
+import com.example.netologydiploma.dto.Coords
+import com.example.netologydiploma.dto.MediaAttachment
+import com.example.netologydiploma.dto.Post
 import java.time.Instant
 
 @Entity
@@ -22,9 +25,9 @@ data class PostEntity(
     val isLikedByMe: Boolean,
     val likeCount: Int,
     @Embedded
-    var coords: CoordsEmbeddable?,
+    val coords: CoordsEmbeddable?,
     @Embedded
-    var attachment: MediaAttachmentEmbeddable?,
+    val attachment: MediaAttachmentEmbeddable?,
 ) {
     fun toDto() = Post(
         id = id,
